@@ -59,7 +59,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "slagalica:build"
+            "browserTarget": "slagalica:build",
+            "proxyConfig": "apps/slagalica/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -115,6 +116,60 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/slagalica-e2e/tsconfig.e2e.json"
+          }
+        }
+      }
+    },
+    "slagalica-api": {
+      "root": "apps/slagalica-api",
+      "sourceRoot": "apps/slagalica-api/src",
+      "projectType": "application",
+      "prefix": "slagalica-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/slagalica-api",
+            "main": "apps/slagalica-api/src/main.ts",
+            "tsConfig": "apps/slagalica-api/tsconfig.app.json",
+            "assets": ["apps/slagalica-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/slagalica-api/src/environments/environment.ts",
+                  "with": "apps/slagalica-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "slagalica-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/slagalica-api/tsconfig.app.json",
+              "apps/slagalica-api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/slagalica-api/jest.config.js",
+            "tsConfig": "apps/slagalica-api/tsconfig.spec.json"
           }
         }
       }
