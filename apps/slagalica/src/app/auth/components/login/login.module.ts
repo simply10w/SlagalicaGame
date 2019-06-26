@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared';
+import { SharedModule } from '@slagalica-app/shared';
 import { LoginComponent } from './login.component';
 
 @NgModule({

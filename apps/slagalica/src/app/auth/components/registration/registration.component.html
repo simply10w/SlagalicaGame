@@ -69,5 +69,8 @@
     <mat-error>Date of birth is required</mat-error>
   </mat-form-field>
 
+  <p *ngIf="errorMessage" class="sla-error">
+    {{ errorMessage }}
+  </p>
   <button mat-button type="submit">Register</button>
 </form>

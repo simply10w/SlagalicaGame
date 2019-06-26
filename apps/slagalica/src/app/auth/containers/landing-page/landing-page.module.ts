@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared';
+import {
+  LoginModule,
+  RegistrationModule
+} from '@slagalica-app/auth/components';
+import { SharedModule } from '@slagalica-app/shared';
 import { LandingPageComponent } from './landing-page.component';
-import { LoginModule } from './login';
-import { RegistrationModule } from './registration';
 
 @NgModule({
   declarations: [LandingPageComponent],

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { UploadedFile } from 'express-fileupload';
 import * as StatusCodes from 'http-status-codes';
 import { UserModel } from '../models';
 import { Logger } from '../util';
@@ -41,7 +42,7 @@ UsersController.post('/login', async (req, res) => {
     if (user) {
       const okay = await user.comparePassword(password);
       okay
-        ? res.status(StatusCodes.OK).json({ message: 'Logged in.' })
+        ? res.status(StatusCodes.OK).json({ user })
         : res
             .status(StatusCodes.UNAUTHORIZED)
             .json({ message: 'Username or password invalid. ' });
@@ -56,9 +57,14 @@ UsersController.post('/login', async (req, res) => {
 });
 
 UsersController.post('/register', async (req, res) => {
+  const file: UploadedFile = req.files.profileImage as UploadedFile;
+  const user = JSON.parse(req.body.user);
+
   try {
-    const user = new UserModel(req.body.user);
-    const createdUser = await user.save();
+    const model = new UserModel(user);
+    await model.validate();
+    await model.storeProfileImage(file);
+    const createdUser = await model.save();
     res.status(StatusCodes.OK).json({
       user: createdUser
     });

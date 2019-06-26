@@ -16,6 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@slagalica-app/*": ["apps/slagalica/src/app/*"],
+      "@slagalica-api/*": ["apps/slagalica-api/src/app/*"],
       "@slagalica/data": ["libs/data/src/index.ts"],
       "@slagalica/common": ["libs/common/src/index.ts"],
       "@slagalica/ui": ["libs/ui/src/index.ts"]

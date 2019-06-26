@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { showFormErrors } from '@slagalica/ui';
+import { LoginDto } from '@slagalica/data';
 
 @Component({
-  selector: 'slagalica-login',
+  selector: 'sla-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
+  @Output() login = new EventEmitter<LoginDto>();
+
+  @Input() errorMessage: string;
+
+  @Input()
+  set pending(isPending: boolean) {
+    if (isPending) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+  }
+
   form = this.fb.group({
     userName: this.fb.control(null, Validators.required),
     password: this.fb.control(null, Validators.required)
@@ -16,7 +30,7 @@ export class LoginComponent {
 
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      this.login.emit(this.form.value);
     } else {
       showFormErrors(this.form);
     }

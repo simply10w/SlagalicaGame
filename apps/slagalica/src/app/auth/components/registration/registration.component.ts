@@ -1,13 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UserGender } from '@slagalica/data';
+import { UserGender, RegisterDto } from '@slagalica/data';
 import { showFormErrors } from '@slagalica/ui';
 
 @Component({
-  selector: 'slagalica-registration',
+  selector: 'sla-registration',
   templateUrl: './registration.component.html'
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent {
+  @Output() register = new EventEmitter<RegisterDto>();
+
+  @Input() errorMessage: string;
+
+  @Input()
+  set pending(isPending: boolean) {
+    if (isPending) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+  }
+
   Gender = UserGender;
 
   form = this.fb.group({
@@ -23,11 +36,9 @@ export class RegistrationComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit() {}
-
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      this.register.emit(this.form.value);
     } else {
       showFormErrors(this.form);
     }

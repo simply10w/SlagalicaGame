@@ -337,3 +337,7 @@
 .sla-cursor-pointer {
     cursor: pointer !important;
 }
+
+.sla-error {
+    color: $sla-warn;
+}
