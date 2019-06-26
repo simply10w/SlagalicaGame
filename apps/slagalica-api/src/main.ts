@@ -4,11 +4,13 @@ import { environment } from './environments/environment.prod';
 import { UsersController } from './app/controllers';
 import { Logger } from './app/util';
 import * as bodyParser from 'body-parser';
+import * as fileUpload from 'express-fileupload';
 
 async function boot() {
   try {
     const app = express();
     app.use(bodyParser.json());
+    app.use(fileUpload());
 
     await connect(
       environment.mongo,

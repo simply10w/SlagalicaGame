@@ -10,13 +10,13 @@ export interface User {
   profileImgUrl: string;
 }
 
-export const enum UserType {
+export enum UserType {
   Supervizor = 'supervizor',
   Admin = 'admin',
   Igrac = 'igrac'
 }
 
-export const enum UserGender {
+export enum UserGender {
   Male = 'male',
   Female = 'female'
 }

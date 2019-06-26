@@ -1,0 +1,339 @@
+// --- Helpers --- //
+
+@import "libs/ui/src/lib/styles/variables";
+
+@mixin text-overflow($display: inline-block) {
+    display: $display;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin img-responsive($display: block) {
+    display: $display;
+    max-width: 100%; // Part 1: Set a maximum relative to the parent
+    height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+}
+
+@mixin clearfix {
+    &:before,
+    &:after {
+        content: ' '; // 1
+        display: table; // 2
+
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sla-no-float {
+    float: none !important;
+}
+
+.sla-no-border {
+    border: none !important;
+}
+
+.sla-no-border-top {
+    border-top: none !important;
+}
+
+.sla-no-border-right {
+    border-right: none !important;
+}
+
+.sla-no-border-bottom {
+    border-bottom: none !important;
+}
+
+.sla-no-border-left {
+    border-left: none !important;
+}
+
+.sla-no-margin {
+    margin: none !important;
+}
+
+.sla-no-margin-top {
+    margin-top: none !important;
+}
+
+.sla-no-margin-right {
+    margin-right: none !important;
+}
+
+.sla-no-margin-bottom {
+    margin-bottom: none !important;
+}
+
+.sla-no-margin-left {
+    margin-left: none !important;
+}
+
+.sla-no-padding {
+    padding: none !important;
+}
+
+.sla-no-padding-top {
+    padding-top: none !important;
+}
+
+.sla-no-padding-right {
+    padding-right: none !important;
+}
+
+.sla-no-padding-bottom {
+    padding-bottom: none !important;
+}
+
+.sla-no-padding-left {
+    padding-left: none !important;
+}
+
+.sla-spacing-xs {
+    margin-bottom: $sla-spacing-xs !important;
+}
+
+.sla-spacing-s {
+    margin-bottom: $sla-spacing-s !important;
+}
+
+.sla-spacing-m {
+    margin-bottom: $sla-spacing-m !important;
+}
+
+.sla-spacing-l {
+    margin-bottom: $sla-spacing-l !important;
+}
+
+.sla-spacing-xl {
+    margin-bottom: $sla-spacing-xl !important;
+}
+
+.sla-spacing-2xl {
+    margin-bottom: $sla-spacing-2xl !important;
+}
+
+.sla-no-select {
+    user-select: none !important;
+    cursor: default !important;
+}
+
+// Text Modifications
+
+.sla-text-uppercase {
+    text-transform: uppercase !important;
+}
+
+.sla-text-lowercase {
+    text-transform: lowercase !important;
+}
+
+.sla-text-capitalize {
+    text-transform: capitalize !important;
+}
+
+.sla-text-truncate {
+    @include text-overflow;
+}
+
+// Text Alignments
+
+.sla-text-left {
+    text-align: left !important;
+}
+
+.sla-text-right {
+    text-align: right !important;
+}
+
+.sla-text-center {
+    text-align: center !important;
+}
+
+.sla-text-justify {
+    text-align: justify !important;
+}
+
+// Positions
+
+.sla-position-relative {
+    position: relative !important;
+}
+
+.sla-position-absolute {
+    position: absolute !important;
+}
+
+.sla-position-static {
+    position: static !important;
+}
+
+.sla-position-fixed {
+    position: fixed !important;
+}
+
+.sla-top-0 {
+    top: 0 !important;
+}
+
+.sla-right-0 {
+    right: 0 !important;
+}
+
+.sla-bottom-0 {
+    bottom: 0 !important;
+}
+
+.sla-left-0 {
+    left: 0 !important;
+}
+
+// Display Types
+
+.sla-none {
+    display: none !important;
+}
+
+.sla-block {
+    display: block !important;
+}
+
+.sla-flex {
+    display: flex !important;
+}
+
+.sla-inline-block {
+    display: inline-block !important;
+}
+
+.sla-inline {
+    display: inline !important;
+}
+
+.sla-invisible {
+    visibility: hidden !important;
+}
+
+// Overflows
+
+.sla-overflow-hidden {
+    overflow: hidden !important;
+}
+
+.sla-overflow-scroll {
+    overflow: scroll !important;
+}
+
+.sla-overflow-auto {
+    overflow: auto !important;
+}
+
+// Floats
+
+.sla-float-left {
+    float: left !important;
+}
+
+.sla-float-right {
+    float: right !important;
+}
+
+.sla-center-block {
+    @include center-block;
+}
+
+.sla-clearfix {
+    @include clearfix;
+}
+
+// Lists
+
+.sla-list-unstyled {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    li {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+.sla-list-inline {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    li {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: inline-block !important;
+    }
+}
+
+// Images
+
+.sla-img-responsive {
+    @include img-responsive;
+}
+
+.sla-img-full-width {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.sla-img-left {
+    float: left !important;
+    margin-right: 24px !important;
+}
+
+.sla-img-right {
+    float: right !important;
+    margin-left: 24px !important;
+}
+
+.sla-img-cover {
+    background-size: cover !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    max-width: 100% !important;
+    height: auto !important;
+
+    &.sla-img-cover-center {
+        background-position: center center !important;
+    }
+}
+
+// Forms
+
+.sla-responsive-field {
+    width: 100%;
+    max-width: 900px;
+
+    // to fix the issue on larger screens where 2 fields are one beside another
+    display: block !important;
+}
+
+// Misc
+
+.sla-full-width {
+    width: 100% !important;
+}
+
+.sla-full-height {
+    height: 100% !important;
+}
+
+.sla-cursor-pointer {
+    cursor: pointer !important;
+}

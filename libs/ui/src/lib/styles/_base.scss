@@ -1,0 +1,132 @@
+// --- Main --- //
+
+@import "libs/ui/src/lib/styles/variables";
+
+html {
+    background-color: white;
+    color: $sla-fg-7;
+    font-family: $sla-font-family;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.5;
+    min-width: 320px;
+
+    /* Fix for webkit rendering */
+    -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Vendor-prefixed and regular ::selection selectors cannot be combined:
+ * https://stackoverflow.com/a/16982510/7133471
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: $sla-color-brand;
+    color: white;
+    text-shadow: none;
+}
+
+::selection {
+    background: $sla-color-brand;
+    color: white;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: $sla-rule-height;
+    border: 0;
+    border-top: 1px solid $sla-color-rule;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+a {
+    color: $sla-link-color-default;
+    line-height: inherit;
+
+    &:not([class^='mat-']) {
+        text-decoration: $sla-link-decoration-default;
+
+        &:hover,
+        &:focus {
+            text-decoration: $sla-link-decoration-hover;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        color: $sla-link-color-hover;
+        outline: 0;
+    }
+
+    &:active {
+        text-decoration: none;
+    }
+
+    &.tel {
+        color: inherit !important;
+    }
+
+    &.disabled {
+        color: $sla-fg-5;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    & img {
+        border: none;
+    }
+}

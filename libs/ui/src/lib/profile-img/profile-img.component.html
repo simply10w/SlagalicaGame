@@ -1,0 +1,17 @@
+<div class="file-drop-area">
+  <button mat-button *ngIf="!file" class="fake-btn">Choose file</button>
+  <span class="file-msg">{{
+    file ? file.name : 'or drag and drop file here'
+  }}</span>
+  <div class="thumbnail" *ngIf="(thumbnail$ | async) as thumbnail">
+    <img class="sla-img-responsive" [src]="thumbnail" [alt]="file.name" />
+  </div>
+
+  <input class="file-input" type="file" accept=".png,.jpg,.jpeg" />
+</div>
+
+<div class="form-group" *ngIf="progress > 0">
+  <div class="progress">
+    <div class="progress-bar" [style.width.%]="progress">{{ progress }}%</div>
+  </div>
+</div>

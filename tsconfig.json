@@ -16,7 +16,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@slagalica/data": ["libs/data/src/index.ts"]
+      "@slagalica/data": ["libs/data/src/index.ts"],
+      "@slagalica/common": ["libs/common/src/index.ts"],
+      "@slagalica/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

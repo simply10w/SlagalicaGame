@@ -1,0 +1,25 @@
+<h2>Login</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field>
+    <mat-label>User Name</mat-label>
+    <input
+      matInput
+      type="text"
+      formControlName="userName"
+      autocomplete="nickname"
+    />
+    <mat-error>User name is required</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      type="password"
+      formControlName="password"
+      autocomplete="current-password"
+    />
+    <mat-error>Password is required</mat-error>
+  </mat-form-field>
+  <button mat-button type="submit">Login</button>
+</form>

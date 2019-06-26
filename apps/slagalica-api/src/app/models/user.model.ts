@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { User as BaseUser, UserType, UserGender } from '@slagalica/data';
 import { genSalt, hash, compare } from 'bcrypt';
-import { Logger } from '../util';
 
 const UserSchema = new Schema<User>(<UserConfig>{
   firstName: {
@@ -56,7 +55,11 @@ const UserSchema = new Schema<User>(<UserConfig>{
    * image will be stored in some cloud storage
    */
   profileImgUrl: String,
-  updated: { type: Date, default: Date.now }
+  updated: { type: Date, default: Date.now },
+  accepted: {
+    type: Boolean,
+    default: false
+  }
 });
 
 /**
@@ -103,7 +106,6 @@ class UserMethods {
 }
 type User = BaseUser & Document & UserMethods;
 type UserConfig = { [key in keyof BaseUser]: any };
-
 UserSchema.loadClass(UserMethods);
 
 export const UserModel = model<User>('users', UserSchema);
