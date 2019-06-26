@@ -16,6 +16,9 @@
     },
     "slagalica-api": {
       "tags": []
+    },
+    "data": {
+      "tags": []
     }
   }
 }
