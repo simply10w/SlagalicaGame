@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SupervizorPageActions } from '@slagalica-app/supervizor/actions';
-import { SpojnicaGame } from '@slagalica/data';
+import { SpojnicaGame, AsocijacijaGame } from '@slagalica/data';
 
 @Component({
   selector: 'sla-supervizor-page',
@@ -17,5 +17,9 @@ export class SupervizorPageComponent {
 
   addSpojnica(game: SpojnicaGame) {
     this.store.dispatch(SupervizorPageActions.addSpojnicaGame({ game }));
+  }
+
+  addAsocijacija(game: AsocijacijaGame) {
+    this.store.dispatch(SupervizorPageActions.addAsocijacijaGame({ game }));
   }
 }

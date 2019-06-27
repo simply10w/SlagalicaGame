@@ -8,9 +8,9 @@ import { SpojnicaGame } from '@slagalica/data';
 export class SpojnicaGameApiService {
   constructor(private http: HttpClient) {}
 
-  addSpojnicaGame(spojnicaGame: SpojnicaGame) {
+  addGame(game: SpojnicaGame) {
     return this.http.post<{ game: SpojnicaGame }>(`api/spojnica-game`, {
-      game: spojnicaGame
+      game
     });
   }
 }

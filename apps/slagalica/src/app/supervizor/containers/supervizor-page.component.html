@@ -10,12 +10,15 @@
       <span>Spojnica Game</span>
     </mat-toolbar>
     <sla-spojnica-game-form
-      (newSpojnica)="addSpojnica($event)"
+      (newGame)="addSpojnica($event)"
     ></sla-spojnica-game-form>
   </div>
   <div>
     <mat-toolbar>
       <span>Asocijacija Game</span>
     </mat-toolbar>
+    <sla-asocijacija-game-form
+      (newGame)="addAsocijacija($event)"
+    ></sla-asocijacija-game-form>
   </div>
 </div>

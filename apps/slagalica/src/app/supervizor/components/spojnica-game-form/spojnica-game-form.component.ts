@@ -16,7 +16,7 @@ import { times } from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SpojnicaGameFormComponent {
-  @Output() newSpojnica = new EventEmitter<SpojnicaGame>();
+  @Output() newGame = new EventEmitter<SpojnicaGame>();
 
   word: string;
 
@@ -45,9 +45,9 @@ export class SpojnicaGameFormComponent {
 
   add() {
     if (this.form.valid) {
-      this.newSpojnica.emit(this.form.value);
-      this.form.reset();
-      this.isEdit = false;
+      this.newGame.emit(this.form.value);
+      // this.form.reset();
+      // this.isEdit = false;
     } else {
       showFormErrors(this.form);
     }

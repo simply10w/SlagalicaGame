@@ -1,0 +1,18 @@
+:host {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        align-items: start;
+    }
+
+    .group {
+        background-color: #fafafa;
+        padding: 8px;
+        margin-bottom: 16px;
+    }
+
+    .game-solution {
+        background-color: beige;
+    }
+}

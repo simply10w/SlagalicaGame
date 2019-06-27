@@ -4,7 +4,8 @@ import { environment } from './environments/environment.prod';
 import {
   UsersController,
   WordsController,
-  SpojnicaGameController
+  SpojnicaGameController,
+  AsocijacijaGameController
 } from './app/controllers';
 import { Logger } from './app/util';
 import * as bodyParser from 'body-parser';
@@ -30,6 +31,7 @@ async function boot() {
     app.use('/api/users', UsersController);
     app.use('/api/words', WordsController);
     app.use('/api/spojnica-game', SpojnicaGameController);
+    app.use('/api/asocijacija-game', AsocijacijaGameController);
 
     const port = process.env.port || 3333;
     const server = app.listen(port, () => {

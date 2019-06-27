@@ -1,0 +1,43 @@
+<button
+  *ngIf="!isEdit"
+  mat-raised-button
+  color="primary"
+  (click)="isEdit = !isEdit"
+>
+  Add Asocijacija Game
+</button>
+<div *ngIf="isEdit" [formGroup]="form">
+  <div formArrayName="groups">
+    <div
+      *ngFor="let group of GROUPS; let i = index"
+      [formGroupName]="i"
+      class="group"
+    >
+      <p>Group {{ i | slaGroupLetter }}</p>
+      <div formArrayName="hints">
+        <div *ngFor="let hint of HINTS; let i = index">
+          <mat-form-field>
+            <mat-label>Hint {{ i + 1 }}</mat-label>
+            <input type="text" matInput [formControlName]="i" />
+            <mat-error>Required.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <sla-solution-input
+        placeholder="Solutions for {{ i | slaGroupLetter }}"
+        formControlName="solutions"
+      ></sla-solution-input>
+    </div>
+  </div>
+
+  <sla-solution-input
+    placeholder="Solutions for game"
+    formControlName="solutions"
+  ></sla-solution-input>
+
+  <button mat-button (click)="isEdit = !isEdit">Back</button>
+  <button mat-raised-button color="primary" (click)="add()">
+    Add Asocijacija Game
+  </button>
+</div>

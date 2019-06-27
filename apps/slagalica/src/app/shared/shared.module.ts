@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
@@ -32,6 +33,7 @@ import { UiModule } from '@slagalica/ui';
     MatToolbarModule,
     MatTooltipModule,
     MatGridListModule,
+    MatChipsModule,
     RouterModule,
     UiModule
   ]

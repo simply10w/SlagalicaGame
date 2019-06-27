@@ -1,0 +1,25 @@
+<mat-form-field
+  class="example-chip-list"
+  [class.mat-form-field-invalid]="error && touched"
+>
+  <mat-chip-list #chipList aria-label="Solutions">
+    <mat-chip
+      *ngFor="let solution of solutions"
+      color="primary"
+      selected
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(solution)"
+    >
+      {{ solution }}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input
+      [placeholder]="placeholder"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-list>
+</mat-form-field>

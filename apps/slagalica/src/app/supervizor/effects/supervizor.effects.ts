@@ -4,11 +4,13 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
   SpojnicaGameApiActions,
   SupervizorPageActions,
-  WordsGameApiActions
+  WordsGameApiActions,
+  AsocijacijaGameApiActions
 } from '@slagalica-app/supervizor/actions';
 import {
   SpojnicaGameApiService,
-  WordsGameApiService
+  WordsGameApiService,
+  AsocijacijaGameApiService
 } from '@slagalica-app/supervizor/services';
 import { of } from 'rxjs';
 import { catchError, concatMap, map, tap } from 'rxjs/operators';
@@ -56,7 +58,7 @@ export class SupervizorEffects {
     this.actions$.pipe(
       ofType(SupervizorPageActions.addSpojnicaGame),
       concatMap(({ game }) =>
-        this.spojnicaGameApi.addSpojnicaGame(game).pipe(
+        this.spojnicaGameApi.addGame(game).pipe(
           map(response => response.game),
           map(addedGame =>
             SpojnicaGameApiActions.addSpojnicaGameSuccess({ game: addedGame })
@@ -96,10 +98,52 @@ export class SupervizorEffects {
     { dispatch: false }
   );
 
+  addAsocijacijaGame$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SupervizorPageActions.addAsocijacijaGame),
+      concatMap(({ game }) =>
+        this.asocijacijaGameApi.addGame(game).pipe(
+          map(response => response.game),
+          map(addedGame =>
+            AsocijacijaGameApiActions.addAsocijacijaGameSuccess({
+              game: addedGame
+            })
+          ),
+          catchError(error =>
+            of(
+              AsocijacijaGameApiActions.addAsocijacijaGameFailure({
+                error
+              })
+            )
+          )
+        )
+      )
+    )
+  );
+
+  onAsocijacijaGameAdded$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AsocijacijaGameApiActions.addAsocijacijaGameSuccess),
+        tap(() => this.snackBar.open(`Added asocijacija game`))
+      ),
+    { dispatch: false }
+  );
+
+  onAsocijacijaGameAddFail$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AsocijacijaGameApiActions.addAsocijacijaGameFailure),
+        tap(() => this.snackBar.open(`Failed to add asocijacija game`))
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private wordsGameApi: WordsGameApiService,
     private spojnicaGameApi: SpojnicaGameApiService,
+    private asocijacijaGameApi: AsocijacijaGameApiService,
     private snackBar: MatSnackBar
   ) {}
 }

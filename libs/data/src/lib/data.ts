@@ -26,6 +26,18 @@ export interface SpojnicaGame {
   pairs: SpojnicaPair[];
 }
 
+export interface AsocijacijaGame {
+  _id: string;
+  groups: AsocijacijaGroup[];
+  solutions: string[];
+}
+
+export interface AsocijacijaGroup {
+  _id: string;
+  hints: string[];
+  solutions: string[];
+}
+
 export interface SpojnicaPair {
   _id: string;
   left: string;
