@@ -1,9 +1,11 @@
 :host {
     .grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 20px;
-        align-items: start;
+        grid-gap: 10px;
+        margin: 0;
+        grid-template-columns: repeat(2, 1fr) 200px repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr) 200px repeat(2, 1fr);
+        grid-template-areas: "a a . b b"  "a a . b b"  ". . s . ."  "c c . d d" "c c . d d";
     }
 
     .group {
@@ -12,7 +14,24 @@
         margin-bottom: 16px;
     }
 
+    .grid > .group:nth-child(1) {
+        grid-area: a;
+    }
+
+    .grid > .group:nth-child(2) {
+        grid-area: b;
+    }
+
+    .grid > .group:nth-child(3) {
+        grid-area: c;
+    }
+
+    .grid > .group:nth-child(4) {
+        grid-area: d;
+    }
+
     .game-solution {
         background-color: beige;
+        grid-area: s;
     }
 }

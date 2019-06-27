@@ -7,7 +7,7 @@
   Add Asocijacija Game
 </button>
 <div *ngIf="isEdit" [formGroup]="form">
-  <div formArrayName="groups">
+  <div formArrayName="groups" class="grid">
     <div
       *ngFor="let group of GROUPS; let i = index"
       [formGroupName]="i"
@@ -29,12 +29,12 @@
         formControlName="solutions"
       ></sla-solution-input>
     </div>
+    <sla-solution-input
+      class="game-solution"
+      placeholder="Solutions for game"
+      [formControl]="form.get('solutions')"
+    ></sla-solution-input>
   </div>
-
-  <sla-solution-input
-    placeholder="Solutions for game"
-    formControlName="solutions"
-  ></sla-solution-input>
 
   <button mat-button (click)="isEdit = !isEdit">Back</button>
   <button mat-raised-button color="primary" (click)="add()">
