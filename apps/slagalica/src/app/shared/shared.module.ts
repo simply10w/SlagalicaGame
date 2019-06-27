@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
@@ -40,6 +41,7 @@ import { UiModule } from '@slagalica/ui';
     MatTabsModule,
     MatSidenavModule,
     MatDialogModule,
+    MatCardModule,
     RouterModule,
     UiModule
   ]

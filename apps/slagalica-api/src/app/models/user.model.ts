@@ -53,7 +53,10 @@ const UserSchema = new Schema({
   /**
    * image will be stored in some cloud storage
    */
-  profileImgUrl: String,
+  profileImgUrl: {
+    type: String,
+    get: (relativeUrl: string) => `/${relativeUrl}`
+  },
   updated: { type: Date, default: Date.now },
   accepted: {
     type: Boolean,
@@ -102,10 +105,10 @@ UserSchema.pre('save', function(this: IUser, next) {
 const STORAGE_BUCKET = path.resolve(
   process.cwd(),
   'apps',
-  'slagalica-api',
+  'slagalica',
   'src',
   'assets',
-  'public'
+  'images'
 );
 
 class UserImpl {

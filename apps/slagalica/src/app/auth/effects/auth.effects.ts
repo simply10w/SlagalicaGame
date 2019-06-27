@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import {
-  LandingPageActions,
   AuthActions,
-  AuthApiActions
+  AuthApiActions,
+  LandingPageActions
 } from '@slagalica-app/auth/actions';
-import { AuthApiService } from '@slagalica-app/auth/services';
 import { LogoutConfirmationDialogComponent } from '@slagalica-app/auth/components';
+import { AuthApiService } from '@slagalica-app/auth/services';
+import { getErrorMessage } from '@slagalica/common';
 import {
   LoginDto,
   RegisterDto,
-  UserType,
-  ResetPasswordDto
+  ResetPasswordDto,
+  UserType
 } from '@slagalica/data';
-import { getErrorMessage } from '@slagalica/common';
+import { of } from 'rxjs';
+import { catchError, exhaustMap, map, tap, filter } from 'rxjs/operators';
 
 @Injectable()
 export class AuthEffects {
@@ -154,6 +155,7 @@ export class AuthEffects {
 
   constructor(
     private actions$: Actions,
+    private store: Store<any>,
     private authApi: AuthApiService,
     private router: Router,
     private dialog: MatDialog,

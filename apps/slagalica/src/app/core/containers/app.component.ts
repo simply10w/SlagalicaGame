@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { AuthActions } from '@slagalica-app/auth/actions';
 import * as fromAuth from '@slagalica-app/auth/reducers';
-import * as fromRoot from '@slagalica-app/reducers';
 import { UserType } from '@slagalica/data';
 
 @Component({
@@ -13,6 +12,7 @@ import { UserType } from '@slagalica/data';
   template: `
     <sla-layout>
       <sla-toolbar>
+        <sla-nav-item *ngIf="!(loggedIn$ | async)">Slagalica</sla-nav-item>
         <sla-nav-item *slaHasPermission="[UserType.Admin]" routerLink="/admin"
           >Admin
         </sla-nav-item>
@@ -24,7 +24,6 @@ import { UserType } from '@slagalica/data';
         <sla-nav-item *slaHasPermission="[UserType.Igrac]" routerLink="/player"
           >Igrac</sla-nav-item
         >
-        <sla-nav-item *ngIf="!(loggedIn$ | async)">Sign In</sla-nav-item>
         <sla-nav-item
           *slaHasPermission="[
             UserType.Igrac,
@@ -50,7 +49,7 @@ export class AppComponent {
   loggedIn$: Observable<boolean>;
   UserType = UserType;
 
-  constructor(private store: Store<fromRoot.State & fromAuth.State>) {
+  constructor(private store: Store<any>) {
     this.loggedIn$ = this.store.pipe(select(fromAuth.getLoggedIn));
   }
 

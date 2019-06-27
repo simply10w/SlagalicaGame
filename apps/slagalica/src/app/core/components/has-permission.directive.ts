@@ -30,11 +30,13 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
     this.listenPermissions = this.permissionsGuard
       .hasPermission(this.permissions)
       .subscribe(hasPermission => {
-        hasPermission && !this.created
-          ? this.viewContainer.createEmbeddedView(this.templateRef)
-          : this.viewContainer.clear();
-
-        this.created = hasPermission;
+        if (hasPermission && !this.created) {
+          this.viewContainer.createEmbeddedView(this.templateRef);
+          this.created = true;
+        } else if (!hasPermission) {
+          this.viewContainer.clear();
+          this.created = false;
+        }
       });
   }
 

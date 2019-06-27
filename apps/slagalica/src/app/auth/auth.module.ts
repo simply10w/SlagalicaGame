@@ -5,7 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { LogoutConfirmationModule } from '@slagalica-app/auth/components';
 import { LandingPageModule } from '@slagalica-app/auth/containers';
 import { AuthEffects } from '@slagalica-app/auth/effects';
-import { reducers } from '@slagalica-app/auth/reducers';
+import { authReducer, landingPageReducer } from '@slagalica-app/auth/reducers';
 import { SharedModule } from '@slagalica-app/shared';
 import { routes } from './routes';
 
@@ -15,7 +15,8 @@ export const DEPS = [LandingPageModule, LogoutConfirmationModule];
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature('auth', reducers),
+    StoreModule.forFeature('auth', authReducer),
+    StoreModule.forFeature('landingPage', landingPageReducer),
     EffectsModule.forFeature([AuthEffects]),
     DEPS
   ]

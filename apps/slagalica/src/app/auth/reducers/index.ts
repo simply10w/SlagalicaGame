@@ -7,37 +7,24 @@ import {
 import * as fromAuth from '@slagalica-app/auth/reducers/auth.reducer';
 import * as fromLandingPage from '@slagalica-app/auth/reducers/landing-page.reducer';
 
-export interface State {
-  status: fromAuth.State;
-  landingPage: fromLandingPage.State;
-}
+export const authReducer = fromAuth.reducer;
+export const landingPageReducer = fromLandingPage.reducer;
 
-export function reducers(state: State | undefined, action: Action) {
-  return combineReducers({
-    status: fromAuth.reducer,
-    landingPage: fromLandingPage.reducer
-  })(state, action);
-}
+export const selectAuthState = createFeatureSelector<fromAuth.State>('auth');
+export const selectLandingPageState = createFeatureSelector<
+  fromLandingPage.State
+>('landingPage');
 
-export const selectAuthState = createFeatureSelector<State>('auth');
-
-export const selectAuthStatusState = createSelector(
-  selectAuthState,
-  (state: State) => state.status
-);
 export const getUser = createSelector(
-  selectAuthStatusState,
+  selectAuthState,
   fromAuth.getUser
 );
+
 export const getLoggedIn = createSelector(
   getUser,
-  user => !!user
+  Boolean
 );
 
-export const selectLandingPageState = createSelector(
-  selectAuthState,
-  (state: State) => state.landingPage
-);
 export const getLoginError = createSelector(
   selectLandingPageState,
   fromLandingPage.getLoginError

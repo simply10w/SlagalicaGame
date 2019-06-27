@@ -1,14 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { LoginDto, RegisterDto, ResetPasswordDto } from '@slagalica/data';
-import { Store, select } from '@ngrx/store';
-import * as fromAuth from '@slagalica-app/auth/reducers';
-import {
-  LandingPageActions,
-  AuthApiActions
-} from '@slagalica-app/auth/actions';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
-import { of, merge } from 'rxjs';
-import { mapTo, tap } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import {
+  AuthApiActions,
+  LandingPageActions
+} from '@slagalica-app/auth/actions';
+import * as fromAuth from '@slagalica-app/auth/reducers';
+import { LoginDto, RegisterDto, ResetPasswordDto } from '@slagalica/data';
+import { mapTo } from 'rxjs/operators';
 
 @Component({
   selector: 'sla-landing-page',
@@ -17,6 +16,9 @@ import { mapTo, tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LandingPageComponent {
+  loggedIn$ = this.store.pipe(select(fromAuth.getLoggedIn));
+  user$ = this.store.pipe(select(fromAuth.getUser));
+
   pendingLogin$ = this.store.pipe(select(fromAuth.getLoginPending));
   errorLogin$ = this.store.pipe(select(fromAuth.getLoginError));
 
