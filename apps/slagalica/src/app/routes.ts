@@ -31,6 +31,15 @@ export const routes: Route[] = [
     canActivate: [PermissionsGuard]
   },
   {
+    path: 'player',
+    loadChildren: () =>
+      import('./player/player.module').then(m => m.PlayerModule),
+    data: {
+      permissions: [UserType.Igrac]
+    },
+    canActivate: [PermissionsGuard]
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'landing'

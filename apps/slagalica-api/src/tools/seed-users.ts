@@ -28,7 +28,33 @@ const SUPER = {
   password: '123123'
 };
 
-const users: any[] = [ADMIN, SUPER];
+const IGRAC1 = {
+  type: 'igrac',
+  accepted: true,
+  firstName: 'Petar',
+  lastName: 'Djordjevic',
+  userName: 'igrac1',
+  email: 'pdjordjevic+igrac1@spark451.com',
+  dateOfBirth: faker.date.past(20),
+  gender: 'male',
+  profileImgUrl: 'bg-img-business.jpg',
+  password: '123123'
+};
+
+const IGRAC2 = {
+  type: 'igrac',
+  accepted: true,
+  firstName: 'Petar',
+  lastName: 'Djordjevic',
+  userName: 'igrac2',
+  email: 'pdjordjevic+igrac2@spark451.com',
+  dateOfBirth: faker.date.past(20),
+  gender: 'male',
+  profileImgUrl: 'bg-img-business.jpg',
+  password: '123123'
+};
+
+const users: any[] = [ADMIN, SUPER, IGRAC1, IGRAC2];
 for (let i = 0; i < 50; i++) {
   users.push({
     type: 'igrac',
