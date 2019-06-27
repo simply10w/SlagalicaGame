@@ -1,0 +1,2 @@
+export { SpojnicaGameApiService } from './spojnica-game-api.service';
+export { WordsGameApiService } from './words-game-api.service';

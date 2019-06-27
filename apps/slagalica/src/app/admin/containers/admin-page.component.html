@@ -1,0 +1,39 @@
+<div class="grid">
+  <div>
+    <mat-toolbar>
+      <span>Pending Registrations</span>
+    </mat-toolbar>
+    <mat-list>
+      <mat-list-item *ngFor="let user of (pendingUsers$ | async)">
+        <h3 matLine>{{ user.userName }}</h3>
+        <p matLine>
+          <span> {{ user.firstName }} {{ user.lastName }} </span>
+          <br />
+          <span>{{ user.email }}</span>
+        </p>
+        <mat-action-list class="actions">
+          <button
+            mat-icon-button
+            matTooltip="Accept user"
+            (click)="accept(user)"
+          >
+            <mat-icon>done</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Reject user"
+            (click)="reject(user)"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+        </mat-action-list>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div>
+    <mat-toolbar>
+      <span>Game of the Day</span>
+    </mat-toolbar>
+  </div>
+</div>

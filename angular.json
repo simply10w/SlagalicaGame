@@ -12,7 +12,7 @@
       },
       "root": "apps/slagalica",
       "sourceRoot": "apps/slagalica/src",
-      "prefix": "slagalica",
+      "prefix": "sla",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -124,7 +124,7 @@
       "root": "apps/slagalica-api",
       "sourceRoot": "apps/slagalica-api/src",
       "projectType": "application",
-      "prefix": "slagalica-api",
+      "prefix": "sla-api",
       "schematics": {},
       "architect": {
         "build": {
@@ -203,7 +203,7 @@
       "projectType": "library",
       "root": "libs/common",
       "sourceRoot": "libs/common/src",
-      "prefix": "slagalica",
+      "prefix": "sla",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -234,7 +234,7 @@
       "projectType": "library",
       "root": "libs/ui",
       "sourceRoot": "libs/ui/src",
-      "prefix": "slagalica-ui",
+      "prefix": "sla-ui",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",

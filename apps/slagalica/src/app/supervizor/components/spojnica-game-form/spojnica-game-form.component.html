@@ -1,0 +1,40 @@
+<button
+  *ngIf="!isEdit"
+  mat-raised-button
+  color="primary"
+  (click)="isEdit = !isEdit"
+>
+  Add Spojnica Game
+</button>
+<form *ngIf="isEdit" [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input type="text" matInput formControlName="description" />
+    <mat-error>Description is required.</mat-error>
+  </mat-form-field>
+
+  <div formArrayName="pairs">
+    <div
+      class="grid"
+      *ngFor="let pair of pairs; let i = index"
+      [formGroupName]="i"
+    >
+      <mat-form-field>
+        <mat-label>Left word</mat-label>
+        <input type="text" matInput formControlName="left" />
+        <mat-error>Left word is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Right word</mat-label>
+        <input type="text" matInput formControlName="right" />
+        <mat-error>Right word is required.</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <button mat-button (click)="isEdit = !isEdit">Back</button>
+  <button mat-raised-button color="primary" (click)="add()">
+    Add Spojnica Game
+  </button>
+</form>

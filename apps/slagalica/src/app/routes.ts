@@ -12,6 +12,15 @@ export const routes: Route[] = [
     component: HomePageComponent
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
+  {
+    path: 'supervizor',
+    loadChildren: () =>
+      import('./supervizor/supervizor.module').then(m => m.SupervizorModule)
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'landing'

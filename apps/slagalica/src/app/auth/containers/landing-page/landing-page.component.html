@@ -1,12 +1,15 @@
-<h1>Slagalica</h1>
-
-<sla-login
-  (login)="login($event)"
-  [pending]="pendingLogin$ | async"
-  [errorMessage]="errorLogin$ | async"
-></sla-login>
-<sla-registration
-  [pending]="pendingRegister$ | async"
-  [errorMessage]="errorRegister$ | async"
-  (register)="register($event)"
-></sla-registration>
+<mat-toolbar>
+  <h1>Slagalica</h1>
+</mat-toolbar>
+<div class="grid">
+  <sla-login
+    (login)="login($event)"
+    [pending]="pendingLogin$ | async"
+    [errorMessage]="errorLogin$ | async"
+  ></sla-login>
+  <sla-registration
+    [pending]="pendingRegister$ | async"
+    [errorMessage]="errorRegister$ | async"
+    (register)="register($event)"
+  ></sla-registration>
+</div>

@@ -11,7 +11,7 @@ import {
 } from '@slagalica-app/auth/actions';
 import { AuthApiService } from '@slagalica-app/auth/services';
 import { LogoutConfirmationDialogComponent } from '@slagalica-app/auth/components';
-import { LoginDto, RegisterDto } from '@slagalica/data';
+import { LoginDto, RegisterDto, UserType } from '@slagalica/data';
 
 @Injectable()
 export class AuthEffects {
@@ -33,7 +33,13 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthApiActions.loginSuccess),
-        tap(() => this.router.navigate(['/home']))
+        tap(({ user }) => {
+          /** TODO:  */
+          if (user.type === UserType.Admin) {
+            //
+          }
+          this.router.navigate(['/admin']);
+        })
       ),
     { dispatch: false }
   );

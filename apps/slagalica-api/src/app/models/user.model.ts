@@ -1,14 +1,13 @@
-import { Schema, model, Document } from 'mongoose';
-import { User as BaseUser, UserType, UserGender } from '@slagalica/data';
+import { Schema, model, Model, Document } from 'mongoose';
+import { User, UserType, UserGender, Omit } from '@slagalica/data';
 import { genSalt, hash, compare } from 'bcrypt';
 import { UploadedFile } from 'express-fileupload';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as uniqueFilename from 'unique-filename';
-import { Logger } from '../util';
 import { promisify } from 'util';
 
-const UserSchema = new Schema<User>(<UserConfig>{
+const UserSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'First name is required.']
@@ -58,17 +57,29 @@ const UserSchema = new Schema<User>(<UserConfig>{
   }
 });
 
+interface IUserDocument extends Omit<User, '_id'>, Document {}
+
+interface IUser extends IUserDocument {
+  storeProfileImage(file: UploadedFile): Promise<string>;
+  comparePassword(password: string): Promise<boolean>;
+  accept(decision: boolean): Promise<this>;
+}
+
+interface IUserModel extends Model<IUser> {
+  getAllPendingPlayers(): Promise<IUser[]>;
+  getAllAcceptedPlayers(): Promise<IUser[]>;
+}
+
 /**
  * Hooks
  */
 
-UserSchema.pre('save', function(this: User, next) {
-  const SALT_ROUNDS = 10;
+UserSchema.pre('save', function(this: IUser, next) {
   const user = this;
-
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
 
+  const SALT_ROUNDS = 10;
   // generate a salt
   genSalt(SALT_ROUNDS, (err, salt) => {
     if (err) return next(err);
@@ -89,8 +100,20 @@ const STORAGE_BUCKET = path.resolve(
   'public'
 );
 
-class UserMethods {
-  comparePassword(this: User, candidatePassword: string) {
+class UserImpl {
+  static getAllPendingPlayers(this: IUserModel): Promise<IUser[]> {
+    return this.find({ accepted: false })
+      .where('type', UserType.Igrac)
+      .exec();
+  }
+
+  static getAllAcceptedPlayers(this: IUserModel): Promise<IUser[]> {
+    return this.find({ accepted: true })
+      .where('type', UserType.Igrac)
+      .exec();
+  }
+
+  comparePassword(this: IUser, candidatePassword: string) {
     return new Promise<boolean>((resolve, reject) => {
       compare(candidatePassword, this.password, (err, isMatch) => {
         if (err) return reject(err);
@@ -99,23 +122,29 @@ class UserMethods {
     });
   }
 
-  toJSON(this: User) {
+  toJSON(this: IUser) {
     const userObj = this.toObject();
     delete userObj.password;
     delete userObj.__v;
     return userObj;
   }
 
-  async storeProfileImage(this: User, file: UploadedFile) {
+  async storeProfileImage(this: IUser, file: UploadedFile) {
     const newFileName = uniqueFilename('', '') + '-' + file.name;
     const where = path.resolve(STORAGE_BUCKET, newFileName);
     await promisify(fs.writeFile)(where, file.data);
     this.set('profileImgUrl', newFileName);
     return where;
   }
-}
-type User = BaseUser & Document & UserMethods;
-type UserConfig = { [key in keyof BaseUser]: any };
-UserSchema.loadClass(UserMethods);
 
-export const UserModel = model<User>('users', UserSchema);
+  accept(this: IUser, decision: boolean) {
+    if (this.accepted) {
+      return Promise.reject('User is already accepted.');
+    }
+    this.accepted = decision;
+    return decision ? this.save() : this.remove();
+  }
+}
+
+UserSchema.loadClass(UserImpl);
+export const UserModel = model('users', UserSchema) as IUserModel;
