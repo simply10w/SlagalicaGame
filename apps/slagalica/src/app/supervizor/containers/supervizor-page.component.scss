@@ -1,12 +1,1 @@
-:host {
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 20px;
-        align-items: start;
-    }
-
-    .asocijacija-game {
-        grid-column: span 2;
-    }
-}
+:host {}

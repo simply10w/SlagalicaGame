@@ -11,15 +11,32 @@ import {
   MatFormFieldDefaultOptions
 } from '@angular/material/form-field';
 
+import {
+  LayoutComponent,
+  NavItemComponent,
+  ToolbarComponent,
+  HasPermissionDirective
+} from '@slagalica-app/core/components';
+import { AppComponent } from '@slagalica-app/core/containers';
+import { SharedModule } from '@slagalica-app/shared';
+export const COMPONENTS = [
+  AppComponent,
+  LayoutComponent,
+  NavItemComponent,
+  ToolbarComponent,
+  HasPermissionDirective
+];
+
 @NgModule({
   imports: [
     HttpClientModule,
     NxModule.forRoot(),
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    SharedModule
   ],
-  exports: [],
-  declarations: [],
+  exports: COMPONENTS,
+  declarations: COMPONENTS,
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -27,7 +44,7 @@ import {
         appearance: 'outline'
       }
     },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } }
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2000 } }
   ]
 })
 export class CoreModule {}

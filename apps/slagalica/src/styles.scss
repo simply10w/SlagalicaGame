@@ -15,3 +15,8 @@ body {
 .sla-error {
     color: $sla-warn;
 }
+
+.mat-tab-body-content {
+    padding: 16px;
+    min-height: 300px;
+}

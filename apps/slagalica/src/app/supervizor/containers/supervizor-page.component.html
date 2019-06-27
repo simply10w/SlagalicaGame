@@ -1,24 +1,20 @@
-<div class="grid">
-  <div>
-    <mat-toolbar>
-      <span>Words game</span>
-    </mat-toolbar>
-    <sla-word-game-form (newWord)="addWord($event)"></sla-word-game-form>
-  </div>
-  <div>
-    <mat-toolbar>
-      <span>Spojnica Game</span>
-    </mat-toolbar>
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab label="Slagalica">
+    <sla-word-game-form
+      class="container"
+      (newWord)="addWord($event)"
+    ></sla-word-game-form>
+  </mat-tab>
+  <mat-tab label="Spojnica">
     <sla-spojnica-game-form
+      class="container"
       (newGame)="addSpojnica($event)"
     ></sla-spojnica-game-form>
-  </div>
-  <div class="asocijacija-game">
-    <mat-toolbar>
-      <span>Asocijacija Game</span>
-    </mat-toolbar>
+  </mat-tab>
+  <mat-tab label="Asocijacija">
     <sla-asocijacija-game-form
+      class="container"
       (newGame)="addAsocijacija($event)"
     ></sla-asocijacija-game-form>
-  </div>
-</div>
+  </mat-tab>
+</mat-tab-group>

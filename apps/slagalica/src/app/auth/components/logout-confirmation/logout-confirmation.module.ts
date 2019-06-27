@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from '@slagalica-app/shared';
 import { LogoutConfirmationDialogComponent } from './logout-confirmation.component';
 
 @NgModule({
-  imports: [MatDialogModule],
+  imports: [SharedModule],
   exports: [LogoutConfirmationDialogComponent],
   declarations: [LogoutConfirmationDialogComponent],
   entryComponents: [LogoutConfirmationDialogComponent]

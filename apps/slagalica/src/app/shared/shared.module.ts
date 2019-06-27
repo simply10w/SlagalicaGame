@@ -14,6 +14,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
@@ -36,6 +38,8 @@ import { UiModule } from '@slagalica/ui';
     MatGridListModule,
     MatChipsModule,
     MatTabsModule,
+    MatSidenavModule,
+    MatDialogModule,
     RouterModule,
     UiModule
   ]

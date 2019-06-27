@@ -6,16 +6,15 @@ import { EffectsModule } from '@ngrx/effects';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AuthModule } from '@slagalica-app/auth/auth.module';
+import { CoreModule } from '@slagalica-app/core';
+import { AppComponent } from '@slagalica-app/core/containers';
+import { HomePageModule } from '@slagalica-app/home-page/home-page.module';
+import { metaReducers, ROOT_REDUCERS } from '@slagalica-app/reducers';
+import { routes } from '@slagalica-app/routes';
 import { environment } from '../environments/environment';
-import { AppComponent } from './app.component';
-import { AuthModule } from './auth/auth.module';
-import { CoreModule } from './core';
-import { HomePageModule } from './home-page/home-page.module';
-import { metaReducers, ROOT_REDUCERS } from './reducers';
-import { routes } from './routes';
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -51,7 +50,6 @@ import { routes } from './routes';
     AuthModule,
     HomePageModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

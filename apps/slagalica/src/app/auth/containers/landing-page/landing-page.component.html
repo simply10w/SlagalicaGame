@@ -1,7 +1,8 @@
-<mat-toolbar>
-  <h1>Slagalica</h1>
-</mat-toolbar>
-<mat-tab-group mat-align-tabs="center" color="accent">
+<mat-tab-group
+  mat-align-tabs="center"
+  color="accent"
+  [selectedIndex]="selectedTab$ | async"
+>
   <mat-tab label="Login">
     <sla-login
       class="container"

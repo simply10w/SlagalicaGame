@@ -1,0 +1,26 @@
+<mat-list>
+  <mat-list-item *ngFor="let user of users">
+    <mat-icon mat-list-icon>face</mat-icon>
+    <h3 matLine>{{ user.userName }}</h3>
+    <p matLine>
+      <span> {{ user.firstName }} {{ user.lastName }} </span>
+    </p>
+    <mat-action-list class="actions">
+      <button
+        mat-icon-button
+        matTooltip="Accept user"
+        (click)="accept.emit(user)"
+      >
+        <mat-icon>done</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Reject user"
+        (click)="reject.emit(user)"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+    </mat-action-list>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
