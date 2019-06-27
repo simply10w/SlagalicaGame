@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as StatusCodes from 'http-status-codes';
-import { Logger } from '../util';
-import { SpojnicaGameModel } from '../models';
+import { Logger, errorHandler } from '@slagalica-api/util';
+import { SpojnicaGameModel } from '@slagalica-api/models';
 
 const SpojnicaGameController = Router();
 
@@ -11,7 +11,7 @@ const SpojnicaGameController = Router();
 SpojnicaGameController.get('/', (req, res) => {
   SpojnicaGameModel.find()
     .then(spojnicaGames => res.status(StatusCodes.OK).json({ spojnicaGames }))
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 /**
@@ -23,7 +23,7 @@ SpojnicaGameController.post('/', (req, res) => {
   model
     .save()
     .then(saved => res.status(StatusCodes.CREATED).json({ game: saved }))
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 export { SpojnicaGameController };

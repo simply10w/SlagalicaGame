@@ -2,6 +2,7 @@
   class="example-chip-list"
   [class.mat-form-field-invalid]="error && touched"
 >
+  <mat-label>{{ placeholder }}</mat-label>
   <mat-chip-list #chipList aria-label="Solutions">
     <mat-chip
       *ngFor="let solution of solutions"
@@ -15,7 +16,6 @@
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
     <input
-      [placeholder]="placeholder"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       [matChipInputAddOnBlur]="addOnBlur"

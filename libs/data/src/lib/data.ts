@@ -60,6 +60,12 @@ export interface LoginDto {
   password: string;
 }
 
+export interface ResetPasswordDto {
+  userName: string;
+  newPassword: string;
+  currentPassword: string;
+}
+
 export interface RegisterDto {
   firstName: string;
   lastName: string;
@@ -70,4 +76,8 @@ export interface RegisterDto {
   gender: UserGender;
   dateOfBirth: string;
   profileImage: File;
+}
+
+export interface ErrorDto {
+  error: string;
 }

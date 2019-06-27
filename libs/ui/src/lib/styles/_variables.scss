@@ -46,8 +46,8 @@ $sla-rule-height: 1px;
 $sla-color-rule: $sla-fg-3;
 
 // Brand Color
-$sla-color-brand: mat-color($mat-blue);
-$sla-warn: mat-color($mat-red);
+$sla-color-brand: mat-color($mat-blue, 300);
+$sla-warn: mat-color($mat-red, 900);
 
 // Icon Color
 $sla-color-icon-standard: $sla-fg-4;

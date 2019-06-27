@@ -1,8 +1,8 @@
+import { UserModel } from '@slagalica-api/models';
+import { errorHandler, createError } from '@slagalica-api/util';
 import { Router } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as StatusCodes from 'http-status-codes';
-import { UserModel } from '../models';
-import { Logger } from '../util';
 
 const UsersController = Router();
 
@@ -13,7 +13,7 @@ UsersController.get('/', async (req, res) => {
         users
       })
     )
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 UsersController.get('/accepted', async (req, res) => {
@@ -23,7 +23,7 @@ UsersController.get('/accepted', async (req, res) => {
         users
       })
     )
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 UsersController.get('/pending', async (req, res) => {
@@ -33,7 +33,7 @@ UsersController.get('/pending', async (req, res) => {
         users
       })
     )
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 UsersController.get('/:id', async (req, res) => {
@@ -49,50 +49,39 @@ UsersController.get('/:id', async (req, res) => {
         res.status(StatusCodes.NOT_FOUND).json();
       }
     })
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 UsersController.post('/login', async (req, res) => {
-  const { userName, password } = req.body;
-
   try {
-    const user = await UserModel.findOne({
-      userName
-    });
-    if (user) {
-      const okay = await user.comparePassword(password);
-      okay
-        ? res.status(StatusCodes.OK).json({ user })
-        : res
-            .status(StatusCodes.UNAUTHORIZED)
-            .json({ message: 'Username or password invalid. ' });
-    } else {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'User does not exist' });
-    }
+    const { userName, password } = req.body;
+    const user = await UserModel.authenticate({ userName, password });
+    user
+      ? res.status(StatusCodes.OK).json({ user })
+      : res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json(createError('Username or password invalid.'));
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({ error });
+    errorHandler(res)(error);
   }
 });
 
 UsersController.post('/register', async (req, res) => {
-  const file: UploadedFile = req.files.profileImage as UploadedFile;
+  const file: UploadedFile = req.files
+    ? (req.files.profileImage as UploadedFile)
+    : null;
   const user = JSON.parse(req.body.user);
 
   try {
     const model = new UserModel(user);
     await model.validate();
-    await model.storeProfileImage(file);
+    if (file) await model.storeProfileImage(file);
     const createdUser = await model.save();
     res.status(StatusCodes.OK).json({
       user: createdUser
     });
   } catch (error) {
-    Logger.logError(error);
-    res.status(StatusCodes.BAD_REQUEST).json({
-      error
-    });
+    errorHandler(res)(error);
   }
 });
 
@@ -104,14 +93,40 @@ UsersController.put('/:id/accept', async (req, res) => {
   if (!user) {
     return res
       .status(StatusCodes.NOT_FOUND)
-      .json({ error: 'User does not exist. ' });
+      .json(createError('User does not exist. '));
   }
 
   try {
     user = await user.accept(decision);
     res.status(StatusCodes.OK).json({ user });
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({ error });
+    errorHandler(res)(error);
+  }
+});
+
+UsersController.put('/reset-password', async (req, res) => {
+  const { userName, currentPassword, newPassword } = req.body;
+
+  try {
+    let user = await UserModel.findOne({ userName });
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json(createError('User does not exist.'));
+    }
+
+    const correctPassword = await user.comparePassword(currentPassword);
+    if (!correctPassword) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(createError('Wrong password.'));
+    }
+
+    user.password = newPassword;
+    user = await user.save();
+    res.status(StatusCodes.OK).json({ user });
+  } catch (error) {
+    errorHandler(res)(error);
   }
 });
 

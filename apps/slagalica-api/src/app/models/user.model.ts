@@ -1,8 +1,8 @@
-import { Schema, model, Model, Document } from 'mongoose';
-import { User, UserType, UserGender, Omit } from '@slagalica/data';
-import { genSalt, hash, compare } from 'bcrypt';
+import { Omit, User, UserGender, UserType } from '@slagalica/data';
+import { compare, genSalt, hash } from 'bcrypt';
 import { UploadedFile } from 'express-fileupload';
 import * as fs from 'fs';
+import { Document, model, Model, Schema, Error } from 'mongoose';
 import * as path from 'path';
 import * as uniqueFilename from 'unique-filename';
 import { promisify } from 'util';
@@ -19,13 +19,17 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Email is required.'],
-    unique: [true, 'Email must be unique']
+    unique: [true, 'Email must be unique'],
+    trim: true,
+    dropDups: true
   },
   occupation: String,
   userName: {
     type: String,
     required: [true, 'Username is required.'],
-    unique: [true, 'Username must be unique']
+    unique: [true, 'Username must be unique'],
+    trim: true,
+    dropDups: true
   },
   password: {
     type: String,
@@ -68,6 +72,10 @@ interface IUser extends IUserDocument {
 interface IUserModel extends Model<IUser> {
   getAllPendingPlayers(): Promise<IUser[]>;
   getAllAcceptedPlayers(): Promise<IUser[]>;
+  authenticate(credentials: {
+    userName: string;
+    password: string;
+  }): Promise<IUser>;
 }
 
 /**
@@ -113,6 +121,30 @@ class UserImpl {
       .exec();
   }
 
+  static async authenticate(
+    this: IUserModel,
+    credentials: { userName: string; password: string }
+  ): Promise<IUser> {
+    const { userName, password } = credentials;
+    const user = await this.findOne({ userName, accepted: true });
+
+    if (!user) {
+      const error = new Error.ValidationError();
+      error.message = `User does not exist`;
+      throw error;
+    }
+
+    const isCorrectPassword = await user.comparePassword(password);
+
+    if (!isCorrectPassword) {
+      const error = new Error.ValidationError();
+      error.message = `Incorrect password.`;
+      throw error;
+    }
+
+    return user;
+  }
+
   comparePassword(this: IUser, candidatePassword: string) {
     return new Promise<boolean>((resolve, reject) => {
       compare(candidatePassword, this.password, (err, isMatch) => {
@@ -124,7 +156,7 @@ class UserImpl {
 
   toJSON(this: IUser) {
     const userObj = this.toObject();
-    delete userObj.password;
+    // delete userObj.password;
     delete userObj.__v;
     return userObj;
   }

@@ -1,2 +1,17 @@
 @import "libs/ui/src/lib/styles/core";
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+body {
+    height: 100vh;
+}
+
+.container {
+    display: block;
+    margin: 0 auto;
+    max-width: 1080px;
+    padding: 0 16px;
+}
+
+.sla-error {
+    color: $sla-warn;
+}

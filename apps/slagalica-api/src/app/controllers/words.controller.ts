@@ -1,7 +1,7 @@
+import { WordModel } from '@slagalica-api/models';
+import { errorHandler } from '@slagalica-api/util';
 import { Router } from 'express';
 import * as StatusCodes from 'http-status-codes';
-import { Logger } from '../util';
-import { WordModel } from '../models';
 
 const WordsController = Router();
 
@@ -11,7 +11,7 @@ const WordsController = Router();
 WordsController.get('/', (req, res) => {
   WordModel.find()
     .then(words => res.status(StatusCodes.OK).json({ words }))
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 /**
@@ -25,7 +25,7 @@ WordsController.post('/', (req, res) => {
   wordModel
     .save()
     .then(saved => res.status(StatusCodes.CREATED).json({ word: saved }))
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 export { WordsController };

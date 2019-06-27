@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginDto, User, RegisterDto } from '@slagalica/data';
+import { LoginDto, User, RegisterDto, ResetPasswordDto } from '@slagalica/data';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,11 @@ export class AuthApiService {
     const formData = new FormData();
     formData.set('user', JSON.stringify(user));
     formData.set('profileImage', profileImage);
-    return this.http.post<any>('/api/users/register', formData);
+    return this.http.post<{ user: User }>('/api/users/register', formData);
+  }
+
+  resetPassword(data: ResetPasswordDto) {
+    return this.http.put<{ user: User }>('/api/users/reset-password', data);
   }
 
   logout() {

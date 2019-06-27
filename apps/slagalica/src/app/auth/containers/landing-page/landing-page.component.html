@@ -1,15 +1,29 @@
 <mat-toolbar>
   <h1>Slagalica</h1>
 </mat-toolbar>
-<div class="grid">
-  <sla-login
-    (login)="login($event)"
-    [pending]="pendingLogin$ | async"
-    [errorMessage]="errorLogin$ | async"
-  ></sla-login>
-  <sla-registration
-    [pending]="pendingRegister$ | async"
-    [errorMessage]="errorRegister$ | async"
-    (register)="register($event)"
-  ></sla-registration>
-</div>
+<mat-tab-group mat-align-tabs="center" color="accent">
+  <mat-tab label="Login">
+    <sla-login
+      class="container"
+      (login)="login($event)"
+      [pending]="pendingLogin$ | async"
+      [errorMessage]="errorLogin$ | async"
+    ></sla-login>
+  </mat-tab>
+  <mat-tab label="Register">
+    <sla-registration
+      class="container"
+      [pending]="pendingRegister$ | async"
+      [errorMessage]="errorRegister$ | async"
+      (register)="register($event)"
+    ></sla-registration>
+  </mat-tab>
+  <mat-tab label="Reset Password">
+    <sla-reset-password
+      class="container"
+      [pending]="pendingResetPassword$ | async"
+      [errorMessage]="errorResetPassword$ | async"
+      (resetPassword)="resetPassword($event)"
+    ></sla-reset-password>
+  </mat-tab>
+</mat-tab-group>

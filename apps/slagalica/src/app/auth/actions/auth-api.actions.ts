@@ -22,3 +22,13 @@ export const registerFailure = createAction(
   '[Auth/API] Register Failure',
   props<{ error: any }>()
 );
+
+export const resetPasswordSuccess = createAction(
+  '[Auth/API] Reset Password Success',
+  props<{ user: User }>()
+);
+
+export const resetPasswordFailure = createAction(
+  '[Auth/API] Reset Password Failure',
+  props<{ error: any }>()
+);

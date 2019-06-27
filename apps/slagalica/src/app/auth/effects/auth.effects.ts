@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -11,7 +11,13 @@ import {
 } from '@slagalica-app/auth/actions';
 import { AuthApiService } from '@slagalica-app/auth/services';
 import { LogoutConfirmationDialogComponent } from '@slagalica-app/auth/components';
-import { LoginDto, RegisterDto, UserType } from '@slagalica/data';
+import {
+  LoginDto,
+  RegisterDto,
+  UserType,
+  ResetPasswordDto
+} from '@slagalica/data';
+import { getErrorMessage } from '@slagalica/common';
 
 @Injectable()
 export class AuthEffects {
@@ -23,7 +29,11 @@ export class AuthEffects {
         this.authApi.login(auth).pipe(
           map(response => response.user),
           map(user => AuthApiActions.loginSuccess({ user })),
-          catchError(error => of(AuthApiActions.loginFailure({ error })))
+          catchError(response =>
+            of(
+              AuthApiActions.loginFailure({ error: getErrorMessage(response) })
+            )
+          )
         )
       )
     )
@@ -34,11 +44,14 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthApiActions.loginSuccess),
         tap(({ user }) => {
-          /** TODO:  */
-          if (user.type === UserType.Admin) {
-            //
+          switch (user.type) {
+            case UserType.Admin:
+              return this.router.navigate(['/admin']);
+            case UserType.Igrac:
+              return this.router.navigate(['/home']);
+            case UserType.Supervizor:
+              return this.router.navigate(['/supervizor']);
           }
-          this.router.navigate(['/admin']);
         })
       ),
     { dispatch: false }
@@ -79,17 +92,71 @@ export class AuthEffects {
       map(action => action.register),
       exhaustMap((registerDto: RegisterDto) =>
         this.authApi.register(registerDto).pipe(
+          map(response => response.user),
           map(user => AuthApiActions.registerSuccess({ user })),
-          catchError(error => of(AuthApiActions.registerFailure({ error })))
+          catchError(response =>
+            of(
+              AuthApiActions.registerFailure({
+                error: getErrorMessage(response)
+              })
+            )
+          )
         )
       )
     )
+  );
+
+  registerSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthApiActions.registerSuccess),
+        tap(({ user }) => {
+          this.snackBar.open(
+            `Registration request created for ${user.userName}`
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
+  resetPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LandingPageActions.resetPassword),
+      map(action => action.resetPassword),
+      exhaustMap((resetPassword: ResetPasswordDto) =>
+        this.authApi.resetPassword(resetPassword).pipe(
+          map(response => response.user),
+          map(user => AuthApiActions.resetPasswordSuccess({ user })),
+          catchError(response =>
+            of(
+              AuthApiActions.resetPasswordFailure({
+                error: getErrorMessage(response)
+              })
+            )
+          )
+        )
+      )
+    )
+  );
+
+  resetPasswordSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthApiActions.resetPasswordSuccess),
+        tap(({ user }) => {
+          this.snackBar.open(
+            `Password reset successufully for ${user.userName}`
+          );
+        })
+      ),
+    { dispatch: false }
   );
 
   constructor(
     private actions$: Actions,
     private authApi: AuthApiService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 }

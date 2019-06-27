@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as StatusCodes from 'http-status-codes';
-import { AsocijacijaGameModel } from '../models';
+import { AsocijacijaGameModel } from '@slagalica-api/models';
+import { errorHandler } from '@slagalica-api/util';
 
 const AsocijacijaGameController = Router();
 
@@ -12,7 +13,7 @@ AsocijacijaGameController.get('/', (req, res) => {
     .then(asocijacijaGames =>
       res.status(StatusCodes.OK).json({ asocijacijaGames })
     )
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 /**
@@ -24,7 +25,7 @@ AsocijacijaGameController.post('/', (req, res) => {
   model
     .save()
     .then(saved => res.status(StatusCodes.CREATED).json({ game: saved }))
-    .catch(error => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    .catch(errorHandler(res));
 });
 
 export { AsocijacijaGameController };

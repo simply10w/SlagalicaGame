@@ -55,3 +55,12 @@ export const getRegisterPending = createSelector(
   selectLandingPageState,
   fromLandingPage.getRegisterPending
 );
+
+export const getResetPasswordError = createSelector(
+  selectLandingPageState,
+  fromLandingPage.getResetPasswordError
+);
+export const getResetPasswordPending = createSelector(
+  selectLandingPageState,
+  fromLandingPage.getResetPasswordPending
+);
