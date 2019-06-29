@@ -18,14 +18,14 @@ export function createError(
 export function errorHandler(res: Response) {
   return (error: Error) => {
     const reference = v1();
-    Logger.logError(`[${reference}]!`, error);
+    Logger.error(`[${reference}]!`, error);
 
     if (error.name === 'ValidationError') {
       res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
         .json(createError(error.message, { reference }));
     } else {
-      Logger.logError('BREAK!', error);
+      Logger.error('BREAK!', error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(createError());
     }
   };

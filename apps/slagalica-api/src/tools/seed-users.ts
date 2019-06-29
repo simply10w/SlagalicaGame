@@ -74,7 +74,7 @@ export function seedUsers() {
     .then(() => users.map(user => new UserModel(user)))
     .then(docs => docs.forEach(doc => doc.save()))
     .then(() => {
-      Logger.logSuccess('SUCCESSFULLY ADDED USERS');
+      Logger.info('SUCCESSFULLY ADDED USERS');
     })
-    .catch(error => Logger.logError('Something went wrong.', error));
+    .catch(error => Logger.error('Something went wrong.', error));
 }
