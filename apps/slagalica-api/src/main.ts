@@ -4,13 +4,11 @@ import * as bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import RateLimiter from 'express-rate-limit';
 import helmet from 'helmet';
-import jwt from 'express-jwt';
 import { environment } from './environments/environment.prod';
 import * as controllers from '@slagalica-api/controllers';
 import { Logger, setupServerLogging } from '@slagalica-api/util';
-import * as StatusCodes from 'http-status-codes';
 import { seedUsers } from './tools/seed-users';
-import { createGameEngine } from '@slagalica-api/game-engine';
+import { createGameServer } from '@slagalica-api/game';
 import {
   createAuthMiddleware,
   interceptAuthError
@@ -32,7 +30,7 @@ async function boot() {
     const port = process.env.port || 3333;
     const server = app.listen(port, () => {
       Logger.info(`API Listening at http://localhost:${port}/api`);
-      app.use('/colyseus', createGameEngine(server));
+      app.use('/colyseus', createGameServer(server));
       Logger.info(`Game Server Listening at ws://localhost:${port}`);
       // seedUsers();
     });
@@ -79,14 +77,3 @@ function setupApiRoutes(app: express.Application) {
 
   app.use(interceptAuthError);
 }
-
-// {
-//   "sub": "1234567890",
-//   "username": "admin",
-//   "type": "admin",
-//   "iat": 1516239022,
-//   "iss": "slagalica/api",
-//   "aud": "slagalica"
-// }
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJhZG1pbiIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTUxNjIzOTAyMiwiaXNzIjoic2xhZ2FsaWNhL2FwaSIsImF1ZCI6InNsYWdhbGljYSJ9.03Ctq29FGtx0M0v4hooINCxxHHYsbtw4mkZlELyUF2M

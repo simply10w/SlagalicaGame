@@ -13,6 +13,8 @@ export interface User {
   type: UserType;
   profileImgUrl: string;
   accepted: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Word {
@@ -81,3 +83,22 @@ export interface RegisterDto {
 export interface ErrorDto {
   error: string;
 }
+
+export enum PlayerRole {
+  Red = 'red',
+  Blue = 'blue'
+}
+
+export interface Game {
+  [PlayerRole.Blue]: GamePlayedPlayerRole;
+  [PlayerRole.Red]: GamePlayedPlayerRole;
+  won: PlayerRole;
+  played_at?: string;
+}
+
+interface GamePlayedPlayerRole {
+  player: User;
+  points: number;
+}
+
+export const WS_GAME_ROOM = 'game_room';

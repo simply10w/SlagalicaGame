@@ -6,6 +6,7 @@ import { Document, model, Model, Schema, Error } from 'mongoose';
 import * as path from 'path';
 import * as uniqueFilename from 'unique-filename';
 import { promisify } from 'util';
+import moment from 'moment';
 
 const UserSchema = new Schema({
   firstName: {
@@ -57,11 +58,12 @@ const UserSchema = new Schema({
     type: String,
     get: (relativeUrl: string) => `/${relativeUrl}`
   },
-  updated: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
   accepted: {
     type: Boolean,
     default: false
-  }
+  },
+  created_at: { type: Date, default: Date.now }
 });
 
 interface IUserDocument extends Omit<User, '_id'>, Document {}
@@ -87,6 +89,9 @@ interface IUserModel extends Model<IUser> {
 
 UserSchema.pre('save', function(this: IUser, next) {
   const user = this;
+
+  this.updated_at = moment().format();
+
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
 
