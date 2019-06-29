@@ -1,10 +1,15 @@
-import { model, Schema, Document } from 'mongoose';
-import { Game as _Game, PlayerRole } from '@slagalica/data';
+import { model, Schema, Document, Error } from 'mongoose';
+import {
+  TwoPeopleGame as _TwoPeopleGame,
+  OnePersonGame as _OnePersonGame,
+  PlayerRole
+} from '@slagalica/data';
 import moment from 'moment';
 
-type Game = _Game & Document;
+type TwoPeopleGame = _TwoPeopleGame & Document;
+type OnePersonGame = _OnePersonGame & Document;
 
-const RoleSchema = new Schema({
+const RoleSchemaSettings = {
   player: {
     type: String,
     required: [true, 'Player is required.']
@@ -13,15 +18,16 @@ const RoleSchema = new Schema({
     type: Number,
     required: [true, 'Points won by player are required.']
   }
-});
+};
 
-export const GameSchema = new Schema({
+const _twoPeopleRoleSchema = new Schema(RoleSchemaSettings);
+export const TwoPeopleGameSchema = new Schema({
   red: {
-    type: RoleSchema,
+    type: _twoPeopleRoleSchema,
     required: [true, 'Red player is required.']
   },
   blue: {
-    type: RoleSchema,
+    type: _twoPeopleRoleSchema,
     required: [true, 'Blue player is required.']
   },
   won: {
@@ -34,25 +40,89 @@ export const GameSchema = new Schema({
   }
 });
 
-export const GameModel = model<Game>('games', GameSchema);
+export const TwoPeopleGameModel = model<TwoPeopleGame>(
+  'two_people_games',
+  TwoPeopleGameSchema
+);
 
-export async function getAllGames() {
+export async function getAllTwoPeopleGamesPlayed() {
   const populateQuery = [
     { path: 'red', select: 'player points' },
     { path: 'blue', select: 'player points' }
   ];
 
-  return GameModel.find().populate(populateQuery);
+  return TwoPeopleGameModel.find().populate(populateQuery);
 }
 
-export async function createGame(game: _Game) {
-  return new GameModel(game).save();
+export async function createTwoPeopleGame(game: _TwoPeopleGame) {
+  return new TwoPeopleGameModel(game).save();
 }
 
-export async function getAllUserGames(userId: string) {
-  return GameModel.find({ 'red.player': userId })
+export async function getAllUserTwoPeopleGames(userId: string) {
+  return TwoPeopleGameModel.find({ 'red.player': userId })
     .find({
-      'blue.played': userId
+      'blue.player': userId
+    })
+    .exec();
+}
+
+export const OnePersonGameSchema = new Schema({
+  ...RoleSchemaSettings,
+  played_at: {
+    type: Date,
+    default: moment().format()
+  }
+});
+
+function getTodaysDateCondition() {
+  const start = moment().startOf('day');
+  const end = moment().endOf('day');
+  return { $gte: start.format(), $lt: end.format() };
+}
+
+export const OnePersonGameModel = model<OnePersonGame>(
+  'one_person_games',
+  OnePersonGameSchema
+);
+
+export async function createOnePersonGame(game: _OnePersonGame) {
+  const userPlayedGame = await OnePersonGameModel.find({
+    player: game.player,
+    played_at: getTodaysDateCondition()
+  });
+
+  if (userPlayedGame) {
+    const error = new Error.ValidationError();
+    error.message = 'User has already played todays game.';
+    throw error;
+  }
+
+  return new OnePersonGameModel(game).save();
+}
+
+export async function getTodaysGames(
+  { cursor, limit }: { cursor: number; limit: number } = {
+    cursor: 0,
+    limit: 10
+  }
+) {
+  return OnePersonGameModel.find({
+    played_at: getTodaysDateCondition()
+  })
+    .sort({
+      skip: cursor,
+      limit: limit,
+      sort: {
+        points: -1 // Sort DESC
+      }
+    })
+    .exec();
+}
+
+export async function getAllUserOnePersonGames(userId: string) {
+  return OnePersonGameModel.find({ player: userId })
+    .find({
+      player: userId
     })
     .exec();
 }

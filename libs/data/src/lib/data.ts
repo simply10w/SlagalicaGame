@@ -89,10 +89,14 @@ export enum PlayerRole {
   Blue = 'blue'
 }
 
-export interface Game {
+export interface TwoPeopleGame {
   [PlayerRole.Blue]: GamePlayedPlayerRole;
   [PlayerRole.Red]: GamePlayedPlayerRole;
   won: PlayerRole;
+  played_at?: string;
+}
+
+export interface OnePersonGame extends GamePlayedPlayerRole {
   played_at?: string;
 }
 

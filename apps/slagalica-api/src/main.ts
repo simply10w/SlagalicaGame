@@ -1,19 +1,20 @@
-import express from 'express';
-import { connect } from 'mongoose';
-import * as bodyParser from 'body-parser';
-import fileUpload from 'express-fileupload';
-import RateLimiter from 'express-rate-limit';
-import helmet from 'helmet';
-import { environment } from './environments/environment.prod';
 import * as controllers from '@slagalica-api/controllers';
-import { Logger, setupServerLogging } from '@slagalica-api/util';
-import { seedUsers } from './tools/seed-users';
 import { createGameServer } from '@slagalica-api/game';
+import { isAdmin, isSupervizor } from '@slagalica-api/services/permissions';
 import {
   createAuthMiddleware,
   interceptAuthError
 } from '@slagalica-api/services/token';
-import { isAdmin, isSupervizor } from '@slagalica-api/services/permissions';
+import { Logger, setupServerLogging } from '@slagalica-api/util';
+import * as bodyParser from 'body-parser';
+import compression from 'compression';
+import cors from 'cors';
+import express from 'express';
+import fileUpload from 'express-fileupload';
+import RateLimiter from 'express-rate-limit';
+import helmet from 'helmet';
+import { connect } from 'mongoose';
+import { environment } from './environments/environment.prod';
 
 async function boot() {
   try {
@@ -44,10 +45,17 @@ async function boot() {
 boot().then(() => {});
 
 function setupBaseMiddleware(app: express.Application) {
+  app.use(
+    cors({
+      origin: ['http://localhost:4200']
+    })
+  );
+  app.disable('x-powered-by');
   setupServerLogging(app);
   app.use(helmet());
   app.use(bodyParser.json());
   app.use(fileUpload());
+  // app.use(compression());
 }
 
 function setupApiRoutes(app: express.Application) {
