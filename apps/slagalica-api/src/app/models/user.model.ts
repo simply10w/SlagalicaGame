@@ -159,7 +159,7 @@ class UserImpl {
 
   toJSON(this: IUser) {
     const userObj = this.toObject();
-    // delete userObj.password;
+    delete userObj.password;
     delete userObj.__v;
     return userObj;
   }
