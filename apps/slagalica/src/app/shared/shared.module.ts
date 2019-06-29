@@ -17,6 +17,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
@@ -42,6 +44,8 @@ import { UiModule } from '@slagalica/ui';
     MatSidenavModule,
     MatDialogModule,
     MatCardModule,
+    MatExpansionModule,
+    ScrollingModule,
     RouterModule,
     UiModule
   ]

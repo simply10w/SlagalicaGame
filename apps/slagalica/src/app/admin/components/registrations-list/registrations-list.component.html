@@ -1,26 +1,28 @@
-<mat-list>
-  <mat-list-item *ngFor="let user of users">
-    <mat-icon mat-list-icon>face</mat-icon>
-    <h3 matLine>{{ user.userName }}</h3>
-    <p matLine>
-      <span> {{ user.firstName }} {{ user.lastName }} </span>
-    </p>
-    <mat-action-list class="actions">
-      <button
-        mat-icon-button
-        matTooltip="Accept user"
-        (click)="accept.emit(user)"
-      >
-        <mat-icon>done</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        matTooltip="Reject user"
-        (click)="reject.emit(user)"
-      >
-        <mat-icon>remove</mat-icon>
-      </button>
-    </mat-action-list>
-    <mat-divider></mat-divider>
-  </mat-list-item>
+<mat-list [@staggerIn]="users?.length" class="mat-elevation-z2">
+  <cdk-virtual-scroll-viewport itemSize="72" class="users-scroll-viewport">
+    <mat-list-item *cdkVirtualFor="let user of users; trackByUser">
+      <mat-icon mat-list-icon>face</mat-icon>
+      <h3 matLine>{{ user.userName }}</h3>
+      <p matLine>
+        <span> {{ user.firstName }} {{ user.lastName }} </span>
+      </p>
+      <mat-action-list class="actions">
+        <button
+          mat-icon-button
+          matTooltip="Accept user"
+          (click)="accept.emit(user)"
+        >
+          <mat-icon>done</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matTooltip="Reject user"
+          (click)="reject.emit(user)"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+      </mat-action-list>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </cdk-virtual-scroll-viewport>
 </mat-list>

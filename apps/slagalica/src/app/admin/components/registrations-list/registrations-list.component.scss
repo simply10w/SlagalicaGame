@@ -1,5 +1,9 @@
 :host {
-  .actions {
-    display: flex;
-  }
+    .actions {
+        display: flex;
+    }
+
+    .users-scroll-viewport {
+        height: 400px;
+    }
 }
