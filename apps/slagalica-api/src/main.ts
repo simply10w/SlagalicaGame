@@ -61,7 +61,7 @@ function setupApiRoutes(app: express.Application) {
     })
   );
   const auth = createAuthMiddleware();
-  app.use('/secure', controllers.AuthController);
+  app.use('/api/secure', controllers.AuthController);
   app.use('/api/users', auth, isAdmin, controllers.UsersController);
   app.use('/api/words', auth, isSupervizor, controllers.WordsController);
   app.use(

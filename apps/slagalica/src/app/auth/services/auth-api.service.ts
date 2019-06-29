@@ -9,7 +9,7 @@ export class AuthApiService {
   constructor(private http: HttpClient) {}
 
   login({ userName, password }: LoginDto) {
-    return this.http.post<{ user: User }>('/api/users/login', {
+    return this.http.post<{ user: User; token: string }>('api/secure/login', {
       userName,
       password
     });
@@ -19,11 +19,11 @@ export class AuthApiService {
     const formData = new FormData();
     formData.set('user', JSON.stringify(user));
     formData.set('profileImage', profileImage);
-    return this.http.post<{ user: User }>('/api/users/register', formData);
+    return this.http.post<{ user: User }>('api/secure/register', formData);
   }
 
   resetPassword(data: ResetPasswordDto) {
-    return this.http.put<{ user: User }>('/api/users/reset-password', data);
+    return this.http.put<{ user: User }>('api/secure/reset-password', data);
   }
 
   logout() {

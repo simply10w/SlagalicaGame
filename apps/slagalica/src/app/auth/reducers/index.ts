@@ -25,6 +25,11 @@ export const getLoggedIn = createSelector(
   Boolean
 );
 
+export const getToken = createSelector(
+  selectAuthState,
+  fromAuth.getToken
+);
+
 export const getLoginError = createSelector(
   selectLandingPageState,
   fromLandingPage.getLoginError

@@ -28,8 +28,9 @@ export class AuthEffects {
       map(action => action.login),
       exhaustMap((auth: LoginDto) =>
         this.authApi.login(auth).pipe(
-          map(response => response.user),
-          map(user => AuthApiActions.loginSuccess({ user })),
+          map(({ user, token }) =>
+            AuthApiActions.loginSuccess({ user, token })
+          ),
           catchError(response =>
             of(
               AuthApiActions.loginFailure({ error: getErrorMessage(response) })

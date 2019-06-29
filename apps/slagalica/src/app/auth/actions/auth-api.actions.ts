@@ -3,7 +3,7 @@ import { User } from '@slagalica/data';
 
 export const loginSuccess = createAction(
   '[Auth/API] Login Success',
-  props<{ user: User }>()
+  props<{ user: User; token: string }>()
 );
 
 export const loginFailure = createAction(
