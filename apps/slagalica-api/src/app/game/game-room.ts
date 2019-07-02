@@ -48,8 +48,8 @@ export class GameRoom extends Room<State> {
       : this.clients.length > 0;
   }
 
-  onMessage(client, data) {
-    // this.state.onMessage(client.sessionId, data);
+  onMessage(client: Client, message: any) {
+    this.handler.onMessage(client.sessionId, message);
   }
 
   onLeave(client: Client) {

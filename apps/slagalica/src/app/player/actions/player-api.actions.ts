@@ -26,3 +26,8 @@ export const joinRoomFailure = createAction(
   '[Player/API] Join Room Failure',
   props<{ error: string }>()
 );
+
+export const stateChangeUpdate = createAction(
+  '[Player/API] State Change Update',
+  props<{ newState: any }>()
+);

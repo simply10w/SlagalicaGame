@@ -8,15 +8,24 @@ import {
 } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { AuthActions, AuthApiActions } from '@slagalica-app/auth/actions';
+import * as fromPlayer from '@slagalica-app/player/reducers';
 import * as fromAuth from '@slagalica-app/auth/reducers';
 import {
   PlayerActions,
   PlayerApiActions,
-  PlayerPageActions
+  PlayerPageActions,
+  SlagalicaGameActions
 } from '@slagalica-app/player/actions';
 import { PlayerService } from '@slagalica-app/player/services';
 import { UserType } from '@slagalica/data';
-import { Observable, of, timer, NEVER, combineLatest, EMPTY } from 'rxjs';
+import {
+  Observable,
+  of,
+  timer,
+  combineLatest,
+  EMPTY,
+  BehaviorSubject
+} from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -25,30 +34,26 @@ import {
   switchMap,
   takeUntil,
   withLatestFrom,
-  tap
+  tap,
+  skip
 } from 'rxjs/operators';
-import { Room } from 'colyseus.js';
+import { Room, Schema } from 'colyseus.js';
+import { serializeState } from '@slagalica/ui';
 
 @Injectable()
 export class PlayerEffects implements OnRunEffects {
   private user$ = this.store.pipe(select(fromAuth.getUser));
-  private token$ = this.store.pipe(select(fromAuth.getToken));
-  private roomOptions$ = combineLatest(this.user$, this.token$).pipe(
-    map(([user, token]) => ({
-      token,
-      userId: user._id,
-      userName: user.userName
-    }))
-  );
+  private player$ = this.store.pipe(select(fromPlayer.getPlayer));
   private room: Room;
+  private stateChangeUpdate = new BehaviorSubject<Schema>(null);
 
   createRoom$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PlayerPageActions.createRoom),
-      withLatestFrom(this.roomOptions$),
-      switchMap(([_, options]) => {
+      withLatestFrom(this.player$),
+      switchMap(([_, player]) => {
         if (!this.room) {
-          return this.playerService.createRoom(options).pipe(
+          return this.playerService.createRoom(player).pipe(
             tap(room => {
               this.room = room;
               this._connectListeners(this.room);
@@ -69,10 +74,10 @@ export class PlayerEffects implements OnRunEffects {
   joinRoom$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PlayerPageActions.joinRoom),
-      withLatestFrom(this.roomOptions$),
-      switchMap(([action, options]) => {
+      withLatestFrom(this.player$),
+      switchMap(([action, player]) => {
         if (!this.room) {
-          return this.playerService.joinRoom(action.roomId, options).pipe(
+          return this.playerService.joinRoom(action.roomId, player).pipe(
             tap(room => {
               this.room = room;
               this._connectListeners(this.room);
@@ -126,6 +131,31 @@ export class PlayerEffects implements OnRunEffects {
     { dispatch: false }
   );
 
+  listenStateChanges$ = createEffect(() =>
+    this.stateChangeUpdate.pipe(
+      skip(1),
+      map(serializeState),
+      map(state => PlayerApiActions.stateChangeUpdate({ newState: state }))
+    )
+  );
+
+  /**
+   * Slagalica Game
+   */
+  slagalicaGameSubmitTry$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(SlagalicaGameActions.submitPlayerTry),
+        tap(({ word }) =>
+          this.room.send({
+            type: GameEvent.SlagalicaSubmitTry,
+            word
+          })
+        )
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private store: Store<any>,
@@ -149,9 +179,10 @@ export class PlayerEffects implements OnRunEffects {
   }
 
   private _connectListeners(room: Room) {
-    room.onStateChange.add((...params) => {
-      console.log('onState:', params);
+    room.onStateChange.add(stateChange => {
+      this.stateChangeUpdate.next(stateChange);
     });
+
     room.onMessage.add((message: GameMessage) => {
       switch (message.type) {
         case GameEvent.GameStarted:
@@ -164,18 +195,6 @@ export class PlayerEffects implements OnRunEffects {
         }
       }
     });
-    // room.onJoin.add(() => {
-    //   // listen to patches coming from the server
-    //   room.state.players.onAdd = (player, sessionId) => {
-    //     console.log('CLIENT ADD PLAYER', player);
-    //   };
-    //   room.state.players.onRemove = (player, sessionId) => {
-    //     console.log('CLIENT REMOVE PLAYER', player);
-    //   };
-    //   room.state.players.onChange = (player, sessionId) => {
-    //     console.log('CLIENT STATE CHANGE', player);
-    //   };
-    // });
   }
 
   private _cleanup() {
@@ -187,8 +206,11 @@ export class PlayerEffects implements OnRunEffects {
   }
 }
 
+// submitPlayerTry
+
 const enum GameEvent {
-  GameStarted = 'game_started'
+  GameStarted = 'game_started',
+  SlagalicaSubmitTry = 'slagalica/submit_try'
 }
 
 interface GameMessage {

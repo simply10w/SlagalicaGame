@@ -1,0 +1,4 @@
+<sla-game-header [red]="red$ | async" [blue]="blue$ | async"></sla-game-header>
+<ng-container [ngSwitch]="game$ | async">
+  <sla-slagalica-game *ngSwitchCase="'slagalica'"></sla-slagalica-game>
+</ng-container>

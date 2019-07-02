@@ -1,6 +1,4 @@
-<div *ngIf="(inRoom$ | async); else notInGame">
-  GAME!
-</div>
+<sla-game *ngIf="(inRoom$ | async); else notInGame"></sla-game>
 
 <ng-template #notInGame>
   <mat-tab-group mat-align-tabs="center">
