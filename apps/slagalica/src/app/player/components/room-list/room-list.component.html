@@ -1,0 +1,26 @@
+<mat-list
+  [@staggerIn]="rooms?.length"
+  class="mat-elevation-z2"
+  *ngIf="rooms?.length > 0; else noRooms"
+>
+  <cdk-virtual-scroll-viewport itemSize="52" class="rooms-scroll-viewport">
+    <mat-list-item *cdkVirtualFor="let room of rooms; trackByRoom">
+      <mat-icon mat-list-icon>videogame_asset</mat-icon>
+      <h3 matLine>{{ room.metadata.userName }}</h3>
+      <mat-action-list class="actions">
+        <button
+          mat-icon-button
+          matTooltip="Join room"
+          (click)="join.emit(room)"
+        >
+          <mat-icon>play_circle_outline</mat-icon>
+        </button>
+      </mat-action-list>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </cdk-virtual-scroll-viewport>
+</mat-list>
+
+<ng-template #noRooms>
+  <ng-content select="[noRooms]"></ng-content>
+</ng-template>

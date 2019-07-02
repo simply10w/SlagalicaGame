@@ -18,7 +18,15 @@ import {
   UserType
 } from '@slagalica/data';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, tap, filter } from 'rxjs/operators';
+import {
+  catchError,
+  exhaustMap,
+  map,
+  tap,
+  filter,
+  debounceTime,
+  delay
+} from 'rxjs/operators';
 
 @Injectable()
 export class AuthEffects {

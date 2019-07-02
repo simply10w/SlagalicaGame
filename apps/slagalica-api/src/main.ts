@@ -1,10 +1,10 @@
 import * as controllers from '@slagalica-api/controllers';
 import { createGameServer } from '@slagalica-api/game';
-import { isAdmin, isSupervizor } from '@slagalica-api/services/permissions';
+import { AdminRole, SupervizorRole } from '@slagalica-api/shared/permissions';
 import {
   createAuthMiddleware,
   interceptAuthError
-} from '@slagalica-api/services/token';
+} from '@slagalica-api/shared/token';
 import { Logger, setupServerLogging } from '@slagalica-api/util';
 import * as bodyParser from 'body-parser';
 import compression from 'compression';
@@ -68,18 +68,18 @@ function setupApiRoutes(app: express.Application) {
   );
   const auth = createAuthMiddleware();
   app.use('/api/secure', controllers.AuthController);
-  app.use('/api/users', auth, isAdmin, controllers.UsersController);
-  app.use('/api/words', auth, isSupervizor, controllers.WordsController);
+  app.use('/api/users', auth, AdminRole, controllers.UsersController);
+  app.use('/api/words', auth, SupervizorRole, controllers.WordsController);
   app.use(
     '/api/spojnica-game',
     auth,
-    isSupervizor,
+    SupervizorRole,
     controllers.SpojnicaGameController
   );
   app.use(
     '/api/asocijacija-game',
     auth,
-    isSupervizor,
+    SupervizorRole,
     controllers.AsocijacijaGameController
   );
 

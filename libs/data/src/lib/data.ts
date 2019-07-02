@@ -106,3 +106,22 @@ interface GamePlayedPlayerRole {
 }
 
 export const WS_GAME_ROOM = 'game_room';
+
+export interface ClientGameRoomOptionsDto {
+  create?: boolean;
+  userName: string;
+  userId: string;
+  token: string;
+}
+
+interface RoomMetadata extends ClientGameRoomOptionsDto {
+  clientId: string;
+  requestId: string;
+}
+
+export interface AvailableRoom {
+  clients: number;
+  maxClients: number;
+  metadata: RoomMetadata;
+  roomId: string;
+}

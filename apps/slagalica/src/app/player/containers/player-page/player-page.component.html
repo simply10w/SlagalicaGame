@@ -1,8 +1,9 @@
 <mat-tab-group mat-align-tabs="center">
   <mat-tab label="Igre">
-    <button mat-raised-button color="accent">
-      Prikljuci se
-    </button>
+    <button mat-raised-button (click)="getAvailableRooms()">Osvezi sobe</button>
+    <sla-room-list [rooms]="rooms" (join)="joinGame($event)">
+      <h3 noRooms>Nema soba za igru</h3>
+    </sla-room-list>
   </mat-tab>
   <mat-tab label="Kreiraj svoju igru">
     <button mat-raised-button color="accent" (click)="createGame()">

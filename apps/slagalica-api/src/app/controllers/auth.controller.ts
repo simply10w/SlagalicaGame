@@ -1,9 +1,9 @@
 import { UserModel } from '@slagalica-api/models';
-import { errorHandler, createError } from '@slagalica-api/util';
+import { createTokenForUser } from '@slagalica-api/shared/token';
+import { createError, errorHandler } from '@slagalica-api/util';
 import { Router } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as StatusCodes from 'http-status-codes';
-import * as TokenService from '../services/token';
 
 const AuthController = Router();
 
@@ -12,7 +12,7 @@ AuthController.post('/login', async (req, res) => {
     const { userName, password } = req.body;
     const user = await UserModel.authenticate({ userName, password });
     if (user) {
-      const token = TokenService.createTokenForUser(user);
+      const token = createTokenForUser(user);
       res.status(StatusCodes.OK).json({ user, token });
     } else {
       res
