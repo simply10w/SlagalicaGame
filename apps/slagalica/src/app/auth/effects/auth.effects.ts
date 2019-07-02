@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import {
   AuthActions,
   AuthApiActions,
   LandingPageActions
 } from '@slagalica-app/auth/actions';
 import { LogoutConfirmationDialogComponent } from '@slagalica-app/auth/components';
+import * as fromAuth from '@slagalica-app/auth/reducers';
 import { AuthApiService } from '@slagalica-app/auth/services';
 import { getErrorMessage } from '@slagalica/common';
 import {
@@ -17,7 +18,7 @@ import {
   ResetPasswordDto,
   UserType
 } from '@slagalica/data';
-import { of } from 'rxjs';
+import { of, defer } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -25,7 +26,8 @@ import {
   tap,
   filter,
   debounceTime,
-  delay
+  delay,
+  withLatestFrom
 } from 'rxjs/operators';
 
 @Injectable()
@@ -160,6 +162,23 @@ export class AuthEffects {
         })
       ),
     { dispatch: false }
+  );
+
+  confirmSessionOnInit$ = createEffect(() =>
+    defer(() => of(AuthActions.sessionConfirmation())).pipe(delay(500))
+  );
+
+  confirmSession$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.sessionConfirmation),
+      withLatestFrom(this.store.pipe(select(fromAuth.getUser))),
+      map(([_, user]) => !!user),
+      map(isUserLoggedIn =>
+        isUserLoggedIn
+          ? AuthActions.sessionConfirmationSuccess()
+          : AuthActions.sessionConfirmationFailure()
+      )
+    )
   );
 
   constructor(

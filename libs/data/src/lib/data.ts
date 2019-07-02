@@ -122,6 +122,6 @@ interface RoomMetadata extends ClientGameRoomOptionsDto {
 export interface AvailableRoom {
   clients: number;
   maxClients: number;
-  metadata: RoomMetadata;
+  metadata?: RoomMetadata;
   roomId: string;
 }
