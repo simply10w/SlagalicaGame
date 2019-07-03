@@ -28,16 +28,8 @@ export class MojBrojGameState extends Schema {
     super();
   }
 
-  getWinner() {
-    this.redPlayerTry.result = math.eval(this.redPlayerTry.formula);
-    this.bluePlayerTry.result = math.eval(this.bluePlayerTry.formula);
-
-    console.log(this.redPlayerTry.result, this.redPlayerTry.formula);
-    console.log(this.bluePlayerTry.result, this.bluePlayerTry.formula);
-  }
-
   async initGame() {
-    this.options = this.getOptions() as any;
+    this.options = new ArraySchema(...this.getOptions());
     this.goal = this.getGoal();
   }
 

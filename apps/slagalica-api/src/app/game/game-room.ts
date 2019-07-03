@@ -2,13 +2,12 @@ import { Room, Client } from 'colyseus';
 import { ClientGameRoomOptionsDto } from '@slagalica/data';
 import { verifyToken } from '@slagalica-api/shared/token';
 import { isPlayer } from '@slagalica-api/shared/permissions';
-import { State, Player, GameType } from './state';
-import * as Handlers from './handlers';
+import { State, Player } from './state';
+import { GameFlow } from './game-flow';
 
 export class GameRoom extends Room<State> {
   maxClients = 2;
-
-  handler: Handlers.GameHandler;
+  gameFlow: GameFlow;
 
   onAuth(options: ClientGameRoomOptionsDto) {
     try {
@@ -23,6 +22,7 @@ export class GameRoom extends Room<State> {
   onInit(options: ClientGameRoomOptionsDto) {
     this.setMetadata(options);
     this.setState(new State());
+    this.gameFlow = new GameFlow(this);
   }
 
   onJoin(client: Client, options: ClientGameRoomOptionsDto) {
@@ -38,7 +38,7 @@ export class GameRoom extends Room<State> {
         userName: options.userName
       });
 
-      this.startGame();
+      this.gameFlow.start();
     }
   }
 
@@ -49,7 +49,7 @@ export class GameRoom extends Room<State> {
   }
 
   onMessage(client: Client, message: any) {
-    this.handler.onMessage(client.sessionId, message);
+    this.gameFlow.onMessage(client.sessionId, message);
   }
 
   onLeave(client: Client) {
@@ -65,15 +65,5 @@ export class GameRoom extends Room<State> {
 
   onDispose() {
     console.log('Dispose StateHandlerRoom');
-  }
-
-  startGame() {
-    this.state.currentGame = GameType.Slagalica;
-    this.handler = new Handlers.SlagalicaGameHandler(this.state);
-    this.handler.initGame().then(() =>
-      this.broadcast({
-        type: 'game_started'
-      })
-    );
   }
 }

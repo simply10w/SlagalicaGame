@@ -1,0 +1,38 @@
+<div>
+  <span class="number" *ngFor="let number of (mojBrojGameOptions$ | async)">
+    {{ number }}
+  </span>
+</div>
+<div>
+  <h3>Goal is {{ mojBrojGameGoal$ | async }}</h3>
+</div>
+
+<hr />
+
+<div>
+  <mat-form-field *ngIf="(redPlayerTry$ | async) as redTry">
+    <mat-label>Crveni igrac</mat-label>
+    <input
+      matInput
+      type="text"
+      [ngModel]="redTry.formula"
+      (ngModelChange)="change($event)"
+      [disabled]="submitted || (amIBlue$ | async)"
+    />
+    <span matSuffix>={{ redTry.result }}</span>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="(bluePlayerTry$ | async) as blueTry">
+    <mat-label>Plavi igrac</mat-label>
+    <input
+      matInput
+      type="text"
+      [ngModel]="blueTry.formula"
+      (ngModelChange)="change($event)"
+      [disabled]="submitted || (amIRed$ | async)"
+    />
+    <span matSuffix>={{ blueTry.result }}</span>
+  </mat-form-field>
+</div>
+
+<button mat-raised-button *ngIf="!submitted" (click)="submit()">Potvrdi</button>

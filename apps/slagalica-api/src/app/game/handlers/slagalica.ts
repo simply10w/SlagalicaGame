@@ -1,13 +1,19 @@
-import { State, SlagalicaGameState } from '../state';
-import { GameHandler } from './shared';
 import { WordModel } from '@slagalica-api/models';
+import { Room } from 'colyseus';
+import { GameType, SlagalicaGameState, State } from '../state';
+import { GameHandler } from './shared';
 
 export class SlagalicaGameHandler implements GameHandler {
-  constructor(public state: State) {}
+  constructor(public room: Room<State>) {}
 
   async initGame() {
+    this.state.currentGame = GameType.Slagalica;
     this.state.slagalicaGame = new SlagalicaGameState();
     await this.state.slagalicaGame.initGame();
+  }
+
+  get state() {
+    return this.room.state;
   }
 
   onMessage(player: string, message: { type: string; word: string }) {
@@ -23,6 +29,13 @@ export class SlagalicaGameHandler implements GameHandler {
     if (blueWord && redWord) {
       this.getWinner(blueWord, redWord).then(winner => {
         console.log('WINNER IS', winner);
+        this.room.broadcast({
+          type: 'slagalica/winner',
+          payload: {
+            winner
+          }
+        });
+        this.room.emit('next_game');
       });
     }
   }

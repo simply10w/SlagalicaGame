@@ -120,3 +120,28 @@ export const getBluePlayerSlagalicaWord = createSelector(
   getSlagalicaGame,
   game => game.bluePlayerTry.word
 );
+
+export const getMojBrojGame = createSelector(
+  getGameState,
+  fromGame.getMojBrojGame
+);
+
+export const getMojBrojGameOptions = createSelector(
+  getMojBrojGame,
+  game => game.options
+);
+
+export const getMojBrojGameGoal = createSelector(
+  getMojBrojGame,
+  game => game.goal
+);
+
+export const getRedPlayerMojBrojTry = createSelector(
+  getMojBrojGame,
+  game => game.redPlayerTry
+);
+
+export const getBluePlayerMojBrojTry = createSelector(
+  getMojBrojGame,
+  game => game.bluePlayerTry
+);

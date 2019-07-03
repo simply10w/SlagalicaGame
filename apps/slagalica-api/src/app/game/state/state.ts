@@ -8,6 +8,7 @@ import { Player } from './player';
 
 export enum GameType {
   NotStarted = 'not_started',
+  Finished = 'finished',
   Asocijacije = 'asocijacije',
   Skocko = 'skocko',
   Spojnice = 'spojnice',
@@ -47,5 +48,5 @@ export class State extends Schema {
   currentTurn: PlayerTurn;
 
   @type('string')
-  currentGame: GameType;
+  currentGame: GameType = GameType.NotStarted;
 }

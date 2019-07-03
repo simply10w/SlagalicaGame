@@ -35,6 +35,19 @@ interface StateSlagalicaGame {
   };
 }
 
+interface StateMojBrojGame {
+  options: number[];
+  goal: number;
+  bluePlayerTry: {
+    formula: string;
+    result: number | null;
+  };
+  redPlayerTry: {
+    formula: string;
+    result: number | null;
+  };
+}
+
 export interface State {
   red: StatePlayer;
   blue: StatePlayer;
@@ -43,7 +56,7 @@ export interface State {
   skockoGame: any;
   spojniceGame: any;
   slagalicaGame: StateSlagalicaGame;
-  mojBrojGame: any;
+  mojBrojGame: StateMojBrojGame;
   asocijacijeGame: any;
 }
 
@@ -67,6 +80,18 @@ export const initialState: Partial<State> = {
     },
     redPlayerTry: {
       word: null
+    }
+  },
+  mojBrojGame: {
+    options: [],
+    goal: null,
+    bluePlayerTry: {
+      formula: null,
+      result: null
+    },
+    redPlayerTry: {
+      formula: null,
+      result: null
     }
   }
 };
@@ -102,3 +127,13 @@ export const getMojBrojGame = (state: State) => state.mojBrojGame;
 export const getSkockoGame = (state: State) => state.skockoGame;
 
 export const getSpojniceGame = (state: State) => state.spojniceGame;
+
+export const getMojBrojGameOptions = createSelector(
+  getMojBrojGame,
+  game => game.options
+);
+
+export const getMojBrojGameGoal = createSelector(
+  getMojBrojGame,
+  game => game.goal
+);

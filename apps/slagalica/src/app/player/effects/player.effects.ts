@@ -14,7 +14,8 @@ import {
   PlayerActions,
   PlayerApiActions,
   PlayerPageActions,
-  SlagalicaGameActions
+  SlagalicaGameActions,
+  MojBrojGameActions
 } from '@slagalica-app/player/actions';
 import { PlayerService } from '@slagalica-app/player/services';
 import { UserType } from '@slagalica/data';
@@ -156,6 +157,23 @@ export class PlayerEffects implements OnRunEffects {
     { dispatch: false }
   );
 
+  /**
+   * Moj Broj Game
+   */
+  mojBrojGameSubmitTry$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MojBrojGameActions.submitPlayerTry),
+        tap(({ formula }) =>
+          this.room.send({
+            type: GameEvent.MojBrojSubmitTry,
+            formula
+          })
+        )
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private store: Store<any>,
@@ -210,7 +228,8 @@ export class PlayerEffects implements OnRunEffects {
 
 const enum GameEvent {
   GameStarted = 'game_started',
-  SlagalicaSubmitTry = 'slagalica/submit_try'
+  SlagalicaSubmitTry = 'slagalica/submit_try',
+  MojBrojSubmitTry = 'moj_broj/submit_try'
 }
 
 interface GameMessage {
