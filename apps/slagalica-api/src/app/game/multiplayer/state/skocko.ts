@@ -41,7 +41,7 @@ export class SkockoGameState extends Schema {
   blue = new SkockoPlayer();
 
   @type('string')
-  turn: PlayerRole | 'waiting_for_next_game';
+  turn: PlayerRole;
 
   @type('string')
   winner: PlayerRole;
@@ -163,7 +163,6 @@ export class SkockoGameState extends Schema {
   }
 
   private _startSecondGame() {
-    this.turn = 'waiting_for_next_game';
     setTimeout(() => {
       this._gameState = GameState.RedPlaying;
       this.turn = PlayerRole.Red;

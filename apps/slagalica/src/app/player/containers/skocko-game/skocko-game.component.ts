@@ -1,49 +1,38 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import * as fromPlayer from '@slagalica-app/player/reducers';
-import { map, withLatestFrom } from 'rxjs/operators';
-import { PlayerRole, Skocko } from '@slagalica/data';
 import { SkockoGameActions } from '@slagalica-app/player/actions';
+import * as fromPlayer from '@slagalica-app/player/reducers';
+import { PlayerRole, Skocko } from '@slagalica/data';
+import { times } from 'lodash';
+import { Subscription } from 'rxjs';
+import { withLatestFrom, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'sla-skocko-game',
   templateUrl: 'skocko-game.component.html',
-  styleUrls: ['./skocko-game.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./skocko-game.component.scss']
 })
-export class SkockoGameComponent {
+export class SkockoGameComponent implements OnInit, OnDestroy {
+  private _listenGame: Subscription;
+
   amIRed$ = this.store.pipe(select(fromPlayer.getAmIRed));
   amIBlue$ = this.store.pipe(select(fromPlayer.getAmIBlue));
-
   game$ = this.store.pipe(select(fromPlayer.getSkockoGame));
 
-  player$ = this.store.pipe(
-    select(fromPlayer.getCurrentSkockoPlayer),
-    map(player => {
-      if (!player) return player;
-      const tries = [...player.tries];
-      const MAX_TRIES = 6;
-      let triesToInsert = MAX_TRIES - player.tries.length;
+  form = new FormGroup({
+    sequence: new FormArray(
+      times(4, () => new FormControl(null, Validators.required))
+    )
+  });
 
-      while (triesToInsert-- > 0) {
-        tries.push({
-          try: [],
-          result: [] as boolean[]
-        });
-      }
-
-      return {
-        tries,
-        points: player.points
-      };
-    })
-  );
-
-  TRIES = [0, 0, 0, 0, 0, 0];
-  SELECTIONS = [0, 0, 0, 0];
-  RESULTS = [0, 0, 0, 0];
-
-  options = [
+  OPTIONS = [
     Skocko.Herc,
     Skocko.Pik,
     Skocko.Skocko,
@@ -52,23 +41,54 @@ export class SkockoGameComponent {
     Skocko.Zvezda
   ];
 
-  disabledBoard$ = this.game$.pipe(
-    map(game => game.turn),
-    withLatestFrom(this.amIRed$, this.amIBlue$),
-    map(([currentPlayer, amIRed, amIBlue]) => {
-      if (currentPlayer === PlayerRole.Red && amIBlue) return true;
-      else if (currentPlayer === PlayerRole.Blue && amIRed) return true;
-      else return false;
-    })
-  );
+  currentIndex: number = 0;
+  disabledBoard: boolean;
+  tries: any[];
 
-  constructor(private store: Store<any>) {}
+  get controls() {
+    return (this.form.get('sequence') as FormArray).controls;
+  }
+
+  constructor(private store: Store<any>, private _cd: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this._listenGame = this.game$
+      .pipe(withLatestFrom(this.amIRed$, this.amIBlue$))
+      .subscribe(([game, amIRed, amIBlue]) => {
+        const player = game[game.turn as 'red' | 'blue'];
+
+        if (!player) {
+          this.disabledBoard = true;
+        } else {
+          this.currentIndex = player.tries.length;
+          this.tries = [...player.tries];
+
+          if (game.turn === PlayerRole.Red && amIBlue)
+            this.disabledBoard = true;
+          else if (game.turn === PlayerRole.Blue && amIRed)
+            this.disabledBoard = true;
+          else return (this.disabledBoard = false);
+        }
+
+        this._cd.markForCheck();
+      });
+  }
+
+  ngOnDestroy() {
+    if (this._listenGame) {
+      this._listenGame.unsubscribe();
+    }
+  }
 
   guess() {
-    this.store.dispatch(
-      SkockoGameActions.guess({
-        sequence: [Skocko.Herc, Skocko.Herc, Skocko.Zvezda, Skocko.Tref]
-      })
-    );
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.store.dispatch(
+        SkockoGameActions.guess({
+          sequence: this.form.get('sequence').value
+        })
+      );
+    }
   }
 }
