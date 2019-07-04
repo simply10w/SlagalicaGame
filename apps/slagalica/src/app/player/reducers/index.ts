@@ -8,7 +8,7 @@ import {
 import { ClientGameRoomOptionsDto } from '@slagalica/data';
 import * as fromRooms from './rooms.reducer';
 import * as fromRoom from './room.reducer';
-import * as fromGame from './game.reducer';
+import * as fromGame from './multiplayer-game.reducer';
 
 export interface PlayerState {
   rooms: fromRooms.State;

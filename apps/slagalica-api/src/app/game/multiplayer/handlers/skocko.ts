@@ -1,4 +1,6 @@
 import { GameType, PlayerRole, SkockoMessage } from '@slagalica/data';
+import { Logger } from '@slagalica-api/util';
+
 import { Room } from 'colyseus';
 import { SkockoGameState, State } from '../state';
 import { GameHandler } from './shared';
@@ -15,13 +17,7 @@ export class SkockoGameHandler extends GameHandler {
   }
 
   onMessage(player: string, message: SkockoMessage) {
-    let role: PlayerRole;
-    if (this._red === player) {
-      role = PlayerRole.Red;
-    } else if (this._blue === player) {
-      role = PlayerRole.Blue;
-    }
-
+    const role: PlayerRole = this._getPlayerRole(player);
     if (!role) return;
 
     const gameFinished = this.room.state.skockoGame.check(

@@ -34,8 +34,6 @@ export class AsocijacijaGameState extends Schema {
 
   async initGame() {
     this.game = await this._getGame();
-    Logger.info(JSON.stringify(this.game));
-
     this.state = AsocijacijaStates.BluePlaying;
 
     const tiles = Array<string>(21).fill('');

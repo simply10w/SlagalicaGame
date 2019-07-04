@@ -1,13 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as fromPlayer from '@slagalica-app/player/reducers';
 import { map, withLatestFrom } from 'rxjs/operators';
 import { PlayerRole, Skocko } from '@slagalica/data';
-// import { MojBrojGameActions } from '@slagalica-app/player/actions';
+import { SkockoGameActions } from '@slagalica-app/player/actions';
 
 @Component({
   selector: 'sla-skocko-game',
@@ -68,16 +64,11 @@ export class SkockoGameComponent {
 
   constructor(private store: Store<any>) {}
 
-  submit() {
-    // this.submitted = true;
-    // this.store.dispatch(
-    //   MojBrojGameActions.submitPlayerTry({
-    //     formula: this.formula
-    //   })
-    // );
-  }
-
-  change(formula: string) {
-    // this.formula = formula;
+  guess() {
+    this.store.dispatch(
+      SkockoGameActions.guess({
+        sequence: [Skocko.Herc, Skocko.Herc, Skocko.Zvezda, Skocko.Tref]
+      })
+    );
   }
 }

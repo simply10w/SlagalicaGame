@@ -16,7 +16,8 @@ import {
   PlayerPageActions,
   SlagalicaGameActions,
   AsocijacijaGameActions,
-  SpojniceGameActions
+  SpojniceGameActions,
+  SkockoGameActions
 } from '@slagalica-app/player/actions';
 import * as fromPlayer from '@slagalica-app/player/reducers';
 import { PlayerService } from '@slagalica-app/player/services';
@@ -28,7 +29,8 @@ import {
   AsocijacijaSolveGroupMessage,
   AsocijacijaSolveGameMessage,
   SpojnicaGuessMessage,
-  SpojnicaSkipMessage
+  SpojnicaSkipMessage,
+  SkockoMessage
 } from '@slagalica/data';
 import { serializeState } from '@slagalica/ui';
 import { Room, Schema } from 'colyseus.js';
@@ -177,7 +179,7 @@ export class PlayerEffects implements OnRunEffects {
   );
 
   /**
-   * Skocko game
+   * Spojnica game
    */
 
   spojnicaGuess$ = createEffect(
@@ -253,6 +255,21 @@ export class PlayerEffects implements OnRunEffects {
     { dispatch: false }
   );
 
+  /**
+   * Skocko guess
+   */
+  skockoGuess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(SkockoGameActions.guess),
+        tap(({ sequence }) =>
+          this.room.send({
+            sequence
+          } as SkockoMessage)
+        )
+      ),
+    { dispatch: false }
+  );
   constructor(
     private actions$: Actions,
     private store: Store<any>,

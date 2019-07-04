@@ -1,7 +1,8 @@
-import { Schema, type } from 'colyseus.js';
 import { ArraySchema } from '@colyseus/schema';
-import { Skocko, PlayerRole } from '@slagalica/data';
+import { Logger } from '@slagalica-api/util';
 import { getRandomNumber } from '@slagalica/common';
+import { PlayerRole, Skocko } from '@slagalica/data';
+import { Schema, type } from 'colyseus.js';
 import { last } from 'lodash';
 
 class SkockoTry extends Schema {
@@ -64,7 +65,6 @@ export class SkockoGameState extends Schema {
   check(player: PlayerRole, sequence: Skocko[]): boolean {
     if (this.turn !== player) return;
     const skockoPlayer: SkockoPlayer = this._getSkockoPlayer();
-
     if (skockoPlayer.tries.length >= 6) return;
 
     const result = this.goal.map(

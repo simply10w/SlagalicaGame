@@ -36,7 +36,7 @@ export class GameFlow {
   private _nextStep() {
     switch (this.room.state.currentGame) {
       case GameType.NotStarted: {
-        this.currentGame = new AsocijacijaGameHandler(this.room);
+        this.currentGame = new SkockoGameHandler(this.room);
         break;
       }
       // }
@@ -69,16 +69,25 @@ export class GameFlow {
         this.room.state.red.totalPoints += this.room.state.slagalicaGame.red.points;
         break;
       }
+
       case GameType.MojBroj: {
         this.room.state.blue.totalPoints += this.room.state.mojBrojGame.blue.points;
         this.room.state.red.totalPoints += this.room.state.mojBrojGame.red.points;
         break;
       }
+
       case GameType.Skocko: {
         this.room.state.blue.totalPoints += this.room.state.skockoGame.blue.points;
         this.room.state.red.totalPoints += this.room.state.skockoGame.red.points;
         break;
       }
+
+      case GameType.Spojnice: {
+        this.room.state.blue.totalPoints += this.room.state.spojniceGame.blue.points;
+        this.room.state.red.totalPoints += this.room.state.spojniceGame.red.points;
+        break;
+      }
+
       case GameType.Asocijacije: {
         this.room.state.blue.totalPoints += this.room.state.asocijacijeGame.blue.points;
         this.room.state.red.totalPoints += this.room.state.asocijacijeGame.red.points;
