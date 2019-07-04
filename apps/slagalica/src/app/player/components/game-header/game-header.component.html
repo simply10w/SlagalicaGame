@@ -1,4 +1,13 @@
 <div class="game-header-layout">
-  <pre>Red player: {{ red | json }}</pre>
-  <pre>Blue player: {{ blue | json }}</pre>
+  <p *ngIf="red?.userName; else waitingPlayer">
+    Red player: {{ red.userName }}
+  </p>
+  <span *ngIf="blue?.userName && red?.userName">{{ time }}</span>
+  <p *ngIf="blue?.userName; else waitingPlayer">
+    Blue player: {{ blue.userName }}
+  </p>
 </div>
+
+<ng-template #waitingPlayer>
+  <p>Waiting for player...</p>
+</ng-template>

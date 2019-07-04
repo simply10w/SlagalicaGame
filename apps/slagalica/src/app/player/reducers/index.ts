@@ -60,7 +60,7 @@ export const getIsInRoom = createSelector(
   fromRoom.getIsInRoom
 );
 
-export const getGameState = createSelector(
+const getGameState = createSelector(
   getPlayerState,
   state => state.game
 );
@@ -78,6 +78,11 @@ export const getBluePlayer = createSelector(
 export const getCurrentGame = createSelector(
   getGameState,
   fromGame.getCurrentGame
+);
+
+export const getTime = createSelector(
+  getGameState,
+  fromGame.getTime
 );
 
 export const getAmIRed = createSelector(

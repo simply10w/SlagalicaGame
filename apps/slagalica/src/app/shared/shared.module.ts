@@ -23,6 +23,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
 
+import { SolutionInputComponent } from './asocijacija/solution-input.component';
+import { GroupLetterPipe } from './asocijacija/group-letter.pipe';
+
 @NgModule({
   exports: [
     CommonModule,
@@ -47,7 +50,11 @@ import { UiModule } from '@slagalica/ui';
     MatExpansionModule,
     ScrollingModule,
     RouterModule,
-    UiModule
-  ]
+    UiModule,
+
+    SolutionInputComponent,
+    GroupLetterPipe
+  ],
+  declarations: [SolutionInputComponent, GroupLetterPipe]
 })
 export class SharedModule {}

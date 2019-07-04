@@ -3,6 +3,8 @@ import { Room } from 'colyseus';
 import { MojBrojGameState, State } from '../state';
 import { GameHandler } from './shared';
 
+const GAME_DURATION_SECONDS = 60;
+
 export class MojBrojGameHandler extends GameHandler {
   private _redFormula: string;
   private _blueFormula: string;
@@ -23,6 +25,7 @@ export class MojBrojGameHandler extends GameHandler {
     this.state.currentGame = GameType.MojBroj;
     this.state.mojBrojGame = new MojBrojGameState();
     await this.gameState.initGame();
+    this._startTimer(GAME_DURATION_SECONDS, () => this._endGame());
   }
 
   onMessage(player: string, message: MojBrojMessage) {
@@ -33,11 +36,16 @@ export class MojBrojGameHandler extends GameHandler {
     }
 
     if (this._redFormula && this._blueFormula) {
-      this.gameState.red.formula = this._redFormula;
-      this.gameState.blue.formula = this._blueFormula;
-      this.gameState.calculateWinner().then(() => {
-        this.declareEndGame(this.gameState.winner);
-      });
+      this._endGame();
     }
+  }
+
+  private _endGame() {
+    this.gameState.red.formula = this._redFormula;
+    this.gameState.blue.formula = this._blueFormula;
+    this.clearTimer();
+    this.gameState.calculateWinner().then(() => {
+      this.declareEndGame(this.gameState.winner);
+    });
   }
 }

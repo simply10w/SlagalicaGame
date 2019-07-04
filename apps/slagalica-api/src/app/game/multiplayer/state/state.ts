@@ -31,4 +31,7 @@ export class State extends Schema {
 
   @type('string')
   currentGame: GameType = GameType.NotStarted;
+
+  @type('number')
+  time: number = 0;
 }

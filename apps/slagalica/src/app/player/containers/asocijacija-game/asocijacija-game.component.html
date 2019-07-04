@@ -1,0 +1,22 @@
+<div class="grid">
+  <div *ngFor="let group of GROUPS; let i = index" class="group">
+    <p>Group {{ i | slaGroupLetter }}</p>
+    <div>
+      <div *ngFor="let hint of HINTS; let i = index">
+        <mat-form-field>
+          <mat-label>Hint {{ i + 1 }}</mat-label>
+          <input type="text" matInput />
+          <mat-error>Required.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <sla-solution-input
+      placeholder="Solutions for {{ i | slaGroupLetter }}"
+    ></sla-solution-input>
+  </div>
+  <sla-solution-input
+    class="game-solution"
+    placeholder="Solutions for game"
+  ></sla-solution-input>
+</div>

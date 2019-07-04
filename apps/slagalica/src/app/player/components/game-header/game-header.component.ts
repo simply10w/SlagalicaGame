@@ -9,4 +9,5 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 export class GameHeaderComponent {
   @Input() red: any;
   @Input() blue: any;
+  @Input() time: number;
 }

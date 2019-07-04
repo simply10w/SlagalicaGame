@@ -163,3 +163,15 @@ export interface MojBrojMessage {
 export interface SkockoMessage {
   sequence: Skocko[];
 }
+
+export interface AsocijacijaOpenMessage {
+  type: 'open';
+  /** from 0 to 20 */
+  open: number;
+}
+
+export interface AsocijacijaSolveMessage {
+  type: 'solve';
+  group: 0 | 1 | 2 | 3 | 4;
+  solution: string;
+}

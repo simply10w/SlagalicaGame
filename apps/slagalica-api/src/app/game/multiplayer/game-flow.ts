@@ -25,6 +25,7 @@ export class GameFlow {
     this._nextStep();
 
     this.room.on('end_game', () => {
+      this._resetTime();
       this._updateTotalPoints();
       setTimeout(() => {
         this._nextStep();
@@ -35,21 +36,22 @@ export class GameFlow {
   private _nextStep() {
     switch (this.room.state.currentGame) {
       case GameType.NotStarted: {
-        this.currentGame = new SlagalicaGameHandler(this.room);
+        this.currentGame = new AsocijacijaGameHandler(this.room);
         break;
       }
-      case GameType.Slagalica: {
-        this.currentGame = new MojBrojGameHandler(this.room);
-        break;
-      }
-      case GameType.MojBroj: {
-        this.currentGame = new SkockoGameHandler(this.room);
-        break;
-      }
-      case GameType.Skocko: {
-        this.room.state.currentGame = GameType.Finished;
-        break;
-      }
+      // }
+      // case GameType.Slagalica: {
+      //   this.currentGame = new MojBrojGameHandler(this.room);
+      //   break;
+      // }
+      // case GameType.MojBroj: {
+      //   this.currentGame = new SkockoGameHandler(this.room);
+      //   break;
+      // }
+      // case GameType.Skocko: {
+      //   this.room.state.currentGame = GameType.Finished;
+      //   break;
+      // }
     }
 
     if (this.room.state.currentGame === GameType.Finished) {
@@ -77,6 +79,16 @@ export class GameFlow {
         this.room.state.red.totalPoints += this.room.state.skockoGame.red.points;
         break;
       }
+      case GameType.Asocijacije: {
+        this.room.state.blue.totalPoints += this.room.state.asocijacijeGame.blue.points;
+        this.room.state.red.totalPoints += this.room.state.asocijacijeGame.red.points;
+        break;
+      }
     }
+  }
+
+  private _resetTime() {
+    this.currentGame.clearTimer();
+    this.room.state.time = 0;
   }
 }

@@ -5,7 +5,7 @@ import { isPlayer } from '@slagalica-api/shared/permissions';
 import { State, Player } from './state';
 import { GameFlow } from './game-flow';
 
-export class GameRoom extends Room<State> {
+export class MultiplayerGameRoom extends Room<State> {
   maxClients = 2;
   gameFlow: GameFlow;
 

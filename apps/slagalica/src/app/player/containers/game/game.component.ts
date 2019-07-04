@@ -12,6 +12,7 @@ export class GameComponent {
   blue$ = this.store.pipe(select(fromPlayer.getBluePlayer));
   red$ = this.store.pipe(select(fromPlayer.getRedPlayer));
   game$ = this.store.pipe(select(fromPlayer.getCurrentGame));
+  time$ = this.store.pipe(select(fromPlayer.getTime));
 
   slagalicaGame$ = this.store.pipe(select(fromPlayer.getSlagalicaGame));
 

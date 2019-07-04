@@ -79,6 +79,7 @@ interface StateSkockoGame {
 }
 
 export interface State {
+  time: number;
   red: StatePlayer;
   blue: StatePlayer;
   currentGame: string;
@@ -91,6 +92,7 @@ export interface State {
 }
 
 export const initialState: Partial<State> = {
+  time: null,
   red: {
     playerId: null,
     userId: null,
@@ -158,6 +160,8 @@ export const reducer = createReducer(
    */
   on(AuthActions.logoutConfirmation, () => initialState)
 );
+
+export const getTime = (state: State) => state.time;
 
 export const getRedPlayer = (state: State) => state.red;
 
