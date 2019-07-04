@@ -1,9 +1,12 @@
-import { State, AsocijacijaGameState, GameType } from '../state';
-import { GameHandler } from './shared';
+import { GameType } from '@slagalica/data';
 import { Room } from 'colyseus';
+import { AsocijacijaGameState, State } from '../state';
+import { GameHandler } from './shared';
 
-export class AsocijacijaGameHandler implements GameHandler {
-  constructor(public room: Room<State>) {}
+export class AsocijacijaGameHandler extends GameHandler {
+  constructor(room: Room<State>) {
+    super(room);
+  }
 
   async initGame() {
     this.room.state.currentGame = GameType.Asocijacije;

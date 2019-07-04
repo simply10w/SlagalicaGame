@@ -19,17 +19,8 @@ export class SlagalicaGameComponent {
 
   amIRed$ = this.store.pipe(select(fromPlayer.getAmIRed));
   amIBlue$ = this.store.pipe(select(fromPlayer.getAmIBlue));
-  slagalicaGameLetters$ = this.store.pipe(
-    select(fromPlayer.getSlagalicaGameLetters)
-  );
 
-  redPlayerWord$ = this.store.pipe(
-    select(fromPlayer.getRedPlayerSlagalicaWord)
-  );
-
-  bluePlayerWord$ = this.store.pipe(
-    select(fromPlayer.getBluePlayerSlagalicaWord)
-  );
+  game$ = this.store.pipe(select(fromPlayer.getSlagalicaGame));
 
   constructor(private store: Store<any>) {}
 

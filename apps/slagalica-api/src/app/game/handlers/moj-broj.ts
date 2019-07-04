@@ -1,10 +1,15 @@
-import { State, MojBrojGameState, GameType } from '../state';
-import { GameHandler } from './shared';
+import { GameType, MojBrojMessage } from '@slagalica/data';
 import { Room } from 'colyseus';
-import * as math from 'mathjs';
+import { MojBrojGameState, State } from '../state';
+import { GameHandler } from './shared';
 
-export class MojBrojGameHandler implements GameHandler {
-  constructor(public room: Room<State>) {}
+export class MojBrojGameHandler extends GameHandler {
+  private _redFormula: string;
+  private _blueFormula: string;
+
+  constructor(room: Room<State>) {
+    super(room);
+  }
 
   get state() {
     return this.room.state;
@@ -20,41 +25,19 @@ export class MojBrojGameHandler implements GameHandler {
     await this.gameState.initGame();
   }
 
-  onMessage(player: string, message: { formula: string }) {
-    if (this.state.red.playerId === player) {
-      this.gameState.redPlayerTry.formula = message.formula;
-    } else if (this.state.blue.playerId === player) {
-      this.gameState.bluePlayerTry.formula = message.formula;
+  onMessage(player: string, message: MojBrojMessage) {
+    if (this._red === player && !this._redFormula) {
+      this._redFormula = message.formula;
+    } else if (this._blue === player && !this._blueFormula) {
+      this._blueFormula = message.formula;
     }
 
-    const blueTry = this.gameState.bluePlayerTry.formula;
-    const redTry = this.gameState.redPlayerTry.formula;
-
-    if (blueTry && redTry) {
-      this.getWinner();
+    if (this._redFormula && this._blueFormula) {
+      this.gameState.red.formula = this._redFormula;
+      this.gameState.blue.formula = this._blueFormula;
+      this.gameState.calculateWinner().then(() => {
+        this.declareEndGame(this.gameState.winner);
+      });
     }
-  }
-
-  getWinner() {
-    try {
-      this.gameState.redPlayerTry.result = math.eval(
-        this.gameState.redPlayerTry.formula
-      );
-    } catch (err) {}
-
-    try {
-      this.gameState.bluePlayerTry.result = math.eval(
-        this.gameState.bluePlayerTry.formula
-      );
-    } catch (err) {}
-
-    console.log(
-      this.gameState.redPlayerTry.result,
-      this.gameState.redPlayerTry.formula
-    );
-    console.log(
-      this.gameState.bluePlayerTry.result,
-      this.gameState.bluePlayerTry.formula
-    );
   }
 }

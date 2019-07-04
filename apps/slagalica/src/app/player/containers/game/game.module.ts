@@ -4,12 +4,14 @@ import { GameHeaderModule } from '@slagalica-app/player/components';
 import { GameComponent } from './game.component';
 import { SlagalicaGameModule } from '../slagalica-game';
 import { MojBrojGameModule } from '../moj-broj-game';
+import { SkockoGameModule } from '../skocko-game';
 
 @NgModule({
   imports: [
     SharedModule,
     SlagalicaGameModule,
     MojBrojGameModule,
+    SkockoGameModule,
     GameHeaderModule
   ],
   exports: [GameComponent],

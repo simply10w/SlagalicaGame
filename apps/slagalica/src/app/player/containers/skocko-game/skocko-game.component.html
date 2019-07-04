@@ -1,0 +1,31 @@
+<ng-container *ngIf="(game$ | async) as game">
+  <ng-container *ngIf="(player$ | async) as player">
+    <div class="grid" *ngFor="let _ of TRIES">
+      <div class="grid-row">
+        <div
+          class="pick-grid-cell"
+          *ngFor="let selection of SELECTIONS; let i = index"
+        >
+          <mat-form-field>
+            <mat-select>
+              <mat-option *ngFor="let options of options" [value]="options">
+                {{ options }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid-row">
+        <div
+          class="result-grid-cell"
+          *ngFor="let result of RESULTS; let i = index"
+        >
+          <div *ngIf="player.tries[i] && player.tries[i].result as result">
+            {{ result ? 'Ok' : 'Not ok' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

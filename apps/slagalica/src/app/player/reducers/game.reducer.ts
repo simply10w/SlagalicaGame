@@ -2,6 +2,7 @@ import { createReducer, createSelector, on } from '@ngrx/store';
 import { AuthActions } from '@slagalica-app/auth/actions';
 import { PlayerApiActions } from '@slagalica-app/player/actions';
 import { merge, mergeWith, isNil, isPlainObject } from 'lodash';
+import { Skocko, PlayerRole } from '@slagalica/data';
 
 /**
  * Useful in combination with mergeWith from lodash
@@ -27,25 +28,54 @@ interface StatePlayer {
 
 interface StateSlagalicaGame {
   letters: string[];
-  bluePlayerTry: {
+  blue: {
     word: string;
+    points: number;
+    error: string;
   };
-  redPlayerTry: {
+  red: {
     word: string;
+    points: string;
+    error: string;
   };
+  winner: string;
 }
 
 interface StateMojBrojGame {
   options: number[];
   goal: number;
-  bluePlayerTry: {
+  blue: {
     formula: string;
-    result: number | null;
+    result: number;
+    points: number;
+    error: string;
   };
-  redPlayerTry: {
+  red: {
     formula: string;
-    result: number | null;
+    result: number;
+    points: number;
+    error: string;
   };
+  winner: string;
+}
+
+interface StateSkockoGame {
+  red: {
+    tries: {
+      try: Skocko[];
+      result: boolean[];
+    }[];
+    points: number;
+  };
+  blue: {
+    tries: {
+      try: Skocko[];
+      result: boolean[];
+    }[];
+    points: number;
+  };
+  turn: PlayerRole | 'waiting_for_next_game';
+  winner: string;
 }
 
 export interface State {
@@ -53,7 +83,7 @@ export interface State {
   blue: StatePlayer;
   currentGame: string;
   currentTurn: 'red' | 'blue';
-  skockoGame: any;
+  skockoGame: StateSkockoGame;
   spojniceGame: any;
   slagalicaGame: StateSlagalicaGame;
   mojBrojGame: StateMojBrojGame;
@@ -75,23 +105,45 @@ export const initialState: Partial<State> = {
   },
   slagalicaGame: {
     letters: [],
-    bluePlayerTry: {
-      word: null
+    blue: {
+      word: null,
+      points: null,
+      error: null
     },
-    redPlayerTry: {
-      word: null
-    }
+    red: {
+      word: null,
+      points: null,
+      error: null
+    },
+    winner: null
   },
   mojBrojGame: {
     options: [],
     goal: null,
-    bluePlayerTry: {
+    blue: {
       formula: null,
-      result: null
+      result: null,
+      points: null,
+      error: null
     },
-    redPlayerTry: {
+    red: {
       formula: null,
-      result: null
+      result: null,
+      points: null,
+      error: null
+    },
+    winner: null
+  },
+  skockoGame: {
+    winner: null,
+    turn: null,
+    blue: {
+      tries: [],
+      points: null
+    },
+    red: {
+      tries: [],
+      points: null
     }
   }
 };
@@ -117,23 +169,22 @@ export const getCurrentGame = (state: State) => state.currentGame;
 
 export const getSlagalicaGame = (state: State) => state.slagalicaGame;
 
-export const getSlagalicaGameLetters = createSelector(
-  getSlagalicaGame,
-  game => game.letters
-);
-
 export const getMojBrojGame = (state: State) => state.mojBrojGame;
 
 export const getSkockoGame = (state: State) => state.skockoGame;
 
 export const getSpojniceGame = (state: State) => state.spojniceGame;
 
-export const getMojBrojGameOptions = createSelector(
-  getMojBrojGame,
-  game => game.options
-);
-
-export const getMojBrojGameGoal = createSelector(
-  getMojBrojGame,
-  game => game.goal
+export const getCurrentSkockoPlayer = createSelector(
+  getSkockoGame,
+  game => {
+    switch (game.turn) {
+      case PlayerRole.Red:
+        return game.red;
+      case PlayerRole.Blue:
+        return game.blue;
+      default:
+        return null;
+    }
+  }
 );

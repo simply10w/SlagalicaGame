@@ -19,15 +19,7 @@ export class MojBrojGameComponent {
 
   amIRed$ = this.store.pipe(select(fromPlayer.getAmIRed));
   amIBlue$ = this.store.pipe(select(fromPlayer.getAmIBlue));
-  mojBrojGameOptions$ = this.store.pipe(
-    select(fromPlayer.getMojBrojGameOptions)
-  );
-
-  mojBrojGameGoal$ = this.store.pipe(select(fromPlayer.getMojBrojGameGoal));
-
-  redPlayerTry$ = this.store.pipe(select(fromPlayer.getRedPlayerMojBrojTry));
-
-  bluePlayerTry$ = this.store.pipe(select(fromPlayer.getBluePlayerMojBrojTry));
+  game$ = this.store.pipe(select(fromPlayer.getMojBrojGame));
 
   constructor(private store: Store<any>) {}
 

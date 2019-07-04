@@ -7,39 +7,32 @@ import {
   OnRunEffects
 } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
-import { AuthActions, AuthApiActions } from '@slagalica-app/auth/actions';
-import * as fromPlayer from '@slagalica-app/player/reducers';
+import { AuthActions } from '@slagalica-app/auth/actions';
 import * as fromAuth from '@slagalica-app/auth/reducers';
 import {
+  MojBrojGameActions,
   PlayerActions,
   PlayerApiActions,
   PlayerPageActions,
-  SlagalicaGameActions,
-  MojBrojGameActions
+  SlagalicaGameActions
 } from '@slagalica-app/player/actions';
+import * as fromPlayer from '@slagalica-app/player/reducers';
 import { PlayerService } from '@slagalica-app/player/services';
-import { UserType } from '@slagalica/data';
-import {
-  Observable,
-  of,
-  timer,
-  combineLatest,
-  EMPTY,
-  BehaviorSubject
-} from 'rxjs';
+import { MojBrojMessage, SlagalicaMessage, UserType } from '@slagalica/data';
+import { serializeState } from '@slagalica/ui';
+import { Room, Schema } from 'colyseus.js';
+import { BehaviorSubject, EMPTY, Observable, of, timer } from 'rxjs';
 import {
   catchError,
   exhaustMap,
   filter,
   map,
+  skip,
   switchMap,
   takeUntil,
-  withLatestFrom,
   tap,
-  skip
+  withLatestFrom
 } from 'rxjs/operators';
-import { Room, Schema } from 'colyseus.js';
-import { serializeState } from '@slagalica/ui';
 
 @Injectable()
 export class PlayerEffects implements OnRunEffects {
@@ -149,9 +142,8 @@ export class PlayerEffects implements OnRunEffects {
         ofType(SlagalicaGameActions.submitPlayerTry),
         tap(({ word }) =>
           this.room.send({
-            type: GameEvent.SlagalicaSubmitTry,
             word
-          })
+          } as SlagalicaMessage)
         )
       ),
     { dispatch: false }
@@ -166,9 +158,8 @@ export class PlayerEffects implements OnRunEffects {
         ofType(MojBrojGameActions.submitPlayerTry),
         tap(({ formula }) =>
           this.room.send({
-            type: GameEvent.MojBrojSubmitTry,
             formula
-          })
+          } as MojBrojMessage)
         )
       ),
     { dispatch: false }
@@ -200,19 +191,6 @@ export class PlayerEffects implements OnRunEffects {
     room.onStateChange.add(stateChange => {
       this.stateChangeUpdate.next(stateChange);
     });
-
-    room.onMessage.add((message: GameMessage) => {
-      switch (message.type) {
-        case GameEvent.GameStarted:
-          {
-            console.log('GAME STARTED!');
-          }
-          break;
-        default: {
-          console.log('onMessage:', message);
-        }
-      }
-    });
   }
 
   private _cleanup() {
@@ -222,17 +200,4 @@ export class PlayerEffects implements OnRunEffects {
       this.room = null;
     }
   }
-}
-
-// submitPlayerTry
-
-const enum GameEvent {
-  GameStarted = 'game_started',
-  SlagalicaSubmitTry = 'slagalica/submit_try',
-  MojBrojSubmitTry = 'moj_broj/submit_try'
-}
-
-interface GameMessage {
-  type: GameEvent;
-  payload: any;
 }

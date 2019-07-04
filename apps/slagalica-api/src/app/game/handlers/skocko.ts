@@ -1,10 +1,12 @@
-import { Subject } from 'rxjs';
-import { SkockoGameState, State, GameType } from '../state';
-import { GameHandler } from './shared';
+import { GameType, PlayerRole, SkockoMessage } from '@slagalica/data';
 import { Room } from 'colyseus';
+import { SkockoGameState, State } from '../state';
+import { GameHandler } from './shared';
 
-export class SkockoGameHandler implements GameHandler {
-  constructor(public room: Room<State>) {}
+export class SkockoGameHandler extends GameHandler {
+  constructor(room: Room<State>) {
+    super(room);
+  }
 
   async initGame() {
     this.room.state.currentGame = GameType.Skocko;
@@ -12,8 +14,23 @@ export class SkockoGameHandler implements GameHandler {
     await this.room.state.skockoGame.initGame();
   }
 
-  onMessage(player: string, data: { test: string }) {
-    // handle asocijaija being played
-    // by mutating the state appropriately
+  onMessage(player: string, message: SkockoMessage) {
+    let role: PlayerRole;
+    if (this._red === player) {
+      role = PlayerRole.Red;
+    } else if (this._blue === player) {
+      role = PlayerRole.Blue;
+    }
+
+    if (!role) return;
+
+    const gameFinished = this.room.state.skockoGame.check(
+      role,
+      message.sequence
+    );
+
+    if (gameFinished) {
+      this.declareEndGame(null);
+    }
   }
 }

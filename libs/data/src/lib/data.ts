@@ -52,6 +52,16 @@ export enum UserType {
   Igrac = 'igrac'
 }
 
+export enum GameType {
+  NotStarted = 'not_started',
+  Finished = 'finished',
+  Asocijacije = 'asocijacije',
+  Skocko = 'skocko',
+  Spojnice = 'spojnice',
+  Slagalica = 'slagalica',
+  MojBroj = 'moj_broj'
+}
+
 export enum UserGender {
   Male = 'male',
   Female = 'female'
@@ -89,6 +99,22 @@ export enum PlayerRole {
   Blue = 'blue'
 }
 
+export enum GameWinner {
+  Red = 'red',
+  Blue = 'blue',
+  None = 'none',
+  Both = 'both'
+}
+
+export enum Skocko {
+  Tref = 'tref',
+  Pik = 'pik',
+  Srce = 'srce',
+  Herc = 'herc',
+  Zvezda = 'zvezda',
+  Skocko = 'skocko'
+}
+
 export interface TwoPeopleGame {
   [PlayerRole.Blue]: GamePlayedPlayerRole;
   [PlayerRole.Red]: GamePlayedPlayerRole;
@@ -124,4 +150,16 @@ export interface AvailableRoom {
   maxClients: number;
   metadata?: RoomMetadata;
   roomId: string;
+}
+
+export interface SlagalicaMessage {
+  word: string;
+}
+
+export interface MojBrojMessage {
+  formula: string;
+}
+
+export interface SkockoMessage {
+  sequence: Skocko[];
 }

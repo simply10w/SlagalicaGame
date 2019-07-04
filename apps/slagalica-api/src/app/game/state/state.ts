@@ -1,26 +1,11 @@
-import { AsocijacijaGameState } from './asocijacija';
-import { SlagalicaGameState } from './slagalica';
-import { MojBrojGameState } from './moj-broj';
-import { SkockoGameState } from './skocko';
-import { SpojniceGameState } from './spojnice';
+import { GameType } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
+import { AsocijacijaGameState } from './asocijacija';
+import { MojBrojGameState } from './moj-broj';
 import { Player } from './player';
-
-export enum GameType {
-  NotStarted = 'not_started',
-  Finished = 'finished',
-  Asocijacije = 'asocijacije',
-  Skocko = 'skocko',
-  Spojnice = 'spojnice',
-  Slagalica = 'slagalica',
-  MojBroj = 'moj_broj'
-}
-
-export enum PlayerTurn {
-  Idle = 'idle',
-  Red = 'red',
-  Blue = 'blue'
-}
+import { SkockoGameState } from './skocko';
+import { SlagalicaGameState } from './slagalica';
+import { SpojniceGameState } from './spojnice';
 
 export class State extends Schema {
   @type(AsocijacijaGameState)
@@ -43,9 +28,6 @@ export class State extends Schema {
 
   @type(Player)
   blue: Player;
-
-  @type('string')
-  currentTurn: PlayerTurn;
 
   @type('string')
   currentGame: GameType = GameType.NotStarted;

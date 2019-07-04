@@ -75,24 +75,9 @@ export const getBluePlayer = createSelector(
   fromGame.getBluePlayer
 );
 
-export const getCurrentTurn = createSelector(
-  getGameState,
-  fromGame.getCurrentTurn
-);
-
 export const getCurrentGame = createSelector(
   getGameState,
   fromGame.getCurrentGame
-);
-
-export const getSlagalicaGame = createSelector(
-  getGameState,
-  fromGame.getSlagalicaGame
-);
-
-export const getSlagalicaGameLetters = createSelector(
-  getGameState,
-  fromGame.getSlagalicaGameLetters
 );
 
 export const getAmIRed = createSelector(
@@ -111,14 +96,9 @@ export const getAmIBlue = createSelector(
   }
 );
 
-export const getRedPlayerSlagalicaWord = createSelector(
-  getSlagalicaGame,
-  game => game.redPlayerTry.word
-);
-
-export const getBluePlayerSlagalicaWord = createSelector(
-  getSlagalicaGame,
-  game => game.bluePlayerTry.word
+export const getSlagalicaGame = createSelector(
+  getGameState,
+  fromGame.getSlagalicaGame
 );
 
 export const getMojBrojGame = createSelector(
@@ -126,22 +106,12 @@ export const getMojBrojGame = createSelector(
   fromGame.getMojBrojGame
 );
 
-export const getMojBrojGameOptions = createSelector(
-  getMojBrojGame,
-  game => game.options
+export const getSkockoGame = createSelector(
+  getGameState,
+  fromGame.getSkockoGame
 );
 
-export const getMojBrojGameGoal = createSelector(
-  getMojBrojGame,
-  game => game.goal
-);
-
-export const getRedPlayerMojBrojTry = createSelector(
-  getMojBrojGame,
-  game => game.redPlayerTry
-);
-
-export const getBluePlayerMojBrojTry = createSelector(
-  getMojBrojGame,
-  game => game.bluePlayerTry
+export const getCurrentSkockoPlayer = createSelector(
+  getGameState,
+  fromGame.getCurrentSkockoPlayer
 );
