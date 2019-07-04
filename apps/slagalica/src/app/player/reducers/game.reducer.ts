@@ -2,7 +2,12 @@ import { createReducer, createSelector, on } from '@ngrx/store';
 import { AuthActions } from '@slagalica-app/auth/actions';
 import { PlayerApiActions } from '@slagalica-app/player/actions';
 import { merge, mergeWith, isNil, isPlainObject } from 'lodash';
-import { Skocko, PlayerRole } from '@slagalica/data';
+import {
+  Skocko,
+  PlayerRole,
+  AsocijacijaStates,
+  SpojniceStates
+} from '@slagalica/data';
 
 /**
  * Useful in combination with mergeWith from lodash
@@ -78,6 +83,31 @@ interface StateSkockoGame {
   winner: string;
 }
 
+interface StateAsocijacijaGame {
+  red: {
+    points: number;
+  };
+  blue: {
+    points: number;
+  };
+  solved: PlayerRole[];
+  tiles: string[];
+  state: AsocijacijaStates;
+}
+
+interface StateSpojniceGame {
+  red: {
+    points: number;
+  };
+  blue: {
+    points: number;
+  };
+  leftSide: any[];
+  rightSide: any[];
+  currentIndex: number;
+  state: SpojniceStates;
+}
+
 export interface State {
   time: number;
   red: StatePlayer;
@@ -85,10 +115,10 @@ export interface State {
   currentGame: string;
   currentTurn: 'red' | 'blue';
   skockoGame: StateSkockoGame;
-  spojniceGame: any;
+  spojniceGame: StateSpojniceGame;
   slagalicaGame: StateSlagalicaGame;
   mojBrojGame: StateMojBrojGame;
-  asocijacijeGame: any;
+  asocijacijeGame: StateAsocijacijaGame;
 }
 
 export const initialState: Partial<State> = {
@@ -104,6 +134,17 @@ export const initialState: Partial<State> = {
     userId: null,
     userName: null,
     totalPoints: 0
+  },
+  asocijacijeGame: {
+    solved: [],
+    tiles: [],
+    state: null,
+    blue: {
+      points: null
+    },
+    red: {
+      points: null
+    }
   },
   slagalicaGame: {
     letters: [],
@@ -147,6 +188,18 @@ export const initialState: Partial<State> = {
       tries: [],
       points: null
     }
+  },
+  spojniceGame: {
+    red: {
+      points: null
+    },
+    blue: {
+      points: null
+    },
+    state: null,
+    leftSide: [],
+    rightSide: [],
+    currentIndex: null
   }
 };
 
@@ -192,3 +245,5 @@ export const getCurrentSkockoPlayer = createSelector(
     }
   }
 );
+
+export const getAsocijacijaGame = (state: State) => state.asocijacijeGame;

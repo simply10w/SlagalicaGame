@@ -1,4 +1,4 @@
-import { GameWinner } from '@slagalica/data';
+import { GameWinner, PlayerRole } from '@slagalica/data';
 import { Room } from 'colyseus';
 import { State } from '../state';
 
@@ -42,5 +42,15 @@ export abstract class GameHandler {
 
   private _tick() {
     this.room.state.time += 1;
+  }
+
+  protected _getPlayerRole(player: string) {
+    let role: PlayerRole;
+    if (this._red === player) {
+      role = PlayerRole.Red;
+    } else if (this._blue === player) {
+      role = PlayerRole.Blue;
+    }
+    return role;
   }
 }

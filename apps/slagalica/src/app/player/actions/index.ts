@@ -3,11 +3,15 @@ import * as PlayerApiActions from './player-api.actions';
 import * as PlayerActions from './player.actions';
 import * as SlagalicaGameActions from './slagalica-game.actions';
 import * as MojBrojGameActions from './moj-broj-game.actions';
+import * as AsocijacijaGameActions from './asocijacija-game.actions';
+import * as SpojniceGameActions from './spojnice-game.actions';
 
 export {
   PlayerPageActions,
   PlayerApiActions,
   PlayerActions,
   SlagalicaGameActions,
-  MojBrojGameActions
+  MojBrojGameActions,
+  AsocijacijaGameActions,
+  SpojniceGameActions
 };

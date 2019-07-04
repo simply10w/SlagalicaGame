@@ -14,11 +14,22 @@ import {
   PlayerActions,
   PlayerApiActions,
   PlayerPageActions,
-  SlagalicaGameActions
+  SlagalicaGameActions,
+  AsocijacijaGameActions,
+  SpojniceGameActions
 } from '@slagalica-app/player/actions';
 import * as fromPlayer from '@slagalica-app/player/reducers';
 import { PlayerService } from '@slagalica-app/player/services';
-import { MojBrojMessage, SlagalicaMessage, UserType } from '@slagalica/data';
+import {
+  MojBrojMessage,
+  SlagalicaMessage,
+  UserType,
+  AsocijacijaOpenMessage,
+  AsocijacijaSolveGroupMessage,
+  AsocijacijaSolveGameMessage,
+  SpojnicaGuessMessage,
+  SpojnicaSkipMessage
+} from '@slagalica/data';
 import { serializeState } from '@slagalica/ui';
 import { Room, Schema } from 'colyseus.js';
 import { BehaviorSubject, EMPTY, Observable, of, timer } from 'rxjs';
@@ -160,6 +171,83 @@ export class PlayerEffects implements OnRunEffects {
           this.room.send({
             formula
           } as MojBrojMessage)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  /**
+   * Skocko game
+   */
+
+  spojnicaGuess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(SpojniceGameActions.guess),
+        tap(({ guess }) =>
+          this.room.send({
+            type: 'guess_spojnica',
+            guess
+          } as SpojnicaGuessMessage)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  spojnicaSkip$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(SpojniceGameActions.skip),
+        tap(() =>
+          this.room.send({
+            type: 'skip_spojnica'
+          } as SpojnicaSkipMessage)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  /**
+   * Asocijacija game
+   */
+  asocijacijaOpenTile$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AsocijacijaGameActions.openTile),
+        tap(({ tile }) =>
+          this.room.send({
+            type: 'open',
+            open: tile
+          } as AsocijacijaOpenMessage)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  asocijacijaSolveGroup$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AsocijacijaGameActions.solveGroup),
+        tap(({ group, solution }) =>
+          this.room.send({
+            type: 'solve_group',
+            group,
+            solution
+          } as AsocijacijaSolveGroupMessage)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  asocijacijaSolveGame$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AsocijacijaGameActions.solveGame),
+        tap(({ solution }) =>
+          this.room.send({
+            type: 'solve_game',
+            solution
+          } as AsocijacijaSolveGameMessage)
         )
       ),
     { dispatch: false }

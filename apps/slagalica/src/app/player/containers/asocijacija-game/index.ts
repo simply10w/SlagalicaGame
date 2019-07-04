@@ -1,2 +1,2 @@
-export { SkockoGameModule } from './skocko-game.module';
-export { SkockoGameComponent } from './skocko-game.component';
+export { AsocijacijaGameModule } from './asocijacija-game.module';
+export { AsocijacijaGameComponent } from './asocijacija-game.component';

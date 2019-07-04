@@ -1,9 +1,17 @@
 <div class="game-header-layout">
-  <p *ngIf="red?.userName; else waitingPlayer">
+  <p
+    *ngIf="red?.userName; else waitingPlayer"
+    class="red"
+    [class.me]="me === red.userName"
+  >
     Red player: {{ red.userName }}
   </p>
   <span *ngIf="blue?.userName && red?.userName">{{ time }}</span>
-  <p *ngIf="blue?.userName; else waitingPlayer">
+  <p
+    *ngIf="blue?.userName; else waitingPlayer"
+    class="blue"
+    [class.me]="me === blue.userName"
+  >
     Blue player: {{ blue.userName }}
   </p>
 </div>

@@ -170,8 +170,38 @@ export interface AsocijacijaOpenMessage {
   open: number;
 }
 
-export interface AsocijacijaSolveMessage {
-  type: 'solve';
+export interface AsocijacijaSolveGroupMessage {
+  type: 'solve_group';
   group: 0 | 1 | 2 | 3 | 4;
   solution: string;
+}
+
+export interface AsocijacijaSolveGameMessage {
+  type: 'solve_game';
+  solution: string;
+}
+
+export interface SpojnicaGuessMessage {
+  type: 'guess_spojnica';
+  guess: string;
+}
+
+export interface SpojnicaSkipMessage {
+  type: 'skip_spojnica';
+}
+
+export enum AsocijacijaStates {
+  BluePlaying = 'blue_playing',
+  BlueSolving = 'blue_solving',
+  RedPlaying = 'red_playing',
+  RedSolving = 'red_solving',
+  Finished = 'finished'
+}
+
+export const enum SpojniceStates {
+  BluePlaying = 'blue_playing',
+  BlueStrikeOutRedPlaying = 'blue_strike_out_red_playing',
+  RedPlaying = 'red_playing',
+  RedStrikeOutBluePlaying = 'red_strike_out_blue_playing',
+  Finished = 'finished'
 }

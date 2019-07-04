@@ -1,16 +1,13 @@
 import { Schema, type } from 'colyseus.js';
 import { MapSchema, ArraySchema } from '@colyseus/schema';
-import { PlayerRole, AsocijacijaGame } from '@slagalica/data';
+import {
+  PlayerRole,
+  AsocijacijaGame,
+  AsocijacijaStates
+} from '@slagalica/data';
 import { AsocijacijaGameModel } from '@slagalica-api/models';
-import { getOneRandomCollectionItem } from '@slagalica-api/util';
-
-export const enum GameState {
-  BluePlaying = 'blue_playing',
-  BlueSolving = 'blue_solving',
-  RedPlaying = 'red_playing',
-  RedSolving = 'red_solving',
-  Finished = 'finished'
-}
+import { getOneRandomCollectionItem, Logger } from '@slagalica-api/util';
+import { flatMap } from 'lodash';
 
 export class AsocijacijaPlayer extends Schema {
   @type('number')
@@ -24,8 +21,8 @@ export class AsocijacijaGameState extends Schema {
   @type(['string'])
   solved = new ArraySchema<PlayerRole>();
 
-  @type(['string'])
-  state: GameState;
+  @type('string')
+  state: AsocijacijaStates;
 
   @type(AsocijacijaPlayer)
   red: AsocijacijaPlayer = new AsocijacijaPlayer();
@@ -37,8 +34,9 @@ export class AsocijacijaGameState extends Schema {
 
   async initGame() {
     this.game = await this._getGame();
+    Logger.info(JSON.stringify(this.game));
 
-    this.state = GameState.BluePlaying;
+    this.state = AsocijacijaStates.BluePlaying;
 
     const tiles = Array<string>(21).fill('');
     this.tiles = new ArraySchema(...tiles);
@@ -48,11 +46,12 @@ export class AsocijacijaGameState extends Schema {
   }
 
   openTile(player: PlayerRole, tile: number) {
-    if (this.tiles[tile]) return;
+    if (this.tiles[tile] || this.state === AsocijacijaStates.Finished) return;
 
     if (
-      (player === PlayerRole.Blue && this.state === GameState.BluePlaying) ||
-      (player === PlayerRole.Red && this.state === GameState.RedPlaying)
+      (player === PlayerRole.Blue &&
+        this.state === AsocijacijaStates.BluePlaying) ||
+      (player === PlayerRole.Red && this.state === AsocijacijaStates.RedPlaying)
     ) {
       /** if out of range */
       if (tile < 0 || tile > 20) return;
@@ -65,67 +64,111 @@ export class AsocijacijaGameState extends Schema {
       const hint = tile % 5;
       this.tiles[tile] = this.game.groups[group].hints[hint];
 
-      if ((this.state = GameState.BluePlaying)) {
-        this.state = GameState.BlueSolving;
+      if (this.state === AsocijacijaStates.BluePlaying) {
+        this.state = AsocijacijaStates.BlueSolving;
       } else {
-        this.state = GameState.RedSolving;
+        this.state = AsocijacijaStates.RedSolving;
       }
     }
   }
 
+  endGame() {
+    this._uncoverAllTiles();
+    this._uncoverSolution();
+  }
+
+  solveGame(player: PlayerRole, solution: string) {
+    this.solve(player, 4, solution);
+  }
+
   solve(player: PlayerRole, group: number, solution: string) {
     if (group < 0 || group > 4) return;
+    if (this.state === AsocijacijaStates.Finished) return;
 
     if (
-      (player === PlayerRole.Blue && this.state === GameState.BlueSolving) ||
-      (player === PlayerRole.Red && this.state === GameState.RedSolving)
+      (player === PlayerRole.Blue &&
+        this.state === AsocijacijaStates.BlueSolving) ||
+      (player === PlayerRole.Red && this.state === AsocijacijaStates.RedSolving)
     ) {
       const currentPlayer = this._getCurrentPlayer();
       /**
        * Trying to solve the final solution
        */
-      if (group === 4 && this.game.solutions.includes(solution)) {
-        const solved = new ArraySchema<PlayerRole>();
+      if (group === 4) {
+        /** if solution correct */
+        if (this.game.solutions.includes(solution)) {
+          const solved = new ArraySchema<PlayerRole>();
 
-        /**
-         * for each unsolved group give him 5 points
-         */
-        this.solved.forEach(solvedBy => {
-          if (solvedBy) solved.push(solvedBy);
-          else {
-            solved.push(player);
-            currentPlayer.points += 5;
-          }
-        });
+          /**
+           * for each unsolved group give him 5 points
+           */
+          this.solved.forEach(solvedBy => {
+            if (solvedBy) solved.push(solvedBy);
+            else {
+              solved.push(player);
+              currentPlayer.points += 5;
+            }
+          });
 
-        /**
-         * for final solution give him 10 points
-         */
-        currentPlayer.points += 10;
+          /**
+           * for final solution give him 10 points
+           */
+          currentPlayer.points += 10;
 
-        /**
-         * uncover final solution
-         */
-        this.tiles[20] = solution;
-        this.solved = new ArraySchema(...solved);
-        this.state = GameState.Finished;
-      } else if (this.game.groups[group].solutions.includes[solution]) {
-        this.solved[group] = player;
-        /**
-         * for solving group give him 5 points
-         */
-        currentPlayer.points += 5;
-        /**
-         * uncover group solution
-         */
-        this.tiles[group * 5 + 4] = solution;
-
-        if ((this.state = GameState.BlueSolving)) {
-          this.state = GameState.RedPlaying;
+          /**
+           * uncover final solution
+           */
+          this._uncoverAllTiles();
+          this._uncoverSolution(solution);
+          this.solved = new ArraySchema(...solved);
+          this.state = AsocijacijaStates.Finished;
         } else {
-          this.state = GameState.BlueSolving;
+          this._nextPlaying();
         }
+      } else if (group >= 0 || group < 4) {
+        if (this._isCorrectSolution(group, solution)) {
+          /**
+           * for solving group give him 5 points
+           */
+          currentPlayer.points += 5;
+          this.solved[group] = player;
+          this._uncoverGroup(group, solution);
+        }
+
+        this._nextPlaying();
       }
+    }
+  }
+
+  private _isCorrectSolution(group: number, solution: string) {
+    return this.game.groups[group].solutions.includes(solution);
+  }
+
+  private _uncoverGroup(group: number, solution?: string) {
+    this.tiles[group * 5 + 0] = this.game.groups[group].hints[0];
+    this.tiles[group * 5 + 1] = this.game.groups[group].hints[1];
+    this.tiles[group * 5 + 2] = this.game.groups[group].hints[2];
+    this.tiles[group * 5 + 3] = this.game.groups[group].hints[3];
+    this.tiles[group * 5 + 4] =
+      solution || this.game.groups[group].solutions[0];
+  }
+
+  private _uncoverAllTiles() {
+    this.tiles = new ArraySchema(
+      ...flatMap(this.game.groups, g => [...g.hints, g.solutions[0]])
+    );
+  }
+
+  private _uncoverSolution(solution?: string) {
+    this.tiles[20] =
+      this.tiles[20] || (solution ? solution : this.game.solutions[0]);
+  }
+
+  private _nextPlaying() {
+    if (this.state === AsocijacijaStates.BlueSolving) {
+      this.state = AsocijacijaStates.RedPlaying;
+    } else if (this.state === AsocijacijaStates.RedSolving) {
+      this.state = AsocijacijaStates.BluePlaying;
     }
   }
 
@@ -135,9 +178,9 @@ export class AsocijacijaGameState extends Schema {
 
   private _getCurrentPlayer() {
     switch (this.state) {
-      case GameState.BlueSolving:
+      case AsocijacijaStates.BlueSolving:
         return this.blue;
-      case GameState.RedSolving:
+      case AsocijacijaStates.RedSolving:
         return this.red;
     }
   }

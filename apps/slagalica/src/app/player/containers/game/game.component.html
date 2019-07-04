@@ -2,9 +2,14 @@
   [red]="red$ | async"
   [blue]="blue$ | async"
   [time]="time$ | async"
+  [me]="me$ | async"
 ></sla-game-header>
 <ng-container [ngSwitch]="game$ | async">
   <sla-slagalica-game *ngSwitchCase="GameType.Slagalica"></sla-slagalica-game>
   <sla-moj-broj-game *ngSwitchCase="GameType.MojBroj"></sla-moj-broj-game>
   <sla-skocko-game *ngSwitchCase="GameType.Skocko"></sla-skocko-game>
+  <sla-spojnice-game *ngSwitchCase="GameType.Spojnice"></sla-spojnice-game>
+  <sla-asocijacija-game
+    *ngSwitchCase="GameType.Asocijacije"
+  ></sla-asocijacija-game>
 </ng-container>
