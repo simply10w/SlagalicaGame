@@ -7,7 +7,11 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserGender, RegisterDto } from '@slagalica/data';
-import { showFormErrors, validateStrongPassword } from '@slagalica/ui';
+import {
+  showFormErrors,
+  validateStrongPassword,
+  singleError
+} from '@slagalica/ui';
 
 @Component({
   selector: 'sla-registration',
@@ -37,10 +41,10 @@ export class RegistrationComponent {
       lastName: this.fb.control(null, Validators.required),
       userName: this.fb.control(null, Validators.required),
       email: this.fb.control(null, Validators.required),
-      password: this.fb.control(null, [
-        Validators.required,
-        validateStrongPassword
-      ]),
+      password: this.fb.control(
+        null,
+        singleError([Validators.required, validateStrongPassword])
+      ),
       dateOfBirth: this.fb.control(null, Validators.required),
       gender: this.fb.control(null, Validators.required),
       profileImage: this.fb.control(null)

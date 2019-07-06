@@ -6,12 +6,17 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { showFormErrors } from '@slagalica/ui';
+import {
+  showFormErrors,
+  validateStrongPassword,
+  singleError
+} from '@slagalica/ui';
 import { ResetPasswordDto } from '@slagalica/data';
 
 @Component({
   selector: 'sla-reset-password',
   templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPasswordComponent {
@@ -31,7 +36,10 @@ export class ResetPasswordComponent {
   form = this.fb.group({
     userName: this.fb.control(null, Validators.required),
     currentPassword: this.fb.control(null, Validators.required),
-    newPassword: this.fb.control(null, Validators.required)
+    newPassword: this.fb.control(
+      null,
+      singleError([Validators.required, validateStrongPassword])
+    )
   });
 
   constructor(private fb: FormBuilder) {}
