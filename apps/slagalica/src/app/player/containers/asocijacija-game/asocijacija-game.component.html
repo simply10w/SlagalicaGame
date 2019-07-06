@@ -1,59 +1,52 @@
 <h2 class="sla-text-center" [ngClass]="turnColor$ | async">
-  {{ turn$ | async }}
+  {{ currentStateDescription$ | async }}
 </h2>
 
-<ng-container *ngIf="(game$ | async) as game">
-  <p class="sla-text-center">
-    <span>Red:{{ game.red.points }}</span> -
-    <span>Blue:{{ game.blue.points }}</span>
-  </p>
+<p class="sla-text-center">
+  <span>Red: {{ redPlayerPoints$ | async }} </span> -
+  <span>Blue: {{ bluePlayerPoints$ | async }}</span>
+</p>
 
-  <div class="grid" *ngIf="(solved$ | async) as solved">
-    <div *ngFor="let group of GROUPS; let groupIndex = index" class="group">
-      <p>Group {{ groupIndex | slaGroupLetter }}</p>
-      <div>
-        <div *ngFor="let hint of HINTS; let tileIndex = index">
-          <sla-tile-component
-            [tile]="game.tiles[groupIndex * 5 + tileIndex]"
-            (openTile)="openTile(groupIndex * 5 + tileIndex)"
-          ></sla-tile-component>
-        </div>
+<div class="grid" *ngIf="(solvedList$ | async) as solvedList">
+  <div *ngFor="let group of GROUPS; let groupIndex = index" class="group">
+    <p>Group {{ groupIndex | slaGroupLetter }}</p>
+    <div>
+      <div *ngFor="let hint of HINTS; let tileIndex = index">
+        <sla-tile-component
+          [tile]="(tilesList$ | async)[groupIndex * 5 + tileIndex]"
+          (openTile)="openTile(groupIndex * 5 + tileIndex)"
+        ></sla-tile-component>
       </div>
-
-      <mat-form-field *ngIf="!solved[groupIndex]">
-        <mat-label>Group solution</mat-label>
-        <input
-          type="text"
-          matInput
-          [(ngModel)]="groupSolutions[groupIndex]"
-          [disabled]="disabledInputs$ | async"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="solveGroup(groupIndex)"
-          *ngIf="!(disabledInputs$ | async)"
-        >
-          <mat-icon>spellcheck</mat-icon>
-        </button>
-      </mat-form-field>
     </div>
-    <mat-form-field>
-      <mat-label>Game solution</mat-label>
-      <input
-        type="text"
-        matInput
-        [(ngModel)]="gameSolution"
-        [disabled]="disabledInputs$ | async"
-      />
+
+    <mat-form-field *ngIf="!solvedList[groupIndex]">
+      <mat-label>Group solution</mat-label>
+      <input type="text" matInput [(ngModel)]="groupSolutions[groupIndex]" />
       <button
         mat-icon-button
         matSuffix
-        (click)="solveGame()"
-        *ngIf="!(disabledInputs$ | async)"
+        (click)="solveGroup(groupIndex)"
+        *ngIf="(isInputEnabled$ | async)"
       >
         <mat-icon>spellcheck</mat-icon>
       </button>
     </mat-form-field>
   </div>
-</ng-container>
+  <mat-form-field class="game-solution">
+    <mat-label>Game solution</mat-label>
+    <input
+      type="text"
+      matInput
+      [ngModel]="gameSolution$ | async"
+      (ngModelChange)="changeGameSolution($event)"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="solveGame()"
+      *ngIf="(isInputEnabled$ | async)"
+    >
+      <mat-icon>spellcheck</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
