@@ -1,4 +1,17 @@
 :host {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+    }
+
+    .numbers {
+        padding: 16px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .number {
         display: inline-block;
         width: 40px;

@@ -6,6 +6,7 @@ import {
 import { select, Store } from '@ngrx/store';
 import * as fromPlayer from '@slagalica-app/player/reducers';
 import { MojBrojGameActions } from '@slagalica-app/player/actions';
+import { selectors } from './moj-broj.selectors';
 
 @Component({
   selector: 'sla-moj-broj-game',
@@ -17,9 +18,21 @@ export class MojBrojGameComponent {
   formula: string;
   submitted: boolean;
 
-  amIRed$ = this.store.pipe(select(fromPlayer.getAmIRed));
-  amIBlue$ = this.store.pipe(select(fromPlayer.getAmIBlue));
-  game$ = this.store.pipe(select(fromPlayer.getMojBrojGame));
+  goal$ = this.store.pipe(select(selectors.getGoal));
+  options$ = this.store.pipe(select(selectors.getOptions));
+  winner$ = this.store.pipe(select(selectors.getWinner));
+
+  redError$ = this.store.pipe(select(selectors.getRedError));
+  redFormula$ = this.store.pipe(select(selectors.getRedFormula));
+  redPoints$ = this.store.pipe(select(selectors.getRedPoints));
+  redResult$ = this.store.pipe(select(selectors.getRedResult));
+  redDisabled$ = this.store.pipe(select(selectors.isRedDisabled));
+
+  blueError$ = this.store.pipe(select(selectors.getBlueError));
+  blueFormula$ = this.store.pipe(select(selectors.getBlueFormula));
+  bluePoints$ = this.store.pipe(select(selectors.getBluePoints));
+  blueResult$ = this.store.pipe(select(selectors.getBlueResult));
+  blueDisabled$ = this.store.pipe(select(selectors.isBlueDisabled));
 
   constructor(private store: Store<any>) {}
 

@@ -1,29 +1,29 @@
-<ng-container *ngIf="(game$ | async) as game">
-  <div>
-    <span class="number" *ngFor="let number of game.options">
+<div class="container">
+  <div class="numbers">
+    <span class="number" *ngFor="let number of (options$ | async)">
       {{ number }}
     </span>
   </div>
   <div>
-    <h3>Goal is {{ game.goal }}</h3>
+    <h3 class="sla-text-center">Goal is {{ goal$ | async }}</h3>
   </div>
 
   <hr />
 
-  <div>
+  <div class="grid">
     <mat-form-field>
       <mat-label>Crveni igrac</mat-label>
       <input
         matInput
         type="text"
-        [ngModel]="game.red.formula"
+        [ngModel]="redFormula$ | async"
         (ngModelChange)="change($event)"
-        [disabled]="submitted || (amIBlue$ | async)"
+        [disabled]="submitted || (redDisabled$ | async)"
       />
-      <span matSuffix>Result={{ game.red.result }}</span>
-      <mat-hint *ngIf="game.red.error">{{ game.red.error }}</mat-hint>
-      <mat-hint *ngIf="game.red.points">
-        Got points {{ game.red.points }}
+      <span matSuffix>Result={{ redResult$ | async }}</span>
+      <mat-hint *ngIf="(redError$ | async) as error">{{ error }}</mat-hint>
+      <mat-hint *ngIf="(redPoints$ | async) as points">
+        Got points {{ points }}
       </mat-hint>
     </mat-form-field>
 
@@ -32,14 +32,14 @@
       <input
         matInput
         type="text"
-        [ngModel]="game.blue.formula"
+        [ngModel]="blueFormula$ | async"
         (ngModelChange)="change($event)"
-        [disabled]="submitted || (amIRed$ | async)"
+        [disabled]="submitted || (blueDisabled$ | async)"
       />
-      <span matSuffix>Result={{ game.blue.result }}</span>
-      <mat-hint *ngIf="game.blue.error">{{ game.blue.error }}</mat-hint>
-      <mat-hint *ngIf="game.blue.points">
-        Got points {{ game.blue.points }}
+      <span matSuffix>Result={{ blueResult$ | async }}</span>
+      <mat-hint *ngIf="(blueError$ | async) as error">{{ error }}</mat-hint>
+      <mat-hint *ngIf="(bluePoints$ | async) as points">
+        Got points {{ bluePoints$ }}
       </mat-hint>
     </mat-form-field>
   </div>
@@ -47,4 +47,4 @@
   <button mat-raised-button *ngIf="!submitted" (click)="submit()">
     Potvrdi
   </button>
-</ng-container>
+</div>
