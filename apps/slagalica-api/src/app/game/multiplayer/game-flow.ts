@@ -36,7 +36,7 @@ export class GameFlow {
   private _nextStep() {
     switch (this.room.state.currentGame) {
       case GameType.NotStarted: {
-        this.currentGame = new SkockoGameHandler(this.room);
+        this.currentGame = new SlagalicaGameHandler(this.room);
         break;
       }
       // }

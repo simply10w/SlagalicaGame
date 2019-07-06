@@ -1,24 +1,24 @@
-<ng-container *ngIf="(game$ | async) as game">
-  <div>
-    <span class="letter" *ngFor="let letter of game.letters">
+<div class="container">
+  <div class="letters">
+    <span class="letter" *ngFor="let letter of (letters$ | async)">
       {{ letter }}
     </span>
   </div>
 
   <hr />
 
-  <div>
+  <div class="grid">
     <mat-form-field>
       <mat-label>Crveni igrac</mat-label>
       <input
         matInput
         type="text"
-        [ngModel]="game.red.word"
+        [ngModel]="redWord$ | async"
         (ngModelChange)="change($event)"
-        [disabled]="submitted || (amIBlue$ | async)"
+        [disabled]="submitted || (isRedDisabled$ | async)"
       />
-      <span matSuffix>Got points: {{ game.red.points }}</span>
-      <mat-hint *ngIf="game.red.error">{{ game.red.error }}</mat-hint>
+      <span matSuffix>Got points: {{ redPoints$ | async }}</span>
+      <mat-hint *ngIf="(redError$ | async) as error">{{ error }}</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
@@ -26,16 +26,20 @@
       <input
         matInput
         type="text"
-        [ngModel]="game.blue.word"
+        [ngModel]="blueWord$ | async"
         (ngModelChange)="change($event)"
-        [disabled]="submitted || (amIRed$ | async)"
+        [disabled]="submitted || (isBlueDisabled$ | async)"
       />
-      <span matSuffix>Got points: {{ game.blue.points }}</span>
-      <mat-hint *ngIf="game.blue.error">{{ game.blue.error }}</mat-hint>
+      <span matSuffix>Got points: {{ bluePoints$ | async }}</span>
+      <mat-hint *ngIf="(blueError$ | async) as error">{{ error }}</mat-hint>
     </mat-form-field>
   </div>
 
-  <button mat-raised-button *ngIf="!submitted" (click)="submit()">
+  <button
+    mat-raised-button
+    *ngIf="!submitted && (isSubmitEnabled$ | async)"
+    (click)="submit()"
+  >
     Potvrdi
   </button>
-</ng-container>
+</div>

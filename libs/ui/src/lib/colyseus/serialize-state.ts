@@ -1,14 +1,10 @@
 import { Schema } from 'colyseus.js';
-import { keys, isArray } from 'lodash';
+import { keys } from 'lodash';
 
 export function serializeState(stateSchema: Schema): object {
   if (!stateSchema) return {};
 
   const json = stateSchema.toJSON();
-
-  if (isArray(json)) {
-    console.log('HOLA!');
-  }
 
   keys(json).forEach(key => {
     if (json[key] && !!json[key].toJSON) {
