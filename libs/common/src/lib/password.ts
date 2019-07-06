@@ -1,13 +1,40 @@
-/**
- * Strong Password Regular Expression
- *
- * Strong Password must follow these 5 rules:
- *
- *   - password must contain at least one uppercase, or capital, letter (ex: A, B, etc.)
- *   - password must contain at least one lowercase
- *   - password must contain at least one number digit (ex: 0, 1, 2, 3, etc.)
- *   - password must contain at least one special character (ex: #, ?, !, @, $, %, ^, &, *, -)
- *   - password must contain at least 8 characters
- *
- */
-export const strongPasswordRegexp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+const specialCharSet = new Set([
+  '#',
+  '?',
+  '!',
+  '@',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '-'
+]);
+const uppercase = /[A-Z]/g;
+const lowercase = /[a-z]/g;
+const digit = /[0-9]/g;
+
+export function isStrongPassword(password: string) {
+  if (password.length < 8 || password.length > 16) return false;
+
+  const record = {
+    lowercase: 0,
+    uppercase: 0,
+    special: 0,
+    digits: 0
+  };
+
+  for (const char of password) {
+    if (uppercase.test(char)) record.uppercase++;
+    else if (lowercase.test(char)) record.lowercase++;
+    else if (digit.test(char)) record.digits++;
+    else if (specialCharSet.has(char)) record.special++;
+  }
+
+  return (
+    record.lowercase > 2 &&
+    record.uppercase > 0 &&
+    record.special > 0 &&
+    record.digits > 0
+  );
+}

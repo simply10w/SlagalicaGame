@@ -12,7 +12,7 @@ const ADMIN = {
   dateOfBirth: faker.date.past(20),
   gender: 'male',
   profileImgUrl: 'bg-img-business.jpg',
-  password: '123123'
+  password: 'P4ssword!'
 };
 
 const SUPER = {
@@ -25,7 +25,7 @@ const SUPER = {
   dateOfBirth: faker.date.past(20),
   gender: 'male',
   profileImgUrl: 'bg-img-business.jpg',
-  password: '123123'
+  password: 'P4ssword!'
 };
 
 const IGRAC1 = {
@@ -38,7 +38,7 @@ const IGRAC1 = {
   dateOfBirth: faker.date.past(20),
   gender: 'male',
   profileImgUrl: 'bg-img-business.jpg',
-  password: '123123'
+  password: 'P4ssword!'
 };
 
 const IGRAC2 = {
@@ -51,10 +51,49 @@ const IGRAC2 = {
   dateOfBirth: faker.date.past(20),
   gender: 'male',
   profileImgUrl: 'bg-img-business.jpg',
-  password: '123123'
+  password: 'P4ssword!'
 };
 
-const users: any[] = [ADMIN, SUPER, IGRAC1, IGRAC2];
+const IGRAC3 = {
+  type: 'igrac',
+  accepted: true,
+  firstName: 'Petar',
+  lastName: 'Djordjevic',
+  userName: 'igrac3',
+  email: 'pdjordjevic+igrac3@spark451.com',
+  dateOfBirth: faker.date.past(20),
+  gender: 'male',
+  profileImgUrl: 'bg-img-business.jpg',
+  password: 'P4ssword!'
+};
+
+const IGRAC4 = {
+  type: 'igrac',
+  accepted: true,
+  firstName: 'Petar',
+  lastName: 'Djordjevic',
+  userName: 'igrac4',
+  email: 'pdjordjevic+igrac4@spark451.com',
+  dateOfBirth: faker.date.past(20),
+  gender: 'male',
+  profileImgUrl: 'bg-img-business.jpg',
+  password: 'P4ssword!'
+};
+
+const IGRAC5 = {
+  type: 'igrac',
+  accepted: true,
+  firstName: 'Petar',
+  lastName: 'Djordjevic',
+  userName: 'igrac5',
+  email: 'pdjordjevic+igrac5@spark451.com',
+  dateOfBirth: faker.date.past(20),
+  gender: 'male',
+  profileImgUrl: 'bg-img-business.jpg',
+  password: 'P4ssword!'
+};
+
+const users: any[] = [ADMIN, SUPER, IGRAC1, IGRAC2, IGRAC3, IGRAC4, IGRAC5];
 for (let i = 0; i < 50; i++) {
   users.push({
     type: 'igrac',

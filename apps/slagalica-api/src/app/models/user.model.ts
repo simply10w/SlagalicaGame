@@ -1,4 +1,4 @@
-import { strongPasswordRegexp } from '@slagalica/common';
+import { isStrongPassword } from '@slagalica/common';
 import { Omit, User, UserGender, UserType } from '@slagalica/data';
 import { compare, genSalt, hash } from 'bcrypt';
 import { UploadedFile } from 'express-fileupload';
@@ -96,7 +96,7 @@ UserSchema.pre('save', function(this: IUser, next) {
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
 
-  if (!strongPasswordRegexp.test(user.password)) {
+  if (!isStrongPassword(user.password)) {
     const error = new Error.ValidationError();
     error.message = 'Password is not strong enough';
     return next(error);
