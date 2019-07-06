@@ -116,11 +116,6 @@ export const getSkockoGame = createSelector(
   fromGame.getSkockoGame
 );
 
-export const getCurrentSkockoPlayer = createSelector(
-  getGameState,
-  fromGame.getCurrentSkockoPlayer
-);
-
 export const getAsocijacijaGame = createSelector(
   getGameState,
   fromGame.getAsocijacijaGame

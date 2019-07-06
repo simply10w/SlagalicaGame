@@ -4,7 +4,7 @@
   *ngIf="rooms?.length > 0; else noRooms"
 >
   <cdk-virtual-scroll-viewport itemSize="52" class="rooms-scroll-viewport">
-    <mat-list-item *cdkVirtualFor="let room of rooms; trackByRoom">
+    <mat-list-item *cdkVirtualFor="let room of rooms; trackBy: trackByRoom">
       <mat-icon mat-list-icon>videogame_asset</mat-icon>
       <h3 matLine>{{ room.metadata.userName }}</h3>
       <mat-action-list class="actions">

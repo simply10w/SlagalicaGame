@@ -1,0 +1,17 @@
+<div *ngFor="let try of tries" class="grid">
+  <div class="grid-row">
+    <span class="try__item" *ngFor="let v of try.try">
+      <sla-skocko-img [skocko]="v"></sla-skocko-img>
+    </span>
+  </div>
+  <div class="grid-row">
+    <span
+      class="result__item"
+      *ngFor="let r of try.result"
+      [class.result__item--in-position]="r === SkockoPositionResult.InPosition"
+      [class.result__item--wrong-position]="
+        r === SkockoPositionResult.WrongPosition
+      "
+    ></span>
+  </div>
+</div>

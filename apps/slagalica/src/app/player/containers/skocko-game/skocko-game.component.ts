@@ -1,29 +1,19 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { SkockoGameActions } from '@slagalica-app/player/actions';
 import * as fromPlayer from '@slagalica-app/player/reducers';
-import { PlayerRole, Skocko } from '@slagalica/data';
+import { Skocko, SkockoPositionResult } from '@slagalica/data';
 import { times } from 'lodash';
-import { Subscription } from 'rxjs';
-import { withLatestFrom, debounceTime } from 'rxjs/operators';
+import { selectors } from './skocko.selectors';
 
 @Component({
   selector: 'sla-skocko-game',
   templateUrl: 'skocko-game.component.html',
-  styleUrls: ['./skocko-game.component.scss']
+  styleUrls: ['./skocko-game.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkockoGameComponent implements OnInit, OnDestroy {
-  private _listenGame: Subscription;
-
-  amIRed$ = this.store.pipe(select(fromPlayer.getAmIRed));
-  amIBlue$ = this.store.pipe(select(fromPlayer.getAmIBlue));
+export class SkockoGameComponent {
   game$ = this.store.pipe(select(fromPlayer.getSkockoGame));
 
   form = new FormGroup({
@@ -41,44 +31,18 @@ export class SkockoGameComponent implements OnInit, OnDestroy {
     Skocko.Zvezda
   ];
 
-  currentIndex: number = 0;
-  disabledBoard: boolean;
-  tries: any[];
+  description$ = this.store.pipe(select(selectors.getCurrentStateDescription));
+  isBoardEnabled$ = this.store.pipe(select(selectors.isBoardEnabled));
+  tries$ = this.store.pipe(select(selectors.getTriesList));
+
+  bluePoints$ = this.store.pipe(select(selectors.getBluePoints));
+  redPoints$ = this.store.pipe(select(selectors.getRedPoints));
 
   get controls() {
     return (this.form.get('sequence') as FormArray).controls;
   }
 
-  constructor(private store: Store<any>, private _cd: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this._listenGame = this.game$
-      .pipe(withLatestFrom(this.amIRed$, this.amIBlue$))
-      .subscribe(([game, amIRed, amIBlue]) => {
-        const player = game[game.turn as 'red' | 'blue'];
-
-        if (!player) {
-          this.disabledBoard = true;
-        } else {
-          this.currentIndex = player.tries.length;
-          this.tries = [...player.tries];
-
-          if (game.turn === PlayerRole.Red && amIBlue)
-            this.disabledBoard = true;
-          else if (game.turn === PlayerRole.Blue && amIRed)
-            this.disabledBoard = true;
-          else return (this.disabledBoard = false);
-        }
-
-        this._cd.markForCheck();
-      });
-  }
-
-  ngOnDestroy() {
-    if (this._listenGame) {
-      this._listenGame.unsubscribe();
-    }
-  }
+  constructor(private store: Store<any>) {}
 
   guess() {
     if (this.form.invalid) {

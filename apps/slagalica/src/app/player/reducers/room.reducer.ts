@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { PlayerApiActions } from '@slagalica-app/player/actions';
+import { PlayerApiActions, RoomActions } from '@slagalica-app/player/actions';
 import { AuthActions } from '@slagalica-app/auth/actions';
 
 export interface State {
@@ -20,7 +20,7 @@ export const reducer = createReducer(
       inRoom: true
     })
   ),
-  on(AuthActions.logoutConfirmation, state => ({
+  on(AuthActions.logoutConfirmation, RoomActions.leaveRoom, state => ({
     ...state,
     inRoom: false
   }))

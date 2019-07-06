@@ -3,6 +3,7 @@
   [blue]="blue$ | async"
   [time]="time$ | async"
   [me]="me$ | async"
+  (leaveRoom)="leaveRoom()"
 ></sla-game-header>
 <ng-container [ngSwitch]="game$ | async">
   <sla-slagalica-game *ngSwitchCase="GameType.Slagalica"></sla-slagalica-game>

@@ -115,6 +115,21 @@ export enum Skocko {
   Skocko = 'skocko'
 }
 
+export enum SkockoGameStates {
+  NotStarted = 'not_started',
+  BluePlaying = 'blue_playing',
+  RedPlaying = 'red_playing',
+  BlueStrikeOutRedPlaying = 'blue_stroke_out',
+  RedStrikeOutBluePlaying = 'red_stroke_out',
+  Finished = 'finished'
+}
+
+export enum SkockoPositionResult {
+  InPosition = 'in_position',
+  WrongPosition = 'wrong_position',
+  NotInSequence = 'not_in_sequence'
+}
+
 export interface TwoPeopleGame {
   [PlayerRole.Blue]: GamePlayedPlayerRole;
   [PlayerRole.Red]: GamePlayedPlayerRole;

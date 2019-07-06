@@ -1,12 +1,13 @@
 import { createReducer, createSelector, on } from '@ngrx/store';
 import { AuthActions } from '@slagalica-app/auth/actions';
-import { PlayerApiActions } from '@slagalica-app/player/actions';
-import { merge, mergeWith, isNil, isPlainObject } from 'lodash';
+import { PlayerApiActions, RoomActions } from '@slagalica-app/player/actions';
+import { merge, mergeWith, isNil, isPlainObject, isArray } from 'lodash';
 import {
   Skocko,
   PlayerRole,
   AsocijacijaStates,
-  SpojniceStates
+  SpojniceStates,
+  SkockoGameStates
 } from '@slagalica/data';
 
 /**
@@ -15,12 +16,16 @@ import {
  * and destination has some values defined already
  */
 function skipNull(dstValue, srcValue) {
+  if (isArray(srcValue) && isArray(dstValue)) {
+    return srcValue;
+  }
+
   if (isNil(srcValue) && isPlainObject(dstValue)) {
     return dstValue;
   }
 }
 
-export function mergeWithSkipNull(...objects: object[]): any {
+export function stateMerge(...objects: object[]): any {
   return mergeWith({}, ...objects, skipNull);
 }
 
@@ -79,8 +84,8 @@ interface StateSkockoGame {
     }[];
     points: number;
   };
-  turn: PlayerRole | 'waiting_for_next_game';
-  winner: string;
+  gameState: SkockoGameStates;
+  gameEnded: boolean;
 }
 
 interface StateAsocijacijaGame {
@@ -178,8 +183,8 @@ export const initialState: Partial<State> = {
     winner: null
   },
   skockoGame: {
-    winner: null,
-    turn: null,
+    gameEnded: false,
+    gameState: null,
     blue: {
       tries: [],
       points: null
@@ -206,12 +211,12 @@ export const initialState: Partial<State> = {
 export const reducer = createReducer(
   initialState,
   on(PlayerApiActions.stateChangeUpdate, (state, { newState }) =>
-    mergeWithSkipNull(state, newState)
+    stateMerge(state, newState)
   ),
   /**
-   * TODO: ADD END GAME AND LEAVE ROOM
+   * TODO: ADD END GAME
    */
-  on(AuthActions.logoutConfirmation, () => initialState)
+  on(AuthActions.logoutConfirmation, RoomActions.leaveRoom, () => initialState)
 );
 
 export const getTime = (state: State) => state.time;
@@ -231,19 +236,5 @@ export const getMojBrojGame = (state: State) => state.mojBrojGame;
 export const getSkockoGame = (state: State) => state.skockoGame;
 
 export const getSpojniceGame = (state: State) => state.spojniceGame;
-
-export const getCurrentSkockoPlayer = createSelector(
-  getSkockoGame,
-  game => {
-    switch (game.turn) {
-      case PlayerRole.Red:
-        return game.red;
-      case PlayerRole.Blue:
-        return game.blue;
-      default:
-        return null;
-    }
-  }
-);
 
 export const getAsocijacijaGame = (state: State) => state.asocijacijeGame;

@@ -6,4 +6,10 @@
     .rooms-scroll-viewport {
         height: 400px;
     }
+
+    ::ng-deep {
+        .mat-list-base {
+            padding-top: 0;
+        }
+    }
 }

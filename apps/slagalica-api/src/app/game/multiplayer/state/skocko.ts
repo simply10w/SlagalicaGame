@@ -1,16 +1,21 @@
 import { ArraySchema } from '@colyseus/schema';
-import { Logger } from '@slagalica-api/util';
 import { getRandomNumber } from '@slagalica/common';
-import { PlayerRole, Skocko } from '@slagalica/data';
+import {
+  PlayerRole,
+  Skocko,
+  SkockoGameStates,
+  SkockoPositionResult
+} from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
 import { last } from 'lodash';
+import { emptyArraySchema } from '@slagalica-api/util';
 
 class SkockoTry extends Schema {
   @type(['string'])
   try = new ArraySchema<Skocko>();
 
-  @type(['boolean'])
-  result = new ArraySchema<boolean>();
+  @type(['string'])
+  result = new ArraySchema<SkockoPositionResult>();
 }
 
 class SkockoPlayer extends Schema {
@@ -19,15 +24,6 @@ class SkockoPlayer extends Schema {
 
   @type('number')
   points = 0;
-}
-
-const enum GameState {
-  NotStarted = 1,
-  BluePlaying,
-  RedPlaying,
-  BlueStrikeOutRedPlaying,
-  RedStrikeOutBluePlaying,
-  Finished
 }
 
 const WINNER_POINTS = 10;
@@ -40,15 +36,15 @@ export class SkockoGameState extends Schema {
   @type(SkockoPlayer)
   blue = new SkockoPlayer();
 
-  @type('string')
   turn: PlayerRole;
-
-  @type('string')
-  winner: PlayerRole;
 
   goal: Skocko[] = [];
 
-  private _gameState: GameState = GameState.NotStarted;
+  @type('boolean')
+  gameEnded: boolean;
+
+  @type('string')
+  gameState: SkockoGameStates = SkockoGameStates.NotStarted;
 
   constructor() {
     super();
@@ -67,73 +63,70 @@ export class SkockoGameState extends Schema {
     const skockoPlayer: SkockoPlayer = this._getSkockoPlayer();
     if (skockoPlayer.tries.length >= 6) return;
 
-    const result = this.goal.map(
-      (goalItem, index) => sequence[index] === goalItem
-    );
+    const results = getPositionResults(this.goal, sequence);
     const skockoTry = new SkockoTry();
     skockoTry.try = new ArraySchema(...sequence);
-    skockoTry.result = new ArraySchema(...result);
+    skockoTry.result = new ArraySchema(...results);
     skockoPlayer.tries.push(skockoTry);
 
     this._goToNextGameStep();
 
-    return this._gameState === GameState.Finished;
+    return this.gameEnded === true;
   }
 
   private _goToNextGameStep() {
-    switch (this._gameState) {
-      case GameState.NotStarted:
-        this._gameState = GameState.BluePlaying;
-        this.turn = PlayerRole.Blue;
+    switch (this.gameState) {
+      case SkockoGameStates.NotStarted:
         this.goal = getGoal();
+        this._startFirstGame();
         break;
-      case GameState.BluePlaying:
+      case SkockoGameStates.BluePlaying:
         /**
          * if blue got it right
          **/
         if (hasGotItRight(this.blue)) {
           this.blue.points = WINNER_POINTS;
-          this.winner = PlayerRole.Blue;
           this._startSecondGame();
 
           /**
            * If blue has used all his tries
            */
         } else if (usedAllTries(this.blue)) {
-          this._gameState = GameState.BlueStrikeOutRedPlaying;
+          this.gameState = SkockoGameStates.BlueStrikeOutRedPlaying;
+          emptyArraySchema(this.red.tries);
           this.turn = PlayerRole.Red;
         }
         break;
-      case GameState.BlueStrikeOutRedPlaying:
+      case SkockoGameStates.BlueStrikeOutRedPlaying:
         /**
          * if red got it right
          */
         if (hasGotItRight(this.red)) {
           this.red.points = WINNER_POINTS;
-          this.winner = PlayerRole.Red;
         }
         /**
          * He has one try so nonetheless we go to next stage
          */
         this._startSecondGame();
         break;
-      case GameState.RedPlaying:
+      case SkockoGameStates.RedPlaying:
         /**
          * if red got it right
          **/
         if (hasGotItRight(this.red)) {
           this.red.points = WINNER_POINTS;
-          this._gameState = GameState.Finished;
+          this.gameEnded = true;
 
           /**
            * If red has used all his tries
            */
         } else if (usedAllTries(this.red)) {
-          this._gameState = GameState.RedStrikeOutBluePlaying;
+          this.gameState = SkockoGameStates.RedStrikeOutBluePlaying;
+          emptyArraySchema(this.blue.tries);
           this.turn = PlayerRole.Blue;
         }
         break;
-      case GameState.RedStrikeOutBluePlaying:
+      case SkockoGameStates.RedStrikeOutBluePlaying:
         /**
          * if blue got it right
          */
@@ -141,13 +134,12 @@ export class SkockoGameState extends Schema {
           this.blue.points = WINNER_POINTS;
         }
 
-        this._gameState = GameState.Finished;
+        this.gameEnded = true;
         break;
     }
   }
 
   private _restart() {
-    this.winner = null;
     this.red.tries = new ArraySchema();
     this.blue.tries = new ArraySchema();
     this.goal = getGoal();
@@ -162,18 +154,37 @@ export class SkockoGameState extends Schema {
     }
   }
 
+  private _startFirstGame() {
+    this.gameState = SkockoGameStates.BluePlaying;
+    emptyArraySchema(this.blue.tries);
+    this.turn = PlayerRole.Blue;
+    this._restart();
+  }
+
   private _startSecondGame() {
     setTimeout(() => {
-      this._gameState = GameState.RedPlaying;
+      this.gameState = SkockoGameStates.RedPlaying;
+      emptyArraySchema(this.red.tries);
       this.turn = PlayerRole.Red;
       this._restart();
     }, NEXT_GAME_DELAY);
   }
 }
 
+function getPositionResults(goal: Skocko[], sequence: Skocko[]) {
+  const goalSet = new Set(goal);
+  return sequence.map((seqItem, index) => {
+    if (goal[index] === seqItem) return SkockoPositionResult.InPosition;
+    else if (goalSet.has(seqItem)) return SkockoPositionResult.WrongPosition;
+    else return SkockoPositionResult.NotInSequence;
+  });
+}
+
 function hasGotItRight(player: SkockoPlayer) {
   const lastTry = last(player.tries);
-  return lastTry.result.every(Boolean);
+  return lastTry.result.every(
+    result => result === SkockoPositionResult.InPosition
+  );
 }
 
 function usedAllTries(player: SkockoPlayer) {

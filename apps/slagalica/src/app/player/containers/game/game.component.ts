@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as fromPlayer from '@slagalica-app/player/reducers';
 import * as fromAuth from '@slagalica-app/auth/reducers';
-
+import { RoomActions } from '@slagalica-app/player/actions';
+import * as fromPlayer from '@slagalica-app/player/reducers';
 import { GameType } from '@slagalica/data';
 import { map } from 'rxjs/operators';
 
@@ -27,4 +27,8 @@ export class GameComponent {
   GameType = GameType;
 
   constructor(private store: Store<any>) {}
+
+  leaveRoom() {
+    this.store.dispatch(RoomActions.leaveRoom());
+  }
 }

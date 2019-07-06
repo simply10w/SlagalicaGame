@@ -1,5 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import {} from '@slagalica/data';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'sla-game-header',
@@ -8,6 +13,7 @@ import {} from '@slagalica/data';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameHeaderComponent {
+  @Output() leaveRoom = new EventEmitter();
   @Input() red: any;
   @Input() blue: any;
   @Input() me: string;

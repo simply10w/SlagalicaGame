@@ -17,7 +17,8 @@ import {
   SlagalicaGameActions,
   AsocijacijaGameActions,
   SpojniceGameActions,
-  SkockoGameActions
+  SkockoGameActions,
+  RoomActions
 } from '@slagalica-app/player/actions';
 import * as fromPlayer from '@slagalica-app/player/reducers';
 import { PlayerService } from '@slagalica-app/player/services';
@@ -65,7 +66,7 @@ export class PlayerEffects implements OnRunEffects {
               this.room = room;
               this._connectListeners(this.room);
             }),
-            map(room => PlayerApiActions.createRoomSuccess())
+            map(() => PlayerApiActions.createRoomSuccess())
           );
         } else {
           return of(
@@ -76,6 +77,15 @@ export class PlayerEffects implements OnRunEffects {
         }
       })
     )
+  );
+
+  leaveRoom$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(RoomActions.leaveRoom),
+        tap(() => this._leaveRoom())
+      ),
+    { dispatch: false }
   );
 
   joinRoom$ = createEffect(() =>
@@ -298,11 +308,15 @@ export class PlayerEffects implements OnRunEffects {
     });
   }
 
-  private _cleanup() {
+  private _leaveRoom() {
     if (this.room) {
       this.room.removeAllListeners();
       this.room.leave();
       this.room = null;
     }
+  }
+
+  private _cleanup() {
+    this._leaveRoom();
   }
 }
