@@ -1,11 +1,18 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { showFormErrors } from '@slagalica/ui';
 import { LoginDto } from '@slagalica/data';
 
 @Component({
   selector: 'sla-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
   @Output() login = new EventEmitter<LoginDto>();

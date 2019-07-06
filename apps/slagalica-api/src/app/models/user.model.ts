@@ -1,12 +1,13 @@
+import { strongPasswordRegexp } from '@slagalica/common';
 import { Omit, User, UserGender, UserType } from '@slagalica/data';
 import { compare, genSalt, hash } from 'bcrypt';
 import { UploadedFile } from 'express-fileupload';
 import * as fs from 'fs';
-import { Document, model, Model, Schema, Error } from 'mongoose';
+import moment from 'moment';
+import { Document, Error, model, Model, Schema } from 'mongoose';
 import * as path from 'path';
 import * as uniqueFilename from 'unique-filename';
 import { promisify } from 'util';
-import moment from 'moment';
 
 const UserSchema = new Schema({
   firstName: {
@@ -94,6 +95,12 @@ UserSchema.pre('save', function(this: IUser, next) {
 
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
+
+  if (!strongPasswordRegexp.test(user.password)) {
+    const error = new Error.ValidationError();
+    error.message = 'Password is not strong enough';
+    return next(error);
+  }
 
   const SALT_ROUNDS = 10;
   // generate a salt

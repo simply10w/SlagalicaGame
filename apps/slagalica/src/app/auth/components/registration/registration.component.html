@@ -1,3 +1,4 @@
+<pre>{{ form.controls.password.errors | json }}</pre>
 <form [formGroup]="form" (ngSubmit)="submit()">
   <mat-form-field>
     <mat-label>First Name</mat-label>
@@ -35,6 +36,7 @@
   <mat-form-field>
     <mat-label>Email</mat-label>
     <input matInput type="email" formControlName="email" autocomplete="email" />
+    <mat-error>Email is required</mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Password</mat-label>
@@ -44,7 +46,12 @@
       formControlName="password"
       autocomplete="current-password"
     />
-    <mat-error>Password is required</mat-error>
+    <mat-error *ngIf="form.controls.password.errors?.required"
+      >Password is required</mat-error
+    >
+    <mat-error *ngIf="form.controls.password.errors?.password"
+      >Password is not strong enough</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <mat-label>Gender</mat-label>
