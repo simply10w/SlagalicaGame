@@ -1,0 +1,152 @@
+[
+  {
+    "description": "Fudbalski klubovi i gradovi u kojima se nalaze",
+    "pairs": [
+      { "left": "Partizan", "right": "Beograd" },
+      { "left": "Bajern", "right": "Minhen" },
+      { "left": "Arsenal", "right": "London" },
+      { "left": "Ajax", "right": "Amsterdam" },
+      { "left": "Hajduk", "right": "Split" },
+      { "left": "Atletiko", "right": "Madrid" },
+      { "left": "Borusija", "right": "Dortmund" },
+      { "left": "Juventus", "right": "Torino" },
+      { "left": "Benfika", "right": "Lisabon" },
+      { "left": "Spartak", "right": "Moskva" }
+    ]
+  },
+  {
+    "description": "Cuvena dela ruske knjizevnosti i njihovi autori",
+    "pairs": [
+      { "left": "Rat i Mir", "right": "Lav Tolstoj" },
+      { "left": "Braca Karamazovi", "right": "Dostojevski" },
+      { "left": "Evgenije Onjegin", "right": "Puskin" },
+      { "left": "Arihpelag Gulag", "right": "A. Solzenjicin" },
+      { "left": "Tihi Dom", "right": "M. A. Solohov" },
+      { "left": "Ujka Vanja", "right": "Cehov" },
+      { "left": "Oblomov", "right": "Goncarov" },
+      { "left": "Mrtve Duse", "right": "Gogolj" },
+      { "left": "Junak Naseg Doba", "right": "Ljermontov" },
+      { "left": "Mati", "right": "Maxim Gorki" }
+    ]
+  },
+  {
+    "description": "Povezite rock izvodjace sa njihovim pesmama",
+    "pairs": [
+      { "left": "Aerosmith", "right": "I don't wanna miss a thing" },
+      { "left": "Alice Cooper", "right": "Trash" },
+      { "left": "Billy Idol", "right": "Rebel yell" },
+      { "left": "Bon Jovi", "right": "It's my life" },
+      { "left": "Depeche mode", "right": "Personal jesus" },
+      { "left": "Guns n roses", "right": "Sweet child of mine" },
+      { "left": "Jimi hendrix", "right": "Foxy lady" },
+      { "left": "Nickelback", "right": "Hero" },
+      { "left": "Linkin Park", "right": "Numb" },
+      { "left": "Cranberries", "right": "Zombie" }
+    ]
+  },
+  {
+    "description": "Muzeji i njihovi gradovi",
+    "pairs": [
+      { "left": "Ermitaz", "right": "Sankt peterburg" },
+      { "left": "Luvr", "right": "Pariz" },
+      { "left": "Prado", "right": "Madrid" },
+      { "left": "Muzejsko ostrvo", "right": "Berlin" },
+      { "left": "Smitsonijan", "right": "Wasington" },
+      { "left": "Ufici", "right": "Firenca" },
+      { "left": "Metropoliten", "right": "Nju jorku" },
+      { "left": "Tejt", "right": "London" },
+      { "left": "Rajksmuzeum", "right": "Amsterdam" },
+      { "left": "Puskinov ", "right": "Moskva" }
+    ]
+  },
+  {
+    "description": "Opere i njihovi kompozitori",
+    "pairs": [
+      { "left": "Rigoleto", "right": "Verdi" },
+      { "left": "Seviljski Berberin", "right": "Rosini" },
+      { "left": "Karmen", "right": "Bize" },
+      { "left": "Madam baterflaj", "right": "Pucini" },
+      { "left": "Figarova Zendiba", "right": "Mocart" },
+      { "left": "Rusalka", "right": "Dvorzak" },
+      { "left": "Tristan i Izolda", "right": "Vagner" },
+      { "left": "Na uranku", "right": "Binicki" },
+      { "left": "Porgi i Bes", "right": "Gersvin" },
+      { "left": "Knez Igor ", "right": "Borodin" }
+    ]
+  },
+  {
+    "description": "Prvake sveta u sahu i njihova rodna mesta danas",
+    "pairs": [
+      { "left": "Bobi Fiser", "right": "SAD" },
+      { "left": "Visvanatan Anad", "right": "Indija" },
+      { "left": "Magnus Karlsen", "right": "Norveska" },
+      { "left": "Anatolij Karpov", "right": "Rusija" },
+      { "left": "Maks Eve", "right": "Holandija" },
+      { "left": "Vilhelm Stajnic", "right": "Ceska" },
+      { "left": "Gari Kasparov", "right": "Azerbejdzan" },
+      { "left": "Mihail Talj", "right": "Letonija" },
+      { "left": "Veselin Topalov", "right": "Bugarska" },
+      { "left": "Hose R. Kapablanka ", "right": "Kuba" }
+    ]
+  },
+  {
+    "description": "Pojmovi po naucnicima",
+    "pairs": [
+      { "left": "Halejeva", "right": "Kometa" },
+      { "left": "Sredingerova", "right": "Macka" },
+      { "left": "Eustahijeva", "right": "Tuba" },
+      { "left": "Pitagorina", "right": "Teorema" },
+      { "left": "Plankova", "right": "Duzina" },
+      { "left": "Petrijeva", "right": "Solja" },
+      { "left": "Mebijusova", "right": "Traka" },
+      { "left": "Dejvijeva", "right": "Lampa" },
+      { "left": "Candrasekarova", "right": "Granica" },
+      { "left": "Boforova ", "right": "Skala" }
+    ]
+  },
+  {
+    "description": "Poznate narodne pesme po izvodjacima",
+    "pairs": [
+      { "left": "Danka", "right": "Toma Zdravkovic" },
+      { "left": "Mali Mrav", "right": "Tomislav Colovic" },
+      { "left": "Jutro Je", "right": "Nada Topcagic" },
+      { "left": "Srce je moje violina", "right": "Lepa Lukic" },
+      { "left": "Vidovdan", "right": "Gordana Lazarevic" },
+      { "left": "Janicar", "right": "Cune Gojkovic" },
+      { "left": "Dva galeba bela", "right": "Saban Saulic" },
+      { "left": "Lela Vranjanka", "right": "Stanisa Stosic" },
+      { "left": "Pozdravi je pozdravi ", "right": "Miroslav Ilic" },
+      { "left": "Mito bekrijo ", "right": "Vasilija Radojcic" }
+    ]
+  },
+  {
+    "description": "Srpske ustanicke vodje i njihove nadimke",
+    "pairs": [
+      { "left": "Miloje Popovic", "right": "Djak" },
+      { "left": "Petar Nikolajevic", "right": "Moler" },
+      { "left": "Stojan Cupic", "right": "Zmaj od Nocaja" },
+      { "left": "Rafailo Nenadovic", "right": "Hadzi-Ruvim" },
+      { "left": "Jovan Gligorijevic", "right": "Zeka Buljubasa" },
+      { "left": "Petar Todorovic", "right": "Dobrnjac" },
+      { "left": "Milos Stojicevic", "right": "Pocerac" },
+      { "left": "Dusan Vulicevic", "right": "Djusa" },
+      { "left": "Gerasim Georgijevic ", "right": "Hadzi-Djera" },
+      { "left": "Vasa Carapic ", "right": "Zmaj od Avale" }
+    ]
+  },
+  {
+    "description": "Prava i umetnicke imena slavnih muzicara",
+    "pairs": [
+      { "left": "Dejvid Dzons", "right": "Dejvid Bouvi" },
+      { "left": "Robert Cimerman", "right": "Bob Dilan" },
+      { "left": "Farok Bulsara", "right": "Fredi Merkjuri" },
+      { "left": "Ricard Starki", "right": "Ringo Star" },
+      { "left": "Stivlend Dzadkins", "right": "Stivi Vonder" },
+      { "left": "Vinsent Furnije", "right": "Alis Kuper" },
+      { "left": "Jorgos Panajotu", "right": "Dzordz Majkl" },
+      { "left": "Redzinald Dvajt", "right": "Elton Dzon" },
+      { "left": "Piter Hernandzez", "right": "Bruno Mars" },
+      { "left": "Marsal Meters ", "right": "Eminem" }
+    ]
+  }
+]

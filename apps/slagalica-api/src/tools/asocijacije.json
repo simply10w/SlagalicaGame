@@ -1,0 +1,212 @@
+[
+  {
+    "solutions": ["evropa"],
+    "groups": [
+      {
+        "hints": ["bog", "rim", "planeta", "dzin"],
+        "solutions": ["jupiter"]
+      },
+      {
+        "hints": ["putanja", "antena", "navodjenje", "gps"],
+        "solutions": ["satelit"]
+      },
+      {
+        "hints": ["antarktik", "azija", "afrika", "australija"],
+        "solutions": ["kontinent"]
+      },
+      {
+        "hints": ["skup", "'u'", "savez", "udruzenje"],
+        "solutions": ["unija"]
+      }
+    ]
+  },
+  {
+    "solutions": ["atlantida"],
+    "groups": [
+      {
+        "hints": ["filozof", "atina", "parmenid", "ljubav"],
+        "solutions": ["platon"]
+      },
+      {
+        "hints": ["koral", "vulkan", "pesak", "blago"],
+        "solutions": ["ostrvo"]
+      },
+      {
+        "hints": ["prdanje", "mit", "ohrid", "urbana"],
+        "solutions": ["legenda"]
+      },
+      {
+        "hints": ["1999.", "besnilo", "v. cuda", "z. runo"],
+        "solutions": ["B. Pekic"]
+      }
+    ]
+  },
+  {
+    "solutions": ["radnici"],
+    "groups": [
+      {
+        "hints": ["studenti", "restoran", "bonovi", "linija"],
+        "solutions": ["menza"]
+      },
+      {
+        "hints": ["dizalice", "skele", "cuvar", "zidari"],
+        "solutions": ["gradiliste"]
+      },
+      {
+        "hints": ["obustava", "blokada", "glad", "generalni"],
+        "solutions": ["strajk"]
+      },
+      {
+        "hints": ["juristika.", "zastita", "ljudska", "decja"],
+        "solutions": ["prava"]
+      }
+    ]
+  },
+  {
+    "solutions": ["radnici"],
+    "groups": [
+      {
+        "hints": ["studenti", "restoran", "bonovi", "linija"],
+        "solutions": ["menza"]
+      },
+      {
+        "hints": ["dizalice", "skele", "cuvar", "zidari"],
+        "solutions": ["gradiliste"]
+      },
+      {
+        "hints": ["obustava", "blokada", "glad", "generalni"],
+        "solutions": ["strajk"]
+      },
+      {
+        "hints": ["juristika", "zastita", "ljudska", "decja"],
+        "solutions": ["prava"]
+      }
+    ]
+  },
+  {
+    "solutions": ["bulevar"],
+    "groups": [
+      {
+        "hints": ["osmeh", "dunav", "izbor", "prostran"],
+        "solutions": ["sirok"]
+      },
+      {
+        "hints": ["lipe", "kuce", "glavna", "slepa"],
+        "solutions": ["ulica"]
+      },
+      {
+        "hints": ["vece", "prvi", "bogovi", "saga"],
+        "solutions": ["sumrak"]
+      },
+      {
+        "hints": ["duboka", "ofset", "roto", "tabak"],
+        "solutions": ["stampa"]
+      }
+    ]
+  },
+  {
+    "solutions": ["cev"],
+    "groups": [
+      {
+        "hints": ["otpad", "vode", "pacovi", "gradska"],
+        "solutions": ["kanalizacija"]
+      },
+      {
+        "hints": ["zenica", "svedska", "legura", "gvozdje"],
+        "solutions": ["celik"]
+      },
+      {
+        "hints": ["sporet", "upaljac", "bojler", "boca"],
+        "solutions": ["plin", "gas"]
+      },
+      {
+        "hints": ["maksim", "graling", "sarac", "oruzje"],
+        "solutions": ["mitraljez", "puska"]
+      }
+    ]
+  },
+  {
+    "solutions": ["pcela", "osa"],
+    "groups": [
+      {
+        "hints": ["odzaklija", "volk", "obucena", "naga"],
+        "solutions": ["maja"]
+      },
+      {
+        "hints": ["srpska", "iseljenici", "reka", "tok"],
+        "solutions": ["matica"]
+      },
+      {
+        "hints": ["akcionari", "staro", "veselo", "tajno"],
+        "solutions": ["drustvo"]
+      },
+      {
+        "hints": ["kosa", "bagrem", "drska", "tisa"],
+        "solutions": ["cvet"]
+      }
+    ]
+  },
+  {
+    "solutions": ["koren"],
+    "groups": [
+      {
+        "hints": ["ukras", "adam", "bendzamin", "fotosinteza"],
+        "solutions": ["biljka"]
+      },
+      {
+        "hints": ["magija", "pravougaonik", "jednacina", "crni"],
+        "solutions": ["kvadrat"]
+      },
+      {
+        "hints": ["uvod", "tezak", "buna", "start"],
+        "solutions": ["pocetak"]
+      },
+      {
+        "hints": ["glavna", "sinonim", "misao", "obecanje"],
+        "solutions": ["rec"]
+      }
+    ]
+  },
+  {
+    "solutions": ["muva"],
+    "groups": [
+      {
+        "hints": ["plocice", "papir", "tuba", "super"],
+        "solutions": ["lepak"]
+      },
+      {
+        "hints": ["prsten", "jevrem", "jovan", "sluga"],
+        "solutions": ["gospodar"]
+      },
+      {
+        "hints": ["divlji", "gimnastika", "nil", "trka"],
+        "solutions": ["konj"]
+      },
+      {
+        "hints": ["cigarete", "mec", "rukavice", "formula 1"],
+        "solutions": ["boks"]
+      }
+    ]
+  },
+  {
+    "solutions": ["guma"],
+    "groups": [
+      {
+        "hints": ["majmun", "pecina", "osoba", "zena"],
+        "solutions": ["covek"]
+      },
+      {
+        "hints": ["mentol", "karamela", "svila", "kesica"],
+        "solutions": ["bombona"]
+      },
+      {
+        "hints": ["caura", "brzina", "olovo", "zrno"],
+        "solutions": ["metak"]
+      },
+      {
+        "hints": ["sezona", "rusija", "radost", "san"],
+        "solutions": ["zima"]
+      }
+    ]
+  }
+]
