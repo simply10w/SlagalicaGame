@@ -31,9 +31,9 @@ export const routes: Route[] = [
     canActivate: [PermissionsGuard]
   },
   {
-    path: 'player',
+    path: 'multiplayer',
     loadChildren: () =>
-      import('./player/player.module').then(m => m.PlayerModule),
+      import('./multiplayer/multiplayer.module').then(m => m.MultiplayerModule),
     data: {
       permissions: [UserType.Igrac]
     },

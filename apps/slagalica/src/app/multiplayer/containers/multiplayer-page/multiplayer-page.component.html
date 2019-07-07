@@ -1,0 +1,16 @@
+<sla-game *ngIf="(inRoom$ | async); else notInGame"></sla-game>
+
+<ng-template #notInGame>
+  <mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Igre">
+      <div class="sla-spacing-m sla-text-center">
+        <button mat-raised-button color="accent" (click)="createGame()">
+          Napravi novu igru
+        </button>
+      </div>
+      <sla-room-list [rooms]="rooms$ | async" (join)="joinGame($event)">
+        <h3 class="sla-text-center" noRooms>Nema soba za igru</h3>
+      </sla-room-list>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>

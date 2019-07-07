@@ -4,7 +4,6 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    component: AdminPageComponent,
-    data: { title: 'Admin Page' }
+    component: AdminPageComponent
   }
 ];

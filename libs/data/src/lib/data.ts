@@ -213,7 +213,7 @@ export enum AsocijacijaStates {
   Finished = 'finished'
 }
 
-export const enum SpojniceStates {
+export enum SpojniceStates {
   BluePlaying = 'blue_playing',
   BlueStrikeOutRedPlaying = 'blue_strike_out_red_playing',
   RedPlaying = 'red_playing',

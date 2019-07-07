@@ -1,0 +1,38 @@
+<h2 class="sla-text-center" [ngClass]="turnColor$ | async">
+  {{ currentStateDescription$ | async }}
+</h2>
+
+<p class="sla-text-center">
+  <span>Red: {{ redPlayerPoints$ | async }} </span> -
+  <span>Blue: {{ bluePlayerPoints$ | async }}</span>
+</p>
+
+<div class="grid">
+  <div class="left">
+    <div
+      *ngFor="
+        let tile of (leftSideTiles$ | async);
+        let i = index;
+        trackBy: trackByOrder
+      "
+      class="tile sla-spacing-m"
+      [class.selected-tile]="(currentIndex$ | async) === i"
+      [class.red-tile]="tile.color === PlayerRole.Red"
+      [class.blue-tile]="tile.color === PlayerRole.Blue"
+    >
+      {{ tile.text }}
+    </div>
+  </div>
+  <div class="right">
+    <div
+      *ngFor="let tile of (rightSideTiles$ | async); trackBy: trackByOrder"
+      class="tile sla-spacing-m"
+      (click)="!tile.disabled && guess(tile.text)"
+      [class.disabled-tile]="tile.disabled"
+      [class.red-tile]="tile.color === PlayerRole.Red"
+      [class.blue-tile]="tile.color === PlayerRole.Blue"
+    >
+      {{ tile.text }}
+    </div>
+  </div>
+</div>

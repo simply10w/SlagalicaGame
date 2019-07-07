@@ -32,12 +32,16 @@ export abstract class GameHandler {
       this._tick();
       if (this.room.state.time === duration) {
         callback();
+        this.clearTimer();
       }
     }, TICK_INTERVAL);
   }
 
   clearTimer() {
-    if (this._timer) clearInterval(this._timer);
+    this.room.state.time = 0;
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
   }
 
   private _tick() {

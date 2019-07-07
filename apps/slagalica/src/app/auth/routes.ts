@@ -4,7 +4,6 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'landing',
-    component: LandingPageComponent,
-    data: { title: 'Landing Page' }
+    component: LandingPageComponent
   }
 ];

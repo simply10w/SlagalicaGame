@@ -21,8 +21,10 @@ import { UserType } from '@slagalica/data';
           routerLink="/supervizor"
           >Supervizor
         </sla-nav-item>
-        <sla-nav-item *slaHasPermission="[UserType.Igrac]" routerLink="/player"
-          >Igrac</sla-nav-item
+        <sla-nav-item
+          *slaHasPermission="[UserType.Igrac]"
+          routerLink="/multiplayer"
+          >Igre</sla-nav-item
         >
         <sla-nav-item
           *slaHasPermission="[

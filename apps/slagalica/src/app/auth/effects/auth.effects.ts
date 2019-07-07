@@ -60,7 +60,7 @@ export class AuthEffects {
             case UserType.Admin:
               return this.router.navigate(['/admin']);
             case UserType.Igrac:
-              return this.router.navigate(['/player']);
+              return this.router.navigate(['/multiplayer']);
             case UserType.Supervizor:
               return this.router.navigate(['/supervizor']);
           }

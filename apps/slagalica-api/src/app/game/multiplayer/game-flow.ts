@@ -8,6 +8,7 @@ import {
   SlagalicaGameHandler,
   SpojniceGameHandler
 } from './handlers';
+import { Logger } from '@slagalica-api/util';
 import { State } from './state';
 
 const NEXT_GAME_DELAY = 3 * 1000;
@@ -36,8 +37,11 @@ export class GameFlow {
   private _nextStep() {
     switch (this.room.state.currentGame) {
       case GameType.NotStarted: {
-        this.currentGame = new SlagalicaGameHandler(this.room);
+        this.currentGame = new SpojniceGameHandler(this.room);
         break;
+      }
+      case GameType.Spojnice: {
+        this.room.state.currentGame = GameType.Finished;
       }
       // }
       // case GameType.Slagalica: {
@@ -57,6 +61,7 @@ export class GameFlow {
     if (this.room.state.currentGame === GameType.Finished) {
       // SAVE IN DB
       // BROADCAST END OF GAME
+      Logger.info('Game end.');
     } else {
       this.currentGame.initGame().then(() => {});
     }
@@ -98,6 +103,5 @@ export class GameFlow {
 
   private _resetTime() {
     this.currentGame.clearTimer();
-    this.room.state.time = 0;
   }
 }

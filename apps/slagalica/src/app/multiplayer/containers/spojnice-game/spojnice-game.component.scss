@@ -1,0 +1,45 @@
+:host {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+    }
+
+    .left,
+    .right {
+        display: flex;
+        flex-flow: column;
+    }
+
+    .right {
+        .tile {
+            cursor: pointer;
+        }
+
+        .disabled-tile {
+            pointer-events: none;
+        }
+
+        .tile:not(.disabled-tile):hover {
+            background-color: yellow !important;
+        }
+    }
+
+    .tile {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid gainsboro;
+
+        &.selected-tile {
+            background-color: yellow !important;
+        }
+
+        &.blue-tile {
+            background-color: blue;
+        }
+
+        &.red-tile {
+            background-color: red;
+        }
+    }
+}
