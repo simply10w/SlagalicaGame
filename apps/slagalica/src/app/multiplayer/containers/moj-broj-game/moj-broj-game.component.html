@@ -39,7 +39,7 @@
       <span matSuffix>Result={{ blueResult$ | async }}</span>
       <mat-hint *ngIf="(blueError$ | async) as error">{{ error }}</mat-hint>
       <mat-hint *ngIf="(bluePoints$ | async) as points">
-        Got points {{ bluePoints$ }}
+        Got points {{ points }}
       </mat-hint>
     </mat-form-field>
   </div>

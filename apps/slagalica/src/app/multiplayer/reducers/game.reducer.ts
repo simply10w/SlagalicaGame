@@ -127,6 +127,7 @@ export interface State {
   blue: StatePlayer;
   currentGame: string;
   currentTurn: 'red' | 'blue';
+  winner: PlayerRole;
   skockoGame: StateSkockoGame;
   spojniceGame: StateSpojniceGame;
   slagalicaGame: StateSlagalicaGame;
@@ -229,6 +230,8 @@ export const reducer = createReducer(
 );
 
 export const getTime = (state: State) => state.time;
+
+export const getWinner = (state: State) => state.winner;
 
 export const getRedPlayer = (state: State) => state.red;
 

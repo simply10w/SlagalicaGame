@@ -1,10 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as fromPlayer from '@slagalica-app/multiplayer/reducers';
 import { MojBrojGameActions } from '@slagalica-app/multiplayer/actions';
 import { selectors } from './moj-broj.selectors';
 

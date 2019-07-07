@@ -1,6 +1,10 @@
 import * as controllers from '@slagalica-api/controllers';
 import { createGameServer } from '@slagalica-api/game';
-import { AdminRole, SupervizorRole } from '@slagalica-api/shared/permissions';
+import {
+  EitherRole,
+  isSupervizor,
+  isAdmin
+} from '@slagalica-api/shared/permissions';
 import {
   createAuthMiddleware,
   interceptAuthError
@@ -67,18 +71,40 @@ function setupApiRoutes(app: express.Application) {
   );
   const auth = createAuthMiddleware();
   app.use('/api/secure', controllers.AuthController);
-  app.use('/api/users', auth, AdminRole, controllers.UsersController);
-  app.use('/api/words', auth, SupervizorRole, controllers.WordsController);
+  app.use(
+    '/api/users',
+    auth,
+    EitherRole([isAdmin]),
+    controllers.UsersController
+  );
+  app.use(
+    '/api/words',
+    auth,
+    EitherRole([isSupervizor]),
+    controllers.WordsController
+  );
+  app.use(
+    '/api/multiplayer-games',
+    auth,
+    EitherRole([isAdmin]),
+    controllers.MultiplayerGameResultsController
+  );
+  app.use(
+    '/api/game-of-the-day',
+    auth,
+    EitherRole([isAdmin]),
+    controllers.GameOfTheDayController
+  );
   app.use(
     '/api/spojnica-game',
     auth,
-    SupervizorRole,
+    EitherRole([isSupervizor, isAdmin]),
     controllers.SpojnicaGameController
   );
   app.use(
     '/api/asocijacija-game',
     auth,
-    SupervizorRole,
+    EitherRole([isSupervizor, isAdmin]),
     controllers.AsocijacijaGameController
   );
 

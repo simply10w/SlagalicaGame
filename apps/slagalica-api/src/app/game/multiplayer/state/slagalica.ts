@@ -1,8 +1,9 @@
 import { Schema, type } from 'colyseus.js';
-import { getRandomCyrillicLetter } from '@slagalica/common';
+import { getRandomLatinLetter } from '@slagalica/common';
 import { ArraySchema } from '@colyseus/schema';
 import { WordModel } from '@slagalica-api/models';
 import { GameWinner } from '@slagalica/data';
+import { upperCase, trim, Dictionary } from 'lodash';
 
 class SlagalicaPlayer extends Schema {
   @type('string')
@@ -37,22 +38,22 @@ export class SlagalicaGameState extends Schema {
   }
 
   async calculateWinner() {
-    const blueWord = this.blue.word;
-    const redWord = this.red.word;
-    const [foundBlue, foundRed] = await Promise.all([
-      blueWord
-        ? WordModel.findOne({
-            word: blueWord
-          })
-        : Promise.resolve(null),
-      redWord
-        ? WordModel.findOne({
-            word: redWord
-          })
-        : Promise.resolve(null)
-    ]);
-
+    const blueWord = upperCase(trim(this.blue.word));
+    const redWord = upperCase(trim(this.red.word));
     const invalidWord = 'Word is invalid.';
+    let foundBlue, foundRed;
+
+    if (blueWord && this._validateWord(blueWord)) {
+      foundBlue = await WordModel.findOne({
+        word: blueWord
+      });
+    }
+
+    if (redWord && this._validateWord(redWord)) {
+      foundRed = await WordModel.findOne({
+        word: redWord
+      });
+    }
 
     /**
      * if Both have correct words
@@ -101,8 +102,23 @@ export class SlagalicaGameState extends Schema {
   private _getLetters() {
     const letters: string[] = [];
     for (let i = 0; i < 12; i++) {
-      letters.push(getRandomCyrillicLetter());
+      letters.push(getRandomLatinLetter());
     }
     return letters;
+  }
+
+  private _validateWord(word: string) {
+    const charTable = this.letters.reduce((table, letter) => {
+      table[letter] = table[letter] ? table[letter] + 1 : 1;
+      return table;
+    }, {});
+    for (const char of word) {
+      if (!charTable[char]) return false;
+      if (charTable[char]) {
+        if (charTable[char] > 0) charTable[char]--;
+        else return false;
+      }
+    }
+    return true;
   }
 }

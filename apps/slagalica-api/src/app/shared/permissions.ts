@@ -26,6 +26,14 @@ export function SupervizorRole(
   else reject(res);
 }
 
+export function EitherRole(checkers) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const someOkay = checkers.some(checker => checker(req.user));
+    if (someOkay) return next();
+    else reject(res);
+  };
+}
+
 export function isSupervizor(user: Pick<User, 'type'>): boolean {
   return user.type === UserType.Supervizor;
 }

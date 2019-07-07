@@ -127,3 +127,8 @@ export const getSpojniceGame = createSelector(
   getGameState,
   fromGame.getSpojniceGame
 );
+
+export const getWinner = createSelector(
+  getGameState,
+  fromGame.getWinner
+);

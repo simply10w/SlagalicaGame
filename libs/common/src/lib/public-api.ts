@@ -1,4 +1,4 @@
 export * from './errors';
-export * from './cyrillic';
+export * from './letters';
 export * from './numbers';
 export * from './password';

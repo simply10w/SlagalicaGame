@@ -130,19 +130,21 @@ export enum SkockoPositionResult {
   NotInSequence = 'not_in_sequence'
 }
 
-export interface TwoPeopleGame {
-  [PlayerRole.Blue]: GamePlayedPlayerRole;
-  [PlayerRole.Red]: GamePlayedPlayerRole;
+export interface MultiplayerGame {
+  red: string;
+  redPoints: number;
+  blue: string;
+  bluePoints: number;
   won: PlayerRole;
   played_at?: string;
 }
 
-export interface OnePersonGame extends GamePlayedPlayerRole {
+export interface SingleplayerGame extends GamePlayedPlayerRole {
   played_at?: string;
 }
 
 interface GamePlayedPlayerRole {
-  player: User;
+  player: string;
   points: number;
 }
 
@@ -219,4 +221,10 @@ export enum SpojniceStates {
   RedPlaying = 'red_playing',
   RedStrikeOutBluePlaying = 'red_strike_out_blue_playing',
   Finished = 'finished'
+}
+
+export interface GameOfTheDay {
+  spojnica: string;
+  asocijacija: string;
+  date: string;
 }

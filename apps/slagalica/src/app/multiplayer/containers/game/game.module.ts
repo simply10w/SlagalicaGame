@@ -7,6 +7,7 @@ import { MojBrojGameModule } from '../moj-broj-game';
 import { SkockoGameModule } from '../skocko-game';
 import { AsocijacijaGameModule } from '../asocijacija-game';
 import { SpojniceGameModule } from '../spojnice-game';
+import { FinishedGameModule } from '../finished-game';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { SpojniceGameModule } from '../spojnice-game';
     SkockoGameModule,
     AsocijacijaGameModule,
     SpojniceGameModule,
-    GameHeaderModule
+    GameHeaderModule,
+    FinishedGameModule
   ],
   exports: [GameComponent],
   declarations: [GameComponent]

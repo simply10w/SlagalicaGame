@@ -9,7 +9,11 @@ export function seedWords() {
   Promise.resolve(null)
     .then(() => fs.readFileSync(FILE, { encoding: 'utf-8' }))
     .then(json => JSON.parse(json))
-    .then(words => WordModel.remove({}).then(() => WordModel.insertMany(words)))
+    .then(words => {
+      WordModel.remove({})
+        .exec()
+        .then(() => WordModel.insertMany(words));
+    })
     .then(() => {
       Logger.info('SUCCESSFULLY ADDED WORDS');
     })

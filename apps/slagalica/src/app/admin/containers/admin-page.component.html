@@ -11,5 +11,7 @@
       [users]="pendingUsers$ | async | slaSearchUsers: query"
     ></sla-registrations-list>
   </mat-tab>
-  <mat-tab label="Igra dana"> </mat-tab>
+  <mat-tab label="Igra dana">
+    <sla-game-of-the-day-form></sla-game-of-the-day-form>
+  </mat-tab>
 </mat-tab-group>

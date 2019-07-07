@@ -1,4 +1,4 @@
-import { GameType } from '@slagalica/data';
+import { GameType, PlayerRole } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
 import { AsocijacijaGameState } from './asocijacija';
 import { MojBrojGameState } from './moj-broj';
@@ -31,6 +31,9 @@ export class State extends Schema {
 
   @type('string')
   currentGame: GameType = GameType.NotStarted;
+
+  @type('string')
+  winner: PlayerRole;
 
   @type('number')
   time: number = 0;

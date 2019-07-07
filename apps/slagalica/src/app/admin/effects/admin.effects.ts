@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { Router } from '@angular/router';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, switchMap, concatMap, map, tap } from 'rxjs/operators';
@@ -58,10 +56,56 @@ export class AdminEffects {
     )
   );
 
-  constructor(
-    private actions$: Actions,
-    private adminApi: AdminApiService,
-    private router: Router,
-    private dialog: MatDialog
-  ) {}
+  getSpojnicaGames$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdminPageActions.getSpojnicaGames),
+      switchMap(() =>
+        this.adminApi.getSpojnicaGames().pipe(
+          map(response => response.spojnicaGames),
+          map(games => AdminApiActions.getSpojnicaGamesSuccess({ games })),
+          catchError(error =>
+            of(AdminApiActions.getSpojnicaGamesFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  getAsocijacijaGames$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdminPageActions.getAsocijacijaGames),
+      switchMap(() =>
+        this.adminApi.getAsocijacijaGames().pipe(
+          map(response => response.asocijacijaGames),
+          map(games => AdminApiActions.getAsocijacijaGamesSuccess({ games })),
+          catchError(error =>
+            of(AdminApiActions.getAsocijacijaGamesFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  createGameOfTheDay$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdminPageActions.createGameOfTheDay),
+      concatMap(({ game }) =>
+        this.adminApi
+          .createGameOfTheDay(game)
+          .pipe(
+            map(
+              response =>
+                AdminApiActions.createGameOfTheDaySuccess({
+                  game: response.game
+                }),
+              catchError(error =>
+                of(AdminApiActions.createGameOfTheDayFailure({ error }))
+              )
+            )
+          )
+      )
+    )
+  );
+
+  constructor(private actions$: Actions, private adminApi: AdminApiService) {}
 }
