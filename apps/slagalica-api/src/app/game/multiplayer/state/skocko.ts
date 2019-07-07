@@ -93,7 +93,7 @@ export class SkockoGameState extends Schema {
            */
         } else if (usedAllTries(this.blue)) {
           this.gameState = SkockoGameStates.BlueStrikeOutRedPlaying;
-          emptyArraySchema(this.red.tries);
+          clearTries(this.red);
           this.turn = PlayerRole.Red;
         }
         break;
@@ -122,7 +122,7 @@ export class SkockoGameState extends Schema {
            */
         } else if (usedAllTries(this.red)) {
           this.gameState = SkockoGameStates.RedStrikeOutBluePlaying;
-          emptyArraySchema(this.blue.tries);
+          clearTries(this.blue);
           this.turn = PlayerRole.Blue;
         }
         break;
@@ -156,7 +156,7 @@ export class SkockoGameState extends Schema {
 
   private _startFirstGame() {
     this.gameState = SkockoGameStates.BluePlaying;
-    emptyArraySchema(this.blue.tries);
+    clearTries(this.blue);
     this.turn = PlayerRole.Blue;
     this._restart();
   }
@@ -164,11 +164,15 @@ export class SkockoGameState extends Schema {
   private _startSecondGame() {
     setTimeout(() => {
       this.gameState = SkockoGameStates.RedPlaying;
-      emptyArraySchema(this.red.tries);
+      clearTries(this.red);
       this.turn = PlayerRole.Red;
       this._restart();
     }, NEXT_GAME_DELAY);
   }
+}
+
+function clearTries(player: SkockoPlayer) {
+  emptyArraySchema(player.tries);
 }
 
 function getPositionResults(goal: Skocko[], sequence: Skocko[]) {

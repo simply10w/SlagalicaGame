@@ -33,7 +33,6 @@ async function boot() {
       Logger.info(`API Listening at http://localhost:${port}/api`);
       app.use('/colyseus', createGameServer(server));
       Logger.info(`Game Server Listening at ws://localhost:${port}`);
-      // seedUsers();
     });
 
     server.on('error', Logger.error);

@@ -149,6 +149,34 @@
             }
           }
         },
+        "seed-build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/slagalica-api",
+            "main": "apps/slagalica-api/src/seed.ts",
+            "tsConfig": "apps/slagalica-api/tsconfig.app.json",
+            "assets": ["apps/slagalica-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/slagalica-api/src/environments/environment.ts",
+                  "with": "apps/slagalica-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "seed": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "slagalica-api:seed-build"
+          }
+        },
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {

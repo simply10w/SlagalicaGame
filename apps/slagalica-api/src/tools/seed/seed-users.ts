@@ -1,6 +1,6 @@
 import * as faker from 'faker';
-import { Logger } from '../app/util';
-import { UserModel } from '../app/models';
+import { Logger } from '@slagalica-api/util';
+import { UserModel } from '@slagalica-api/models';
 
 const ADMIN = {
   type: 'admin',
@@ -104,7 +104,7 @@ for (let i = 0; i < 50; i++) {
     dateOfBirth: faker.date.past(20),
     gender: faker.random.arrayElement(['female', 'male']),
     profileImgUrl: faker.random.image(),
-    password: faker.internet.password()
+    password: 'P4ssword!'
   });
 }
 
