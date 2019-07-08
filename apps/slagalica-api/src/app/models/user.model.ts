@@ -9,68 +9,74 @@ import * as path from 'path';
 import * as uniqueFilename from 'unique-filename';
 import { promisify } from 'util';
 
-const UserSchema = new Schema({
-  firstName: {
-    type: String,
-    required: [true, 'First name is required.']
+const UserSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: [true, 'First name is required.']
+    },
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required.']
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required.'],
+      unique: [true, 'Email must be unique'],
+      trim: true,
+      dropDups: true
+    },
+    occupation: String,
+    userName: {
+      type: String,
+      required: [true, 'Username is required.'],
+      unique: [true, 'Username must be unique'],
+      trim: true,
+      dropDups: true
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required.']
+    },
+    type: {
+      type: String,
+      required: [true, 'Type required.'],
+      default: UserType.Igrac,
+      enum: [UserType.Admin, UserType.Supervizor, UserType.Igrac]
+    },
+    gender: {
+      type: String,
+      required: true,
+      enum: [UserGender.Female, UserGender.Male]
+    },
+    dateOfBirth: {
+      type: String,
+      required: true
+    },
+    /**
+     * image will be stored in some cloud storage
+     */
+    profileImgUrl: {
+      type: String,
+      get: (url: string) => {
+        const STORAGE_BUCKET = `http://localhost:3333/public`;
+        return `${STORAGE_BUCKET}/${url}`;
+      }
+    },
+    updated_at: { type: Date, default: Date.now },
+    accepted: {
+      type: Boolean,
+      default: false
+    },
+    created_at: { type: Date, default: Date.now }
   },
-  lastName: {
-    type: String,
-    required: [true, 'Last name is required.']
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required.'],
-    unique: [true, 'Email must be unique'],
-    trim: true,
-    dropDups: true
-  },
-  occupation: String,
-  userName: {
-    type: String,
-    required: [true, 'Username is required.'],
-    unique: [true, 'Username must be unique'],
-    trim: true,
-    dropDups: true
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required.']
-  },
-  type: {
-    type: String,
-    required: [true, 'Type required.'],
-    default: UserType.Igrac,
-    enum: [UserType.Admin, UserType.Supervizor, UserType.Igrac]
-  },
-  gender: {
-    type: String,
-    required: true,
-    enum: [UserGender.Female, UserGender.Male]
-  },
-  dateOfBirth: {
-    type: String,
-    required: true
-  },
-  /**
-   * image will be stored in some cloud storage
-   */
-  profileImgUrl: {
-    type: String,
-    get: (relativeUrl: string) => `/${relativeUrl}`
-  },
-  updated_at: { type: Date, default: Date.now },
-  accepted: {
-    type: Boolean,
-    default: false
-  },
-  created_at: { type: Date, default: Date.now }
-});
+  { toJSON: { getters: true }, toObject: { getters: true } }
+);
 
 interface IUserDocument extends Omit<User, '_id'>, Document {}
 
 interface IUser extends IUserDocument {
-  storeProfileImage(file: UploadedFile): Promise<string>;
+  storeProfileImage(file: UploadedFile): string;
   comparePassword(password: string): Promise<boolean>;
   accept(decision: boolean): Promise<this>;
 }
@@ -113,15 +119,6 @@ UserSchema.pre('save', function(this: IUser, next) {
     });
   });
 });
-
-const STORAGE_BUCKET = path.resolve(
-  process.cwd(),
-  'apps',
-  'slagalica',
-  'src',
-  'assets',
-  'images'
-);
 
 class UserImpl {
   static getAllPendingPlayers(this: IUserModel): Promise<IUser[]> {
@@ -176,12 +173,23 @@ class UserImpl {
     return userObj;
   }
 
-  async storeProfileImage(this: IUser, file: UploadedFile) {
+  storeProfileImage(this: IUser, file: UploadedFile) {
+    const UPLOAD_PATH = path.resolve(
+      process.cwd(),
+      'dist',
+      'apps',
+      'slagalica-api',
+      'assets',
+      'public'
+    );
     const newFileName = uniqueFilename('', '') + '-' + file.name;
-    const where = path.resolve(STORAGE_BUCKET, newFileName);
-    await promisify(fs.writeFile)(where, file.data);
-    this.set('profileImgUrl', newFileName);
-    return where;
+    const where = path.resolve(UPLOAD_PATH, newFileName);
+    try {
+      fs.writeFileSync(where, file.data);
+      this.profileImgUrl = newFileName;
+    } catch (err) {
+      throw err;
+    }
   }
 
   accept(this: IUser, decision: boolean) {

@@ -36,8 +36,6 @@ export function evalPlayer(
       if (isWholeNumber(result)) player.result = result;
       else player.error = `Result is not a whole number: ${result}`;
     } catch (error) {
-      console.log(error, error.message);
-
       player.error =
         error instanceof MojBrojValidationError
           ? error.message

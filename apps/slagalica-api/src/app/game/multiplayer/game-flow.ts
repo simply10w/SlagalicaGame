@@ -140,4 +140,34 @@ export class GameFlow {
       }
     }
   }
+
+  playerLeft(player: string) {
+    if (
+      this.room.state.currentGame === GameType.Finished ||
+      this.room.state.currentGame === GameType.NotStarted
+    ) {
+      return;
+    }
+
+    let winner: PlayerRole;
+    if (player === this.room.state.blue.playerId) {
+      winner = PlayerRole.Red;
+      this.room.state.blue.totalPoints = 0;
+      this.room.state.red.totalPoints = 100;
+    } else if (player === this.room.state.red.playerId) {
+      winner = PlayerRole.Blue;
+      this.room.state.red.totalPoints = 0;
+      this.room.state.blue.totalPoints = 100;
+    }
+
+    this.room.state.currentGame = GameType.Finished;
+    this.room.state.winner = winner;
+
+    if (this.currentGame) {
+      this.currentGame.clearTimer();
+      this.currentGame = null;
+    }
+
+    this._logGame();
+  }
 }

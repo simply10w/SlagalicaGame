@@ -37,23 +37,27 @@ export class GameFlow {
   }
 
   start() {
-    getGameOfTheDay().then(game => {
-      this.gameOfTheDay = game._id;
-      this.spojnicaGame = game.spojnica;
-      this.asocijacijaGame = game.asocijacija;
+    getGameOfTheDay()
+      .then(game => {
+        this.gameOfTheDay = game._id;
+        this.spojnicaGame = game.spojnica;
+        this.asocijacijaGame = game.asocijacija;
+        this._nextStep();
 
-      this._nextStep();
-
-      this.room.on('end_game', () => {
-        if (this.currentGame) {
-          this.currentGame.clearTimer();
-          this._updateTotalPoints();
-        }
-        setTimeout(() => {
-          this._nextStep();
-        }, NEXT_GAME_DELAY);
+        this.room.on('end_game', () => {
+          if (this.currentGame) {
+            this.currentGame.clearTimer();
+            this._updateTotalPoints();
+          }
+          setTimeout(() => {
+            this._nextStep();
+          }, NEXT_GAME_DELAY);
+        });
+      })
+      .catch(err => {
+        Logger.error(err);
+        this.room.state.currentGame = GameType.Finished;
       });
-    });
   }
 
   private _nextStep() {

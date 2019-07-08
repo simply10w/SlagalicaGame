@@ -13,6 +13,7 @@ import { Logger, setupServerLogging } from '@slagalica-api/util';
 import * as bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
+import path from 'path';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import RateLimiter from 'express-rate-limit';
@@ -48,6 +49,7 @@ async function boot() {
 boot().then(() => {});
 
 function setupBaseMiddleware(app: express.Application) {
+  app.use(express.static(path.join(__dirname, 'assets')));
   app.use(
     cors({
       origin: ['http://localhost:4200']

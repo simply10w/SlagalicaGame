@@ -53,16 +53,7 @@ export class MultiplayerGameRoom extends Room<State> {
   }
 
   onLeave(client: Client) {
-    if (this.state.red && this.state.red.playerId === client.sessionId) {
-      this.state.red = null;
-    } else if (
-      this.state.blue &&
-      this.state.blue.playerId === client.sessionId
-    ) {
-      this.state.blue = null;
-    }
-
-    // TODO: end game by declaring a winner
+    this.gameFlow.playerLeft(client.sessionId);
   }
 
   onDispose() {

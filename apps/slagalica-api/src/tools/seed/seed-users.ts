@@ -103,7 +103,7 @@ for (let i = 0; i < 50; i++) {
     email: faker.internet.email(),
     dateOfBirth: faker.date.past(20),
     gender: faker.random.arrayElement(['female', 'male']),
-    profileImgUrl: faker.random.image(),
+    profileImgUrl: 'bg-img-business.jpg',
     password: 'P4ssword!'
   });
 }

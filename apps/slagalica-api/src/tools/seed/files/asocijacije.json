@@ -187,5 +187,26 @@
         "solutions": ["zima"]
       }
     ]
+  },
+  {
+    "solutions": ["muzika"],
+    "groups": [
+      {
+        "hints": ["banja", "voda", "planina", "gejzir"],
+        "solutions": ["izvor"]
+      },
+      {
+        "hints": ["traka", "nemi", "animacija", "montaza"],
+        "solutions": ["film"]
+      },
+      {
+        "hints": ["kultura", "zacini", "istok", "ekspres"],
+        "solutions": ["orijent"]
+      },
+      {
+        "hints": ["crtanje", "rvanje", "kupatilo", "kabina"],
+        "solutions": ["tus"]
+      }
+    ]
   }
 ]

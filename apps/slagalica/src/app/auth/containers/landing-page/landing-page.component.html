@@ -45,6 +45,7 @@
           >{{ user.userName }} {{ user.email }}
         </mat-card-subtitle>
       </mat-card-header>
+      <img mat-card-image [src]="user.profileImgUrl" alt="Profile photo" />
     </mat-card>
   </mat-card-content>
 </ng-template>

@@ -33,7 +33,7 @@ AuthController.post('/register', async (req, res) => {
   try {
     const model = new UserModel(user);
     await model.validate();
-    if (file) await model.storeProfileImage(file);
+    if (file) model.storeProfileImage(file);
     const createdUser = await model.save();
     res.status(StatusCodes.OK).json({
       user: createdUser

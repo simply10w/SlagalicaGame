@@ -6,7 +6,7 @@ import { SEED_FILES_PATH } from './path';
 
 export function seedSpojnice() {
   const FILE = path.resolve(SEED_FILES_PATH, 'spojnice.json');
-  Promise.resolve(null)
+  return Promise.resolve(null)
     .then(() => fs.readFileSync(FILE, { encoding: 'utf-8' }))
     .then(json => JSON.parse(json))
     .then(games =>
