@@ -18,5 +18,10 @@ export const reducer = createReducer(
   initialState,
   on(PlayerApiActions.getAvailableRoomsSuccess, (state, { rooms }) =>
     adapter.addAll(rooms, state)
+  ),
+  on(
+    PlayerApiActions.joinRoomSuccess,
+    PlayerApiActions.joinRoomFailure,
+    (state, { roomId }) => adapter.removeOne(roomId, state)
   )
 );

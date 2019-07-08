@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Client, Room } from 'colyseus.js';
 import {
-  SINGLEPLAYER_GAME_ROOM,
-  ClientGameRoomOptionsDto
+  ClientGameRoomOptionsDto,
+  SingleplayerResultDto,
+  SINGLEPLAYER_GAME_ROOM
 } from '@slagalica/data';
+import { Client, Room } from 'colyseus.js';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,7 +14,7 @@ import { Observable } from 'rxjs';
 export class SingleplayerService {
   private _client: Client;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.initClient();
   }
 
@@ -29,6 +31,16 @@ export class SingleplayerService {
       observer.next(room);
       observer.complete();
     });
+  }
+
+  loadSingleResults() {
+    return this.http.get<{ results: SingleplayerResultDto[] }>(
+      '/api/results/single'
+    );
+  }
+
+  loadMultiResults() {
+    return this.http.get<{ results: any[] }>('/api/results/multi');
   }
 
   private _getClientUrl() {

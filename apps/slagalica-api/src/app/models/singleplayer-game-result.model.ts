@@ -26,9 +26,13 @@ export const SingeplayerGameResultSchema = new Schema({
 });
 
 function getTodaysDateCondition() {
-  const start = moment().startOf('day');
-  const end = moment().endOf('day');
-  return { $gte: start.format(), $lt: end.format() };
+  const start = moment()
+    .startOf('day')
+    .toDate();
+  const end = moment()
+    .endOf('day')
+    .toDate();
+  return { $gte: start, $lt: end };
 }
 
 export const SingeplayerGameResultModel = model<SingleplayerGameResult>(
@@ -40,29 +44,25 @@ export async function createSingleplayerGameResult(game: ISingleplayerGame) {
   return new SingeplayerGameResultModel(game).save();
 }
 
-export async function getTodaysGames(
+export async function getTopSingleplayerResults(
   { cursor, limit }: { cursor: number; limit: number } = {
     cursor: 0,
     limit: 10
   }
 ) {
-  return SingeplayerGameResultModel.find({
-    played_at: getTodaysDateCondition()
-  })
-    .sort({
+  return SingeplayerGameResultModel.find(
+    {
+      played_at: getTodaysDateCondition()
+    },
+    [],
+    {
       skip: cursor,
       limit: limit,
       sort: {
         points: -1 // Sort DESC
       }
-    })
-    .exec();
-}
-
-export async function getAllUserSingleplayerGameResults(userId: string) {
-  return SingeplayerGameResultModel.find({ player: userId })
-    .find({
-      player: userId
-    })
+    }
+  )
+    .populate('player')
     .exec();
 }

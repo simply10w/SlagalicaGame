@@ -38,6 +38,8 @@ export class MultiplayerGameRoom extends Room<State> {
         userName: options.userName
       });
 
+      this.lock();
+
       this.gameFlow.start();
     }
   }

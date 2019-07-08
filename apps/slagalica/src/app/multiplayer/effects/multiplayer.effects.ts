@@ -99,12 +99,15 @@ export class MultiplayerEffects implements OnRunEffects {
               this.room = room;
               this._connectListeners(this.room);
             }),
-            map(room => PlayerApiActions.joinRoomSuccess())
+            map(room =>
+              PlayerApiActions.joinRoomSuccess({ roomId: action.roomId })
+            )
           );
         } else {
           return of(
-            PlayerApiActions.createRoomFailure({
-              error: 'Already in a room.'
+            PlayerApiActions.joinRoomFailure({
+              error: 'Already in a room.',
+              roomId: action.roomId
             })
           );
         }

@@ -9,5 +9,26 @@
         </button>
       </div>
     </mat-tab>
+    <mat-tab label="Rezultati igre dana">
+      <div class="sla-spacing-m sla-text-center">
+        <mat-list>
+          <mat-list-item *ngFor="let result of (single$ | async)">
+            <h2 matLine>{{ result.player?.userName }} - {{ result.points }}</h2>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="Tvoje igre sa vise igraca">
+      <div class="sla-spacing-m sla-text-center">
+        <mat-list>
+          <mat-list-item *ngFor="let result of (multi$ | async)">
+            <p>
+              {{ result.red.userName }} ({{ result.redPoints }}) -
+              {{ result.blue.userName }} ({{ result.bluePoints }})
+            </p>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </ng-template>

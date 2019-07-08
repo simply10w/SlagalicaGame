@@ -22,6 +22,7 @@ export class Player extends Schema {
     this.playerId = playerId;
     this.userName = playerInfo.userName;
     this.userId = playerInfo.userId;
+    console.log(playerId);
     this.totalPoints = 0;
   }
 }

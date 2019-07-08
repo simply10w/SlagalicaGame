@@ -55,6 +55,7 @@ export async function getGameOfTheDay() {
   ]);
 
   if (!spojnica || !asocijacija) {
+    Logger.error(JSON.stringify(game));
     const error = new Error.ValidationError();
     Logger.error('Missing asocijacija or spojnica for the game of the day');
     error.message = 'Server error.';

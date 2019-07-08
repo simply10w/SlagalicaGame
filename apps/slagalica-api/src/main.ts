@@ -2,8 +2,9 @@ import * as controllers from '@slagalica-api/controllers';
 import { createGameServer } from '@slagalica-api/game';
 import {
   EitherRole,
-  isSupervizor,
-  isAdmin
+  isAdmin,
+  isPlayer,
+  isSupervizor
 } from '@slagalica-api/shared/permissions';
 import {
   createAuthMiddleware,
@@ -11,14 +12,13 @@ import {
 } from '@slagalica-api/shared/token';
 import { Logger, setupServerLogging } from '@slagalica-api/util';
 import * as bodyParser from 'body-parser';
-import compression from 'compression';
 import cors from 'cors';
-import path from 'path';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import RateLimiter from 'express-rate-limit';
 import helmet from 'helmet';
 import { connect } from 'mongoose';
+import path from 'path';
 import { environment } from './environments/environment.prod';
 
 async function boot() {
@@ -108,6 +108,13 @@ function setupApiRoutes(app: express.Application) {
     auth,
     EitherRole([isSupervizor, isAdmin]),
     controllers.AsocijacijaGameController
+  );
+
+  app.use(
+    '/api/results',
+    auth,
+    EitherRole([isPlayer]),
+    controllers.ResultsController
   );
 
   app.use(interceptAuthError);

@@ -42,7 +42,8 @@ import {
   switchMap,
   takeUntil,
   tap,
-  withLatestFrom
+  withLatestFrom,
+  catchError
 } from 'rxjs/operators';
 
 @Injectable()
@@ -51,6 +52,38 @@ export class SingleplayerEffects implements OnRunEffects {
   private player$ = this.store.pipe(select(fromPlayer.getPlayerInfo));
   private room: Room;
   private stateChangeUpdate = new BehaviorSubject<Schema>(null);
+
+  loadSingleResults$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlayerPageActions.loadSingleResults),
+      switchMap(() =>
+        this.playerService.loadSingleResults().pipe(
+          map(response => response.results),
+          map(results =>
+            PlayerApiActions.loadSingleResultsSuccess({ results })
+          ),
+          catchError(error =>
+            of(PlayerApiActions.loadSingleResultsFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  loadMultiResults$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlayerPageActions.loadMultiResults),
+      switchMap(() =>
+        this.playerService.loadMultiResults().pipe(
+          map(response => response.results),
+          map(results => PlayerApiActions.loadMultiResultsSuccess({ results })),
+          catchError(error =>
+            of(PlayerApiActions.loadMultiResultsFailure({ error }))
+          )
+        )
+      )
+    )
+  );
 
   createGame$ = createEffect(() =>
     this.actions$.pipe(

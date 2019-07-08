@@ -7,3 +7,4 @@ export {
   MultiplayerGameResultsController
 } from './multiplayer-game-results.controller';
 export { GameOfTheDayController } from './game-of-the-day.controller';
+export { ResultsController } from './results.controller';

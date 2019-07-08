@@ -144,6 +144,13 @@ export interface SingleplayerGame extends GamePlayedPlayerRole {
   played_at?: string;
 }
 
+export interface SingleplayerResultDto {
+  game: string;
+  points: number;
+  player: User;
+  played_at: string;
+}
+
 interface GamePlayedPlayerRole {
   player: string;
   points: number;

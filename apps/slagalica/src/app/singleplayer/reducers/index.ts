@@ -8,17 +8,20 @@ import {
 import { ClientGameRoomOptionsDto } from '@slagalica/data';
 import * as fromRoom from './room.reducer';
 import * as fromGame from './game.reducer';
+import * as fromResults from './results.reducer';
 
 export interface SingleplayerState {
   room: fromRoom.State;
   game: fromGame.State;
+  results: fromResults.State;
 }
 
 /** Provide reducer in AoT-compilation happy way */
 export function reducers(state: SingleplayerState | undefined, action: Action) {
   return combineReducers({
     room: fromRoom.reducer,
-    game: fromGame.reducer
+    game: fromGame.reducer,
+    results: fromResults.reducer
   })(state, action);
 }
 
@@ -35,6 +38,11 @@ export const getPlayerInfo = createSelector(
       userId: user._id,
       token
     }
+);
+
+export const getResultsState = createSelector(
+  getSingleplayerState,
+  state => state.results
 );
 
 export const getRoomState = createSelector(
@@ -90,4 +98,14 @@ export const getAsocijacijaGame = createSelector(
 export const getSpojniceGame = createSelector(
   getGameState,
   fromGame.getSpojniceGame
+);
+
+export const getSingleResultsList = createSelector(
+  getResultsState,
+  fromResults.getSingleList
+);
+
+export const getMultiResultsList = createSelector(
+  getResultsState,
+  fromResults.getMultiList
 );

@@ -39,10 +39,25 @@ export async function createMultiplayerGameResult(game: IMultiplayerGame) {
   return new MultiplayerGameResultModel(game).save();
 }
 
+function getLast10DaysCondition() {
+  const start = moment()
+    .startOf('day')
+    .subtract(10, 'days')
+    .toDate();
+  const end = moment()
+    .endOf('day')
+    .toDate();
+  return { $gte: start, $lt: end };
+}
+
 export async function getAllUserMultiplayerGameResults(userId: string) {
-  return MultiplayerGameResultModel.find({ 'red.player': userId })
-    .find({
-      'blue.player': userId
-    })
+  return MultiplayerGameResultModel.find({
+    $and: [
+      { $or: [{ red: userId }, { blue: userId }] },
+      { played_at: getLast10DaysCondition() }
+    ]
+  })
+    .populate('red')
+    .populate('blue')
     .exec();
 }
