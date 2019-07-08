@@ -29,8 +29,10 @@ export class GameFlow {
     this._nextStep();
 
     this.room.on('end_game', () => {
-      this.currentGame.clearTimer();
-      this._updateTotalPoints();
+      if (this.currentGame) {
+        this.currentGame.clearTimer();
+        this._updateTotalPoints();
+      }
       setTimeout(() => {
         this._nextStep();
       }, NEXT_GAME_DELAY);

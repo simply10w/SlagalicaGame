@@ -6,6 +6,7 @@ const TICK_INTERVAL = 1000; // 1 second expressed in milliseconds
 
 export abstract class GameHandler {
   private _timer: NodeJS.Timer;
+  private _declaredEnd: boolean = false;
 
   constructor(public room: Room<State>) {}
 
@@ -13,7 +14,10 @@ export abstract class GameHandler {
   abstract initGame(): Promise<void>;
 
   declareEndGame() {
-    this.room.emit('end_game');
+    if (!this._declaredEnd) {
+      this._declaredEnd = true;
+      this.room.emit('end_game');
+    }
   }
 
   /**

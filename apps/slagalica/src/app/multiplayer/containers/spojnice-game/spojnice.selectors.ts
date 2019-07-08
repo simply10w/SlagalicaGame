@@ -127,7 +127,7 @@ const getRedPlayerPoints = createSelector(
 
 const getBluePlayer = createSelector(
   getGame,
-  game => game.red
+  game => game.blue
 );
 
 const getBluePlayerPoints = createSelector(
