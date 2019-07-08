@@ -2,7 +2,6 @@ import { ArraySchema } from '@colyseus/schema';
 import { SlagalicaGame } from '@slagalica-api/game/shared';
 import { WordModel } from '@slagalica-api/models';
 import { Schema, type } from 'colyseus.js';
-import { trim, upperCase } from 'lodash';
 
 export class SlagalicaGameState extends Schema {
   @type(['string'])
@@ -28,8 +27,8 @@ export class SlagalicaGameState extends Schema {
 
     if (word && SlagalicaGame.validateWord(this.letters, word)) {
       foundWord = await WordModel.findOne({
-        word: foundWord
-      });
+        word
+      }).exec();
     }
 
     if (foundWord) {
