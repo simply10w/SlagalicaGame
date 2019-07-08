@@ -1,9 +1,5 @@
 import { ArraySchema } from '@colyseus/schema';
-import { SpojnicaGameModel } from '@slagalica-api/models';
-import {
-  emptyArraySchema,
-  getOneRandomCollectionItem
-} from '@slagalica-api/util';
+import { emptyArraySchema } from '@slagalica-api/util';
 import { SpojnicaGame } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
 import { shuffle } from 'lodash';
@@ -20,7 +16,7 @@ export class SpojniceGameState extends Schema {
   game: SpojnicaGame;
 
   @type('number')
-  points: number;
+  points: number = 0;
 
   @type('number')
   currentIndex = 0;
@@ -37,15 +33,11 @@ export class SpojniceGameState extends Schema {
   @type('boolean')
   finished: boolean = false;
 
-  async initGame() {
-    this.game = await this.getGame();
+  async initGame(game: SpojnicaGame) {
+    this.game = game;
     this._initSides();
     emptyArraySchema(this.connections);
     this.currentIndex = 0;
-  }
-
-  getGame() {
-    return getOneRandomCollectionItem(SpojnicaGameModel);
   }
 
   guess(guess: string) {

@@ -1,7 +1,5 @@
 import { ArraySchema } from '@colyseus/schema';
-import { AsocijacijaGameModel } from '@slagalica-api/models';
-import { getOneRandomCollectionItem } from '@slagalica-api/util';
-import { AsocijacijaGame, PlayerRole } from '@slagalica/data';
+import { AsocijacijaGame } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
 import { flatMap, lowerCase, trim } from 'lodash';
 
@@ -20,8 +18,8 @@ export class AsocijacijaGameState extends Schema {
   @type('number')
   points = 0;
 
-  async initGame() {
-    this.game = await this._getGame();
+  async initGame(game: AsocijacijaGame) {
+    this.game = game;
     const tiles = Array<string>(21).fill('');
     this.tiles = new ArraySchema(...tiles);
     const solved = Array<boolean>(5).fill(false);
@@ -61,8 +59,6 @@ export class AsocijacijaGameState extends Schema {
     if (group === 4) {
       /** if solution correct */
       if (this.game.solutions.includes(solution)) {
-        const solved = new ArraySchema<boolean>();
-
         /**
          * for each unsolved group give him 5 points
          */
@@ -116,9 +112,5 @@ export class AsocijacijaGameState extends Schema {
   private _uncoverSolution(solution?: string) {
     this.tiles[20] =
       this.tiles[20] || (solution ? solution : this.game.solutions[0]);
-  }
-
-  private _getGame() {
-    return getOneRandomCollectionItem(AsocijacijaGameModel);
   }
 }

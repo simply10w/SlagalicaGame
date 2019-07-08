@@ -1,4 +1,9 @@
-import { GameType } from '@slagalica/data';
+import {
+  createSingleplayerGameResult,
+  getGameOfTheDay
+} from '@slagalica-api/models';
+import { Logger } from '@slagalica-api/util';
+import { AsocijacijaGame, GameType, SpojnicaGame } from '@slagalica/data';
 import { Room } from 'colyseus';
 import {
   AsocijacijaGameHandler,
@@ -17,6 +22,12 @@ export class GameFlow {
 
   gameSaved: boolean;
 
+  gameOfTheDay: string;
+
+  spojnicaGame: SpojnicaGame;
+
+  asocijacijaGame: AsocijacijaGame;
+
   constructor(public room: Room<State>) {}
 
   onMessage(player: string, data: any) {
@@ -26,16 +37,22 @@ export class GameFlow {
   }
 
   start() {
-    this._nextStep();
+    getGameOfTheDay().then(game => {
+      this.gameOfTheDay = game._id;
+      this.spojnicaGame = game.spojnica;
+      this.asocijacijaGame = game.asocijacija;
 
-    this.room.on('end_game', () => {
-      if (this.currentGame) {
-        this.currentGame.clearTimer();
-        this._updateTotalPoints();
-      }
-      setTimeout(() => {
-        this._nextStep();
-      }, NEXT_GAME_DELAY);
+      this._nextStep();
+
+      this.room.on('end_game', () => {
+        if (this.currentGame) {
+          this.currentGame.clearTimer();
+          this._updateTotalPoints();
+        }
+        setTimeout(() => {
+          this._nextStep();
+        }, NEXT_GAME_DELAY);
+      });
     });
   }
 
@@ -54,11 +71,17 @@ export class GameFlow {
         break;
       }
       case GameType.Skocko: {
-        this.currentGame = new SpojniceGameHandler(this.room);
+        this.currentGame = new SpojniceGameHandler(
+          this.room,
+          this.spojnicaGame
+        );
         break;
       }
       case GameType.Spojnice: {
-        this.currentGame = new AsocijacijaGameHandler(this.room);
+        this.currentGame = new AsocijacijaGameHandler(
+          this.room,
+          this.asocijacijaGame
+        );
         break;
       }
       case GameType.Asocijacije: {
@@ -78,16 +101,14 @@ export class GameFlow {
   private _logGame() {
     if (this.gameSaved) return;
 
-    // createMultiplayerGameResult({
-    //   bluePoints: blue.totalPoints,
-    //   blue: blue.userId,
-    //   red: red.userId,
-    //   redPoints: red.totalPoints,
-    //   won: this.room.state.winner
-    // }).then(() => {
-    //   this.gameSaved = true;
-    //   Logger.info('Game saved!');
-    // });
+    createSingleplayerGameResult({
+      points: this.room.state.player.totalPoints,
+      player: this.room.state.player.userId,
+      game: this.gameOfTheDay
+    }).then(() => {
+      this.gameSaved = true;
+      Logger.info('Game saved!');
+    });
   }
 
   private _updateTotalPoints() {

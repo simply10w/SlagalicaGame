@@ -36,18 +36,7 @@ export const SingeplayerGameResultModel = model<SingleplayerGameResult>(
   SingeplayerGameResultSchema
 );
 
-export async function createSingleplayerGame(game: ISingleplayerGame) {
-  const userPlayedGame = await SingeplayerGameResultModel.find({
-    player: game.player,
-    played_at: getTodaysDateCondition()
-  });
-
-  if (userPlayedGame) {
-    const error = new Error.ValidationError();
-    error.message = 'User has already played todays game.';
-    throw error;
-  }
-
+export async function createSingleplayerGameResult(game: ISingleplayerGame) {
   return new SingeplayerGameResultModel(game).save();
 }
 

@@ -4,3 +4,4 @@ export { WordModel } from './word.model';
 export { AsocijacijaGameModel } from './asocijacija-game.model';
 export * from './multiplayer-game-result.model';
 export * from './game-of-the-day.model';
+export * from './singleplayer-game-result.model';

@@ -140,6 +140,7 @@ export interface MultiplayerGame {
 }
 
 export interface SingleplayerGame extends GamePlayedPlayerRole {
+  game: string;
   played_at?: string;
 }
 

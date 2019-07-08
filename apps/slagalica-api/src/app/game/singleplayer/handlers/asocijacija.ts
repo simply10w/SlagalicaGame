@@ -3,7 +3,8 @@ import {
   AsocijacijaOpenMessage,
   AsocijacijaSolveGroupMessage,
   AsocijacijaSolveGameMessage,
-  PlayerRole
+  PlayerRole,
+  AsocijacijaGame
 } from '@slagalica/data';
 import { Room } from 'colyseus';
 import { AsocijacijaGameState, State } from '../state';
@@ -11,14 +12,14 @@ import { GameHandler } from './shared';
 
 const GAME_DURATION_SECONDS = 4 * 60;
 export class AsocijacijaGameHandler extends GameHandler {
-  constructor(room: Room<State>) {
+  constructor(room: Room<State>, public game: AsocijacijaGame) {
     super(room);
   }
 
   async initGame() {
     this.room.state.currentGame = GameType.Asocijacije;
     this.room.state.asocijacijeGame = new AsocijacijaGameState();
-    await this.room.state.asocijacijeGame.initGame();
+    await this.room.state.asocijacijeGame.initGame(this.game);
     this._startTimer(GAME_DURATION_SECONDS, () => this._endGame());
   }
 

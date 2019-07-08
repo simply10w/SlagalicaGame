@@ -12,7 +12,7 @@ export class Player extends Schema {
   userId: string;
 
   @type('number')
-  totalPoints: number;
+  totalPoints: number = 0;
 
   @type('string')
   playerId: string;

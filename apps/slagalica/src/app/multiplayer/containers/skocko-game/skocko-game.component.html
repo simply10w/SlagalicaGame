@@ -3,9 +3,10 @@
   <h3 class="sla-text-center">{{ description$ | async }}</h3>
   <hr />
 
-  <div class="points">
-    <p>{{ redPoints$ | async }}</p>
+  <div class="points sla-text-center">
     <p>{{ bluePoints$ | async }}</p>
+    -
+    <p>{{ redPoints$ | async }}</p>
   </div>
 
   <hr />

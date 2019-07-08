@@ -9,7 +9,7 @@ export class SlagalicaGameState extends Schema {
   letters = new ArraySchema<string>();
 
   @type('number')
-  points: number;
+  points: number = 0;
 
   @type('string')
   word: string;
@@ -22,7 +22,7 @@ export class SlagalicaGameState extends Schema {
   }
 
   async calculateWinner() {
-    const word = upperCase(trim(this.word));
+    const word = this.word;
     const invalidWord = 'Word is invalid.';
     let foundWord;
 

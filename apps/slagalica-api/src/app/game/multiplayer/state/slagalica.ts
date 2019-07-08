@@ -3,7 +3,6 @@ import { SlagalicaGame } from '@slagalica-api/game/shared';
 import { WordModel } from '@slagalica-api/models';
 import { GameWinner } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
-import { trim, upperCase } from 'lodash';
 
 class SlagalicaPlayer extends Schema {
   @type('string')
@@ -38,8 +37,8 @@ export class SlagalicaGameState extends Schema {
   }
 
   async calculateWinner() {
-    const blueWord = upperCase(trim(this.blue.word));
-    const redWord = upperCase(trim(this.red.word));
+    const blueWord = this.blue.word;
+    const redWord = this.red.word;
     const invalidWord = 'Word is invalid.';
     let foundBlue, foundRed;
 

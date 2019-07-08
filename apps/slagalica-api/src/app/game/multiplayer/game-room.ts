@@ -28,12 +28,12 @@ export class MultiplayerGameRoom extends Room<State> {
   onJoin(client: Client, options: ClientGameRoomOptionsDto) {
     const playerId = client.sessionId;
     if (this.clients.length === 1) {
-      this.state.red = new Player(playerId, {
+      this.state.blue = new Player(playerId, {
         userId: options.userId,
         userName: options.userName
       });
     } else {
-      this.state.blue = new Player(playerId, {
+      this.state.red = new Player(playerId, {
         userId: options.userId,
         userName: options.userName
       });
@@ -61,6 +61,8 @@ export class MultiplayerGameRoom extends Room<State> {
     ) {
       this.state.blue = null;
     }
+
+    // TODO: end game by declaring a winner
   }
 
   onDispose() {

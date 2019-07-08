@@ -1,6 +1,9 @@
 import { model, Schema, Document, Error } from 'mongoose';
 import moment from 'moment';
 import { GameOfTheDay as IGameOfTheDay } from '@slagalica/data';
+import { getOneRandomCollectionItem } from '@slagalica-api/util';
+import { SpojnicaGameModel } from './spojnica-game.model';
+import { AsocijacijaGameModel } from './asocijacija-game.model';
 
 type GameOfTheDay = IGameOfTheDay & Document;
 
@@ -42,3 +45,19 @@ export const GameOfTheDayModel = model<GameOfTheDay>(
   'game_of_the_day',
   GameOfTheDaySchema
 );
+
+export async function getGameOfTheDay() {
+  const game = await getOneRandomCollectionItem(GameOfTheDayModel);
+
+  const [spojnica, asocijacija] = await Promise.all([
+    SpojnicaGameModel.findById(game.spojnica),
+    AsocijacijaGameModel.findById(game.asocijacija)
+  ]);
+
+  return {
+    _id: game._id,
+    date: game.date,
+    asocijacija,
+    spojnica
+  };
+}

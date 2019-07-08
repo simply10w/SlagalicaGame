@@ -29,9 +29,6 @@ export class MojBrojGameState extends Schema {
 
   async calculateWinner() {
     MojBrojGame.evalPlayer(this, this.options);
-
-    if (isNumber(this.result)) {
-      if (this.result === this.goal) this.points = 10;
-    }
+    if (this.result === this.goal) this.points = 10;
   }
 }

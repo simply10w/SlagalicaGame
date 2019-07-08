@@ -4,18 +4,6 @@
   </button>
 </div>
 <div class="game-header__layout">
-  <p class="red sla-text-center player-desc" [class.me]="me === red?.userName">
-    <span *ngIf="red?.userName; else waitingPlayer">
-      <span>{{ red.userName }}</span
-      ><br />
-      <span>Total points: {{ red.totalPoints }}</span>
-    </span>
-  </p>
-  <span class="sla-text-center">
-    <ng-container *ngIf="blue?.userName && red?.userName"
-      >{{ time }}
-    </ng-container>
-  </span>
   <p
     class="blue sla-text-center player-desc"
     [class.me]="me === blue?.userName"
@@ -23,6 +11,18 @@
     <span *ngIf="blue?.userName; else waitingPlayer">
       <span>{{ blue.userName }}</span> <br />
       <span>Total points: {{ blue.totalPoints }}</span>
+    </span>
+  </p>
+  <span class="sla-text-center">
+    <ng-container *ngIf="blue?.userName && red?.userName"
+      >{{ time }}
+    </ng-container>
+  </span>
+  <p class="red sla-text-center player-desc" [class.me]="me === red?.userName">
+    <span *ngIf="red?.userName; else waitingPlayer">
+      <span>{{ red.userName }}</span
+      ><br />
+      <span>Total points: {{ red.totalPoints }}</span>
     </span>
   </p>
 </div>

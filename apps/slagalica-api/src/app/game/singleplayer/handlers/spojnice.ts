@@ -1,7 +1,8 @@
 import {
   GameType,
   SpojnicaGuessMessage,
-  SpojnicaSkipMessage
+  SpojnicaSkipMessage,
+  SpojnicaGame
 } from '@slagalica/data';
 import { Room } from 'colyseus';
 import { SpojniceGameState, State } from '../state';
@@ -10,14 +11,14 @@ import { GameHandler } from './shared';
 const GAME_DURATION_SECONDS = 60;
 
 export class SpojniceGameHandler extends GameHandler {
-  constructor(room: Room<State>) {
+  constructor(room: Room<State>, public game: SpojnicaGame) {
     super(room);
   }
 
   async initGame() {
     this.room.state.currentGame = GameType.Spojnice;
     this.room.state.spojniceGame = new SpojniceGameState();
-    await this.room.state.spojniceGame.initGame();
+    await this.room.state.spojniceGame.initGame(this.game);
     this._restartTimer();
   }
 
