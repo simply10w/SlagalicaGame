@@ -1,0 +1,22 @@
+:host {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 8px;
+    }
+
+    .points {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .selection {
+        max-width: 100px;
+    }
+
+    .check-btn {
+        display: block;
+        width: 100%;
+        min-height: 50px;
+    }
+}

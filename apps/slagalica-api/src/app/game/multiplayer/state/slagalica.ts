@@ -1,9 +1,9 @@
-import { Schema, type } from 'colyseus.js';
-import { getRandomLatinLetter } from '@slagalica/common';
 import { ArraySchema } from '@colyseus/schema';
+import { SlagalicaGame } from '@slagalica-api/game/shared';
 import { WordModel } from '@slagalica-api/models';
 import { GameWinner } from '@slagalica/data';
-import { upperCase, trim, Dictionary } from 'lodash';
+import { Schema, type } from 'colyseus.js';
+import { trim, upperCase } from 'lodash';
 
 class SlagalicaPlayer extends Schema {
   @type('string')
@@ -34,7 +34,7 @@ export class SlagalicaGameState extends Schema {
   }
 
   async initGame() {
-    this.letters = new ArraySchema(...this._getLetters());
+    this.letters = new ArraySchema(...SlagalicaGame.getLetters());
   }
 
   async calculateWinner() {
@@ -43,13 +43,13 @@ export class SlagalicaGameState extends Schema {
     const invalidWord = 'Word is invalid.';
     let foundBlue, foundRed;
 
-    if (blueWord && this._validateWord(blueWord)) {
+    if (blueWord && SlagalicaGame.validateWord(this.letters, blueWord)) {
       foundBlue = await WordModel.findOne({
         word: blueWord
       });
     }
 
-    if (redWord && this._validateWord(redWord)) {
+    if (redWord && SlagalicaGame.validateWord(this.letters, redWord)) {
       foundRed = await WordModel.findOne({
         word: redWord
       });
@@ -69,22 +69,22 @@ export class SlagalicaGameState extends Schema {
       else if (blueLength < redLength) this.winner = GameWinner.Red;
       else this.winner = GameWinner.Both;
 
-      this.blue.points = this._calculatePoints(blueWord);
-      this.red.points = this._calculatePoints(redWord);
+      this.blue.points = SlagalicaGame.calculatePoints(blueWord);
+      this.red.points = SlagalicaGame.calculatePoints(redWord);
       /**
        * If only blue has correct word
        */
     } else if (foundBlue) {
       this.red.error = invalidWord;
       this.winner = GameWinner.Blue;
-      this.blue.points = this._calculatePoints(blueWord);
+      this.blue.points = SlagalicaGame.calculatePoints(blueWord);
       /**
        * If only red has correct word
        */
     } else if (foundRed) {
       this.blue.error = invalidWord;
       this.winner = GameWinner.Red;
-      this.red.points = this._calculatePoints(redWord);
+      this.red.points = SlagalicaGame.calculatePoints(redWord);
       /**
        * If both have invalid words
        */
@@ -93,32 +93,5 @@ export class SlagalicaGameState extends Schema {
       this.blue.error = invalidWord;
       this.winner = GameWinner.None;
     }
-  }
-
-  private _calculatePoints(word: string) {
-    return word.length * 2;
-  }
-
-  private _getLetters() {
-    const letters: string[] = [];
-    for (let i = 0; i < 12; i++) {
-      letters.push(getRandomLatinLetter());
-    }
-    return letters;
-  }
-
-  private _validateWord(word: string) {
-    const charTable = this.letters.reduce((table, letter) => {
-      table[letter] = table[letter] ? table[letter] + 1 : 1;
-      return table;
-    }, {});
-    for (const char of word) {
-      if (!charTable[char]) return false;
-      if (charTable[char]) {
-        if (charTable[char] > 0) charTable[char]--;
-        else return false;
-      }
-    }
-    return true;
   }
 }

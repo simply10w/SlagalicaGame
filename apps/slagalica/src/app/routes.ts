@@ -40,6 +40,17 @@ export const routes: Route[] = [
     canActivate: [PermissionsGuard]
   },
   {
+    path: 'singleplayer',
+    loadChildren: () =>
+      import('./singleplayer/singleplayer.module').then(
+        m => m.SingleplayerModule
+      ),
+    data: {
+      permissions: [UserType.Igrac]
+    },
+    canActivate: [PermissionsGuard]
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'landing'

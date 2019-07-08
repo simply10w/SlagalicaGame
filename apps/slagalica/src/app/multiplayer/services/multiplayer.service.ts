@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client, Room } from 'colyseus.js';
 import {
-  WS_GAME_ROOM,
+  MULTIPLAYER_GAME_ROOM,
   ClientGameRoomOptionsDto,
   AvailableRoom
 } from '@slagalica/data';
@@ -23,7 +23,7 @@ export class MultiplayerService {
 
   createRoom(gameOptions: ClientGameRoomOptionsDto) {
     return new Observable<Room>(observer => {
-      const room = this._client.join(WS_GAME_ROOM, {
+      const room = this._client.join(MULTIPLAYER_GAME_ROOM, {
         create: true,
         ...gameOptions
       });
@@ -42,7 +42,7 @@ export class MultiplayerService {
 
   getAvailableRooms(): Observable<AvailableRoom[]> {
     return new Observable(observer => {
-      this._client.getAvailableRooms(WS_GAME_ROOM, (rooms, err) => {
+      this._client.getAvailableRooms(MULTIPLAYER_GAME_ROOM, (rooms, err) => {
         if (err) observer.error(err);
         else {
           observer.next(rooms);

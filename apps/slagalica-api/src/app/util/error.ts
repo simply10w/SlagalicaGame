@@ -22,7 +22,7 @@ export function errorHandler(res: Response) {
 
     if (error.name === 'ValidationError') {
       res
-        .status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .status(StatusCodes.BAD_REQUEST)
         .json(createError(error.message, { reference }));
     } else {
       Logger.error('BREAK!', error);

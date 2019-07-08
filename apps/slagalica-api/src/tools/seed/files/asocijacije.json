@@ -63,27 +63,6 @@
     ]
   },
   {
-    "solutions": ["radnici"],
-    "groups": [
-      {
-        "hints": ["studenti", "restoran", "bonovi", "linija"],
-        "solutions": ["menza"]
-      },
-      {
-        "hints": ["dizalice", "skele", "cuvar", "zidari"],
-        "solutions": ["gradiliste"]
-      },
-      {
-        "hints": ["obustava", "blokada", "glad", "generalni"],
-        "solutions": ["strajk"]
-      },
-      {
-        "hints": ["juristika", "zastita", "ljudska", "decja"],
-        "solutions": ["prava"]
-      }
-    ]
-  },
-  {
     "solutions": ["bulevar"],
     "groups": [
       {

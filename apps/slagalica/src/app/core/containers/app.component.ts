@@ -27,6 +27,11 @@ import { UserType } from '@slagalica/data';
           >Igre</sla-nav-item
         >
         <sla-nav-item
+          *slaHasPermission="[UserType.Igrac]"
+          routerLink="/singleplayer"
+          >Igra dana</sla-nav-item
+        >
+        <sla-nav-item
           *slaHasPermission="[
             UserType.Igrac,
             UserType.Admin,

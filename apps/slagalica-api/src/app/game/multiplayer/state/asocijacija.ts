@@ -7,7 +7,7 @@ import {
 } from '@slagalica/data';
 import { AsocijacijaGameModel } from '@slagalica-api/models';
 import { getOneRandomCollectionItem, Logger } from '@slagalica-api/util';
-import { flatMap } from 'lodash';
+import { flatMap, lowerCase, trim } from 'lodash';
 
 export class AsocijacijaPlayer extends Schema {
   @type('number')
@@ -83,6 +83,7 @@ export class AsocijacijaGameState extends Schema {
     if (group < 0 || group > 4) return;
     if (this.state === AsocijacijaStates.Finished) return;
 
+    solution = lowerCase(trim(solution));
     if (
       (player === PlayerRole.Blue &&
         this.state === AsocijacijaStates.BlueSolving) ||

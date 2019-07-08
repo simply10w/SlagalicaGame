@@ -1,0 +1,15 @@
+<sla-game-header
+  [player]="player$ | async"
+  [time]="time$ | async"
+  (leaveRoom)="leaveGame()"
+></sla-game-header>
+<ng-container [ngSwitch]="game$ | async">
+  <sla-slagalica-game *ngSwitchCase="GameType.Slagalica"></sla-slagalica-game>
+  <sla-moj-broj-game *ngSwitchCase="GameType.MojBroj"></sla-moj-broj-game>
+  <sla-skocko-game *ngSwitchCase="GameType.Skocko"></sla-skocko-game>
+  <sla-spojnice-game *ngSwitchCase="GameType.Spojnice"></sla-spojnice-game>
+  <sla-asocijacija-game
+    *ngSwitchCase="GameType.Asocijacije"
+  ></sla-asocijacija-game>
+  <h2 *ngSwitchCase="GameType.Finished">Game Finished</h2>
+</ng-container>

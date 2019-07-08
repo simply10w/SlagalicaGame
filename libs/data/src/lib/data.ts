@@ -148,7 +148,8 @@ interface GamePlayedPlayerRole {
   points: number;
 }
 
-export const WS_GAME_ROOM = 'game_room';
+export const MULTIPLAYER_GAME_ROOM = 'multiplayer_game_room';
+export const SINGLEPLAYER_GAME_ROOM = 'singleplayer_game_room';
 
 export interface ClientGameRoomOptionsDto {
   create?: boolean;

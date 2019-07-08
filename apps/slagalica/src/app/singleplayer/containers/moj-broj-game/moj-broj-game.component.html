@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="numbers">
+    <span class="number" *ngFor="let number of (options$ | async)">
+      {{ number }}
+    </span>
+  </div>
+  <div>
+    <h3 class="sla-text-center">Goal is {{ goal$ | async }}</h3>
+  </div>
+
+  <hr />
+
+  <div class="grid">
+    <mat-form-field>
+      <mat-label>Igrac</mat-label>
+      <input
+        matInput
+        type="text"
+        [ngModel]="formula$ | async"
+        (ngModelChange)="change($event)"
+        [disabled]="submitted"
+      />
+      <span matSuffix>Result={{ result$ | async }}</span>
+      <mat-hint *ngIf="(error$ | async) as error">{{ error }}</mat-hint>
+      <mat-hint *ngIf="(points$ | async) as points">
+        Got points {{ points }}
+      </mat-hint>
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button *ngIf="!submitted" (click)="submit()">
+    Potvrdi
+  </button>
+</div>

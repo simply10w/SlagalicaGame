@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="letters">
+    <span class="letter" *ngFor="let letter of (letters$ | async)">
+      {{ letter }}
+    </span>
+  </div>
+
+  <hr />
+
+  <div>
+    <mat-form-field>
+      <mat-label>Rec</mat-label>
+      <input
+        matInput
+        type="text"
+        [ngModel]="word$ | async"
+        (ngModelChange)="change($event)"
+        [disabled]="submitted"
+      />
+      <span matSuffix>Got points: {{ points$ | async }}</span>
+      <mat-hint *ngIf="(error$ | async) as error">{{ error }}</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button *ngIf="!submitted" (click)="submit()">
+    Potvrdi
+  </button>
+</div>

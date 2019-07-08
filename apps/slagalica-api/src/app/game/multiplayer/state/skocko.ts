@@ -1,5 +1,6 @@
 import { ArraySchema } from '@colyseus/schema';
-import { getRandomNumber } from '@slagalica/common';
+import { SkockoGame } from '@slagalica-api/game/shared';
+import { emptyArraySchema } from '@slagalica-api/util';
 import {
   PlayerRole,
   Skocko,
@@ -7,8 +8,6 @@ import {
   SkockoPositionResult
 } from '@slagalica/data';
 import { Schema, type } from 'colyseus.js';
-import { last } from 'lodash';
-import { emptyArraySchema } from '@slagalica-api/util';
 
 class SkockoTry extends Schema {
   @type(['string'])
@@ -26,7 +25,7 @@ class SkockoPlayer extends Schema {
   points = 0;
 }
 
-const WINNER_POINTS = 10;
+const WINNER_POINTS = SkockoGame.WINNER_POINTS;
 const NEXT_GAME_DELAY = 3 * 1000; // 3 SECONDS
 
 export class SkockoGameState extends Schema {
@@ -63,7 +62,7 @@ export class SkockoGameState extends Schema {
     const skockoPlayer: SkockoPlayer = this._getSkockoPlayer();
     if (skockoPlayer.tries.length >= 6) return;
 
-    const results = getPositionResults(this.goal, sequence);
+    const results = SkockoGame.getPositionResults(this.goal, sequence);
     const skockoTry = new SkockoTry();
     skockoTry.try = new ArraySchema(...sequence);
     skockoTry.result = new ArraySchema(...results);
@@ -77,21 +76,21 @@ export class SkockoGameState extends Schema {
   private _goToNextGameStep() {
     switch (this.gameState) {
       case SkockoGameStates.NotStarted:
-        this.goal = getGoal();
+        this.goal = SkockoGame.getGoal();
         this._startFirstGame();
         break;
       case SkockoGameStates.BluePlaying:
         /**
          * if blue got it right
          **/
-        if (hasGotItRight(this.blue)) {
+        if (SkockoGame.hasGotItRight(this.blue)) {
           this.blue.points = WINNER_POINTS;
           this._startSecondGame();
 
           /**
            * If blue has used all his tries
            */
-        } else if (usedAllTries(this.blue)) {
+        } else if (SkockoGame.usedAllTries(this.blue)) {
           this.gameState = SkockoGameStates.BlueStrikeOutRedPlaying;
           clearTries(this.red);
           this.turn = PlayerRole.Red;
@@ -101,7 +100,7 @@ export class SkockoGameState extends Schema {
         /**
          * if red got it right
          */
-        if (hasGotItRight(this.red)) {
+        if (SkockoGame.hasGotItRight(this.red)) {
           this.red.points = WINNER_POINTS;
         }
         /**
@@ -113,14 +112,14 @@ export class SkockoGameState extends Schema {
         /**
          * if red got it right
          **/
-        if (hasGotItRight(this.red)) {
+        if (SkockoGame.hasGotItRight(this.red)) {
           this.red.points = WINNER_POINTS;
           this.gameEnded = true;
 
           /**
            * If red has used all his tries
            */
-        } else if (usedAllTries(this.red)) {
+        } else if (SkockoGame.usedAllTries(this.red)) {
           this.gameState = SkockoGameStates.RedStrikeOutBluePlaying;
           clearTries(this.blue);
           this.turn = PlayerRole.Blue;
@@ -130,7 +129,7 @@ export class SkockoGameState extends Schema {
         /**
          * if blue got it right
          */
-        if (hasGotItRight(this.blue)) {
+        if (SkockoGame.hasGotItRight(this.blue)) {
           this.blue.points = WINNER_POINTS;
         }
 
@@ -142,7 +141,7 @@ export class SkockoGameState extends Schema {
   private _restart() {
     this.red.tries = new ArraySchema();
     this.blue.tries = new ArraySchema();
-    this.goal = getGoal();
+    this.goal = SkockoGame.getGoal();
   }
 
   private _getSkockoPlayer() {
@@ -173,43 +172,4 @@ export class SkockoGameState extends Schema {
 
 function clearTries(player: SkockoPlayer) {
   emptyArraySchema(player.tries);
-}
-
-function getPositionResults(goal: Skocko[], sequence: Skocko[]) {
-  const goalSet = new Set(goal);
-  return sequence.map((seqItem, index) => {
-    if (goal[index] === seqItem) return SkockoPositionResult.InPosition;
-    else if (goalSet.has(seqItem)) return SkockoPositionResult.WrongPosition;
-    else return SkockoPositionResult.NotInSequence;
-  });
-}
-
-function hasGotItRight(player: SkockoPlayer) {
-  const lastTry = last(player.tries);
-  return lastTry.result.every(
-    result => result === SkockoPositionResult.InPosition
-  );
-}
-
-function usedAllTries(player: SkockoPlayer) {
-  return player.tries.length >= 6;
-}
-
-function getGoal() {
-  const options = [
-    Skocko.Herc,
-    Skocko.Pik,
-    Skocko.Srce,
-    Skocko.Tref,
-    Skocko.Zvezda,
-    Skocko.Skocko
-  ];
-
-  const goal: Skocko[] = [];
-  for (let i = 0; i < 4; i++) {
-    const optionIndex = getRandomNumber({ min: 0, max: options.length - 1 });
-    goal.push(options[optionIndex]);
-  }
-
-  return goal;
 }

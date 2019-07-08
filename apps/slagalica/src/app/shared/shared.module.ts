@@ -24,6 +24,10 @@ import { RouterModule } from '@angular/router';
 import { UiModule } from '@slagalica/ui';
 import { GroupLetterPipe } from './asocijacija/group-letter.pipe';
 import { SolutionInputComponent } from './asocijacija/solution-input.component';
+import { TileComponent } from './asocijacija/tile.component';
+
+import { SkockoImgComponent } from './skocko/skocko-img.component';
+import { SkockoTriesComponent } from './skocko/skocko-tries.component';
 
 @NgModule({
   exports: [
@@ -53,8 +57,17 @@ import { SolutionInputComponent } from './asocijacija/solution-input.component';
     UiModule,
 
     SolutionInputComponent,
-    GroupLetterPipe
+    SkockoImgComponent,
+    SkockoTriesComponent,
+    GroupLetterPipe,
+    TileComponent
   ],
-  declarations: [SolutionInputComponent, GroupLetterPipe]
+  declarations: [
+    SolutionInputComponent,
+    SkockoImgComponent,
+    SkockoTriesComponent,
+    GroupLetterPipe,
+    TileComponent
+  ]
 })
 export class SharedModule {}

@@ -1,0 +1,17 @@
+<div class="game-header__toolbar">
+  <button mat-icon-button matTooltip="Leave room" (click)="leaveRoom.emit()">
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
+</div>
+<div class="game-header__layout">
+  <p class="me sla-text-center player-desc">
+    <span *ngIf="player?.userName">
+      <span>{{ player.userName }}</span
+      ><br />
+      <span>Total points: {{ player.totalPoints }}</span>
+    </span>
+  </p>
+  <span class="sla-text-center">
+    {{ time }}
+  </span>
+</div>

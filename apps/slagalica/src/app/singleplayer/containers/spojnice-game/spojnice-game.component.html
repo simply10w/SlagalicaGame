@@ -1,0 +1,30 @@
+<p class="sla-text-center">
+  <span>Points: {{ points$ | async }} </span> -
+</p>
+
+<div class="grid">
+  <div class="left">
+    <div
+      *ngFor="
+        let tile of (leftSideTiles$ | async);
+        let i = index;
+        trackBy: trackByOrder
+      "
+      class="tile sla-spacing-m"
+      [class.selected-tile]="(currentIndex$ | async) === i"
+      [class.done-tile]="tile.color"
+    >
+      {{ tile.text }}
+    </div>
+  </div>
+  <div class="right">
+    <div
+      *ngFor="let tile of (rightSideTiles$ | async); trackBy: trackByOrder"
+      class="tile sla-spacing-m"
+      (click)="!tile.disabled && guess(tile.text)"
+      [class.done-tile]="tile.color"
+    >
+      {{ tile.text }}
+    </div>
+  </div>
+</div>
